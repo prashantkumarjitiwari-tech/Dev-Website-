@@ -338,6 +338,39 @@ section h2{
   border-radius: 8px;
   border: 1px solid #e0d0b0;
 }
+    /* About Section Styling */
+.about-content {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: left;
+  line-height: 1.8;
+  font-size: 17px;
+  color: #333;
+}
+.intro-lead {
+  font-size: 20px;
+  text-align: center;
+  color: #b8860b;
+  margin-bottom: 15px;
+}
+.intro-highlights {
+  background: #fffdf5;
+  border-left: 4px solid #b8860b;
+  padding: 15px 20px;
+  margin-top: 20px;
+  border-radius: 4px;
+}
+.intro-highlights h3 {
+  margin-top: 0;
+  color: #8b6508;
+}
+.intro-highlights ul {
+  padding-left: 20px;
+}
+.intro-highlights li {
+  margin-bottom: 8px;
+}
+    
 
 /* Consultation Form Style */
 #consultation-form {
