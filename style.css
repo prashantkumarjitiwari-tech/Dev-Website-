@@ -1,73 +1,322 @@
 *{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Poppins',sans-serif;
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
 }
 
 body{
-background:#0b0b0b;
-color:white;
-line-height:1.6;
+    font-family:'Poppins','Tiro Devanagari Hindi',sans-serif;
+    background:#f8f7f2;
+    color:#222;
+    line-height:1.7;
 }
+
+html{
+    scroll-behavior:smooth;
+}
+
+
+/* NAVBAR */
+
+nav{
+    width:100%;
+    padding:18px 8%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    position:absolute;
+    top:0;
+    z-index:10;
+    color:white;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:700;
+}
+
+.menu a{
+    color:white;
+    text-decoration:none;
+    margin-left:25px;
+    font-size:15px;
+}
+
+
+
+/* HERO */
 
 .hero{
-height:100vh;
-background:linear-gradient(rgba(0,0,0,.6),rgba(0,0,0,.7)),
-url("assets/images/hero.jpg") center/cover no-repeat;
-display:flex;
-align-items:center;
-justify-content:center;
-text-align:center;
-padding:20px;
+
+    height:100vh;
+    background:
+    linear-gradient(
+    rgba(0,0,0,.55),
+    rgba(0,0,0,.55)
+    ),
+    url("assets/profile.jpg");
+
+    background-size:cover;
+    background-position:center;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    color:white;
+
 }
 
-.hero-content h1{
-font-size:3rem;
-color:#FFD700;
+
+.hero-text{
+
+    max-width:800px;
+    padding:20px;
+
 }
 
-.hero-content h3{
-margin:10px 0;
-font-weight:400;
+
+.hero h1{
+
+    font-size:48px;
+    margin-bottom:10px;
+
 }
 
-.hero-content p{
-max-width:700px;
-margin:auto;
-font-size:18px;
+
+.hero h2{
+
+    font-size:28px;
+    color:#ffd166;
+
 }
+
+
+.hero p{
+
+    font-size:20px;
+    margin:20px 0;
+
+}
+
+
+
 
 .btn{
-display:inline-block;
-margin-top:25px;
-padding:14px 35px;
-background:#FFD700;
-color:#111;
-text-decoration:none;
-border-radius:50px;
-font-weight:bold;
-transition:.3s;
+
+    display:inline-block;
+    padding:12px 30px;
+    background:#c78b2b;
+    color:white;
+    border-radius:30px;
+    text-decoration:none;
+    transition:.3s;
+
 }
+
 
 .btn:hover{
-background:white;
+
+    background:#8b5a14;
+    transform:translateY(-3px);
+
 }
+
+
+
+
+/* SECTION */
 
 section{
-padding:80px 10%;
+
+    padding:70px 8%;
+    text-align:center;
+
 }
+
 
 section h2{
-text-align:center;
-font-size:2.3rem;
-margin-bottom:25px;
-color:#FFD700;
+
+    font-size:34px;
+    margin-bottom:30px;
+    color:#7b4b15;
+
 }
 
-section p{
-max-width:900px;
-margin:auto;
-text-align:center;
-font-size:18px;
+
+
+
+/* CARDS */
+
+.cards{
+
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:25px;
+
+}
+
+
+
+.card,
+.box{
+
+    background:white;
+    padding:30px;
+    border-radius:20px;
+
+    box-shadow:
+    0 10px 30px rgba(0,0,0,.1);
+
+    transition:.3s;
+
+}
+
+
+.card:hover{
+
+    transform:translateY(-8px);
+
+}
+
+
+
+
+.card h3{
+
+    color:#8b5a14;
+    margin-bottom:15px;
+
+}
+
+
+
+
+button{
+
+    background:#c78b2b;
+    color:white;
+    border:none;
+    padding:12px 25px;
+    border-radius:25px;
+    cursor:pointer;
+
+}
+
+
+
+
+
+/* GALLERY */
+
+.gallery{
+
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:20px;
+
+}
+
+
+.gallery img{
+
+    width:100%;
+    height:280px;
+    object-fit:cover;
+    border-radius:20px;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.15);
+
+    transition:.4s;
+
+}
+
+
+
+.gallery img:hover{
+
+    transform:scale(1.05);
+
+}
+
+
+
+/* FOOTER */
+
+footer{
+
+    background:#171717;
+    color:white;
+    text-align:center;
+    padding:25px;
+
+}
+
+
+
+
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+
+nav{
+
+    flex-direction:column;
+    background:rgba(0,0,0,.4);
+
+}
+
+
+.menu{
+
+    margin-top:15px;
+
+}
+
+
+.menu a{
+
+    margin:8px;
+    font-size:13px;
+
+}
+
+
+.hero h1{
+
+    font-size:32px;
+
+}
+
+
+.hero h2{
+
+    font-size:22px;
+
+}
+
+
+.hero p{
+
+    font-size:16px;
+
+}
+
+
+section{
+
+    padding:50px 5%;
+
+}
+
+
+section h2{
+
+    font-size:28px;
+
+}
+
+
 }
