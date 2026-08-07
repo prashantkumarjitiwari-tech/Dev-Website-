@@ -1,1 +1,73 @@
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
 
+body{
+background:#0b0b0b;
+color:white;
+line-height:1.6;
+}
+
+.hero{
+height:100vh;
+background:linear-gradient(rgba(0,0,0,.6),rgba(0,0,0,.7)),
+url("assets/images/hero.jpg") center/cover no-repeat;
+display:flex;
+align-items:center;
+justify-content:center;
+text-align:center;
+padding:20px;
+}
+
+.hero-content h1{
+font-size:3rem;
+color:#FFD700;
+}
+
+.hero-content h3{
+margin:10px 0;
+font-weight:400;
+}
+
+.hero-content p{
+max-width:700px;
+margin:auto;
+font-size:18px;
+}
+
+.btn{
+display:inline-block;
+margin-top:25px;
+padding:14px 35px;
+background:#FFD700;
+color:#111;
+text-decoration:none;
+border-radius:50px;
+font-weight:bold;
+transition:.3s;
+}
+
+.btn:hover{
+background:white;
+}
+
+section{
+padding:80px 10%;
+}
+
+section h2{
+text-align:center;
+font-size:2.3rem;
+margin-bottom:25px;
+color:#FFD700;
+}
+
+section p{
+max-width:900px;
+margin:auto;
+text-align:center;
+font-size:18px;
+}
