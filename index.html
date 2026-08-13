@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="hi">
 <head>
   <meta charset="UTF-8">
@@ -8,6 +8,9 @@
   <!-- Google Fonts & FontAwesome -->
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Poppins:wght@300;400;500;600&family=Rozha+One&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- AOS Animation CSS -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; scroll-behavior: smooth; }
@@ -37,36 +40,17 @@
     }
 
     /* Hero Section */
-    .hero { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 50px 20px 30px; }
+    .hero { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 50px 20px 20px; }
     .profile-avatar {
       width: 150px; height: 150px; border-radius: 50%;
       background: linear-gradient(135deg, #f97316, #3b82f6); padding: 4px;
-      box-shadow: 0 0 30px rgba(249, 115, 22, 0.4); margin-bottom: 20px; overflow: hidden;}
-  </div>
-</div>
-    
-    .profile-avatar img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
-    .hero h1 { font-family: 'Cinzel', serif; font-size: 36px; color: #ffffff; margin-bottom: 6px; }
-    .hero p.subtitle { color: #fbbf24; font-size: 15px; margin-bottom: 20px; }
-    <!-- Daily Suvichar Widget -->
-<div class="container" style="margin-top: 30px;" data-aos="fade-up">
-  <div style="background: linear-gradient(135deg, rgba(249, 115, 22, 0.15), rgba(16, 185, 129, 0.15)); border: 1px solid rgba(251, 191, 36, 0.3); padding: 20px 25px; border-radius: 16px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.3);">
-    <span style="background: #f97316; color: #fff; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">✨ आज का सुविचार</span>
-    <p id="daily-thought" style="color: #fbbf24; font-size: 18px; font-weight: 500; margin-top: 12px; font-family: 'Rozha One', serif;"></p>
-    <p id="thought-meaning" style="color: #d1d5db; font-size: 13px; margin-top: 5px;"></p>
-  </div>
-</div>
-   
-    
-
-    .shloka-box {
-      background: rgba(17, 24, 39, 0.7); border: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 18px 25px; border-radius: 14px; max-width: 600px; margin-bottom: 25px;
+      box-shadow: 0 0 30px rgba(249, 115, 22, 0.4); margin-bottom: 20px; overflow: hidden;
     }
-    .shloka-box p.sanskrit { color: #fbbf24; font-family: 'Rozha One', serif; font-size: 17px; margin-bottom: 4px; }
-    .shloka-box p.translation { color: #9ca3af; font-size: 12px; }
+    .profile-avatar img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+    .hero h1 { font-family: 'Cinzel', serif; font-size: 34px; color: #ffffff; margin-bottom: 6px; }
+    .hero p.subtitle { color: #fbbf24; font-size: 15px; margin-bottom: 20px; }
 
-    .cta-group { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-bottom: 30px; }
+    .cta-group { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-bottom: 20px; }
     .btn {
       padding: 10px 22px; border-radius: 25px; font-size: 13px; font-weight: 500;
       text-decoration: none; display: flex; align-items: center; gap: 8px; transition: 0.2s;
@@ -77,14 +61,7 @@
     .btn-green { background: linear-gradient(135deg, #10b981, #059669); color: #fff; }
     .btn-purple { background: linear-gradient(135deg, #8b5cf6, #6d28d9); color: #fff; }
 
-     <!-- Daily Suvichar Box -->
-    <div class="container" style="margin-top: 30px;">
-    <div style="background: linear-gradient(135deg, rgba(249, 115, 22, 0.15), rgba(16, 185, 129, 0.15)); border: 1px solid rgba(251, 191, 36, 0.3); padding: 20px 25px; border-radius: 16px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.3);">
-      <span style="background: #f97316; color: #fff; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">✨ आज का सुविचार</span>
-      <p id="daily-thought" style="color: #fbbf24; font-size: 18px; font-weight: 500; margin-top: 12px; font-family: 'Rozha One', serif;"></p>
-      <p id="thought-meaning" style="color: #d1d5db; font-size: 13px; margin-top: 5px;"></p>
-    
-    /* Main Container */
+    /* Container & Cards */
     .container { max-width: 1050px; margin: 0 auto; padding: 0 20px 50px; }
     .section-title { text-align: center; font-family: 'Cinzel', serif; color: #fbbf24; font-size: 24px; margin: 40px 0 20px; }
 
@@ -104,9 +81,9 @@
     .grid-card h4 { font-size: 16px; color: #fff; margin-bottom: 6px; }
     .grid-card p { color: #9ca3af; font-size: 12px; }
 
-    /* Archive Book Reader Frame */
+    /* Drive Frame */
     .drive-iframe {
-      width: 100%; height: 580px; border: 1px solid rgba(255, 255, 255, 0.15);
+      width: 100%; height: 500px; border: 1px solid rgba(255, 255, 255, 0.15);
       border-radius: 12px; margin-top: 20px;
     }
 
@@ -118,7 +95,7 @@
 
     @media (max-width: 768px) {
       nav ul { display: none; }
-      .drive-iframe { height: 400px; }
+      .drive-iframe { height: 380px; }
     }
   </style>
 </head>
@@ -148,17 +125,12 @@
   </header>
 
   <!-- Hero Section -->
-  <section class="hero">
+  <section class="hero" data-aos="fade-down">
     <div class="profile-avatar">
       <img src="assets/profile.jpg" alt="Acharya Dev Tiwari">
     </div>
     <h1>Acharya Dev Tiwari Ji Maharaj</h1>
     <p class="subtitle">Renowned Bhagavat Katha Vachak & Sanatan Scholar</p>
-
-    <div class="shloka-box">
-      <p class="sanskrit">"गुरुर्ब्रह्मा गुरुर्विष्णुः गुरुर्देवो महेश्वरः ।<br>गुरुः साक्षात् परं ब्रह्म तस्मै श्रीगुरवे नमः ॥"</p>
-      <p class="translation">— Guru Stotram (The Supreme Reverence to the Guru)</p>
-    </div>
 
     <div class="cta-group">
       <a href="#contact" class="btn btn-orange"><i class="fa-solid fa-book-open"></i> Book Katha</a>
@@ -169,8 +141,15 @@
 
   <div class="container">
 
+    <!-- Daily Suvichar Box -->
+    <div style="background: linear-gradient(135deg, rgba(249, 115, 22, 0.15), rgba(16, 185, 129, 0.15)); border: 1px solid rgba(251, 191, 36, 0.3); padding: 22px 25px; border-radius: 16px; text-align: center; margin-bottom: 40px; box-shadow: 0 10px 25px rgba(0,0,0,0.3);" data-aos="fade-up">
+      <span style="background: #f97316; color: #fff; padding: 4px 14px; border-radius: 20px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">✨ आज का पवन विचार / श्लोक</span>
+      <p id="daily-thought" style="color: #fbbf24; font-size: 19px; font-weight: 500; margin-top: 14px; font-family: 'Rozha One', serif;"></p>
+      <p id="thought-meaning" style="color: #d1d5db; font-size: 13px; margin-top: 6px;"></p>
+    </div>
+
     <!-- About Section -->
-    <div id="about" class="card">
+    <div id="about" class="card" data-aos="fade-up">
       <h2>परिचय</h2>
       <p>
         परम पूज्य आचार्य श्री देव तिवारी जी महाराज एक प्रख्यात कथावाचक, सनातन धर्म एवं ज्योतिष के ओजस्वी वक्ता हैं। सनातन संस्कृति और वैदिक परंपराओं की अलौकिक सुगंध को आधुनिक समाज तक सहज रूप से पहुँचाने के लिए वे निरंतर समर्पित हैं।
@@ -178,8 +157,8 @@
     </div>
 
     <!-- Services Section -->
-    <h3 class="section-title" id="services">हमारी प्रमुख सेवाएं</h3>
-    <div class="grid">
+    <h3 class="section-title" id="services" data-aos="fade-up">हमारी प्रमुख सेवाएं</h3>
+    <div class="grid" data-aos="fade-up">
       <div class="grid-card">
         <i class="fa-solid fa-sun"></i>
         <h4>भागवत एवं राम कथा</h4>
@@ -201,74 +180,43 @@
         <p>जीवन समस्याओं का सनातन एवं आध्यात्मिक समाधान।</p>
       </div>
     </div>
-    
 
-    <!-- Jyotish & Stotra Section (Multiple PDFs Single Card) -->
-<div id="stotra-jyotish" class="card" style="text-align: center; margin-top: 40px;">
-  <h2>📜 ज्योतिष एवं स्तोत्र संग्रह</h2>
-  <p style="color: #9ca3af; margin-bottom: 20px;">नीचे दिए गए ग्रंथों को ऑनलाइन पढ़ें या डाउनलोड करें:</p>
-  
-  <!-- PDF 1 Buttons & Viewer -->
-  <div class="cta-group">
-    <a href="https://drive.google.com/file/d/1fB7dMXYu-TLhxLclbYerUSbOf4MJRLUn/view?usp=sharing" target="_blank" class="btn btn-orange">
-      <i class="fa-solid fa-book-open"></i> Full Screen me Padhne Ke Liye
-    </a>
-    <a href="https://drive.google.com/uc?export=download&id=1fB7dMXYu-TLhxLclbYerUSbOf4MJRLUn" class="btn btn-blue">
-      <i class="fa-solid fa-download"></i> PDF डाउनलोड करें
-    </a>
-  </div>
-  <iframe src="https://drive.google.com/file/d/1fB7dMXYu-TLhxLclbYerUSbOf4MJRLUn/preview" class="drive-iframe" allow="autoplay"></iframe>
+    <!-- Jyotish & Stotra Section -->
+    <h3 class="section-title" id="stotra-jyotish" data-aos="fade-up">📜 ज्योतिष एवं स्तोत्र संग्रह</h3>
 
-  <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 30px 0;">
+    <!-- PDF 1 -->
+    <div class="card" data-aos="fade-up">
+      <h2 style="font-size: 18px;">1. फलित ज्योतिष एवं ग्रंथ</h2>
+      <div class="cta-group" style="margin-top: 15px;">
+        <a href="https://drive.google.com/file/d/1fB7dMXYu-TLhxLclbYerUSbOf4MJRLUn/view?usp=sharing" target="_blank" class="btn btn-orange"><i class="fa-solid fa-book-open"></i> Full Screen Padhne Ke Liye</a>
+        <a href="https://drive.google.com/uc?export=download&id=1fB7dMXYu-TLhxLclbYerUSbOf4MJRLUn" class="btn btn-blue"><i class="fa-solid fa-download"></i> PDF डाउनलोड करें</a>
+      </div>
+      <iframe src="https://drive.google.com/file/d/1fB7dMXYu-TLhxLclbYerUSbOf4MJRLUn/preview" class="drive-iframe" allow="autoplay"></iframe>
+    </div>
 
-  <!-- PDF 2 (New) Buttons & Viewer -->
-  <h3 style="color: #fbbf24; font-size: 16px; margin: 15px 0 10px;">2. स्तोत्र एवं पाठ संग्रह</h3>
-  <div class="cta-group">
-    <a href="https://drive.google.com/file/d/1BKTlTLSIAySwKoQhPFnnHsweot9X3B82/view?usp=sharing" target="_blank" class="btn btn-orange">
-      <i class="fa-solid fa-book-open"></i> Full Screen me Padhne Ke Liye
-    </a>
-    <a href="https://drive.google.com/uc?export=download&id=1BKTlTLSIAySwKoQhPFnnHsweot9X3B82" class="btn btn-blue">
-      <i class="fa-solid fa-download"></i> PDF डाउनलोड करें
-    </a>
-  </div>
-  <iframe src="https://drive.google.com/file/d/1BKTlTLSIAySwKoQhPFnnHsweot9X3B82/preview" class="drive-iframe" allow="autoplay"></iframe>
-</div>
-    <!-- Krishnamyrti Paddhati-->
-<div style="margin-top: 30px;">
-  <h3 style="color: #fbbf24; font-size: 16px; margin: 15px 0 10px;"> Krishnamurthy   Paddhati  </h3>
-  <div class="cta-group">
-    <a href="https://drive.google.com/file/d/1snMsr_1Oznjdpj4UM1BtorbgmOxaEDCn/view?usp=sharing" target="_blank" class="btn btn-orange">
-      <i class="fa-solid fa-book-open"></i> Full Screen me Padhne Ke Liye
-    </a>
-    <a href="https://drive.google.com/uc?export=download&id=1snMsr_1Oznjdpj4UM1BtorbgmOxaEDCn" class="btn btn-blue">
-      <i class="fa-solid fa-download"></i> PDF डाउनलोड करें
-    </a>
-  </div>
-  <iframe src="https://drive.google.com/file/d/1snMsr_1Oznjdpj4UM1BtorbgmOxaEDCn/preview" class="drive-iframe" allow="autoplay"></iframe>
-</div>
-    
-    
-    <!-- Nayi PDF 3 Card -->
-<div class="card" style="text-align: center; margin-top: 30px;">
-  <h2> Naya Granth </h2>
-  <p style="color: #9ca3af; margin-bottom: 15px;">PDF padhne ya download karne ke liye niche buttons par click karein:</p>
-  
-  <div class="cta-group">
-    <a href="https://drive.google.com/file/d/14EB6w49rE5hw8rejshvJCVHAr-t27MG0/view?usp=sharing" target="_blank" class="btn btn-orange">
-      <i class="fa-solid fa-book-open"></i> Full Screen me Padhne Ke Liye
-    </a>
-    <a href="https://drive.google.com/uc?export=download&id=14EB6w49rE5hw8rejshvJCVHAr-t27MG0" class="btn btn-blue">
-      <i class="fa-solid fa-download"></i> PDF डाउनलोड करें
-    </a>
-  </div>
+    <!-- PDF 2 -->
+    <div class="card" data-aos="fade-up">
+      <h2 style="font-size: 18px;">2. स्तोत्र एवं पाठ संग्रह</h2>
+      <div class="cta-group" style="margin-top: 15px;">
+        <a href="https://drive.google.com/file/d/1BKTlTLSIAySwKoQhPFnnHsweot9X3B82/view?usp=sharing" target="_blank" class="btn btn-orange"><i class="fa-solid fa-book-open"></i> Full Screen Padhne Ke Liye</a>
+        <a href="https://drive.google.com/uc?export=download&id=1BKTlTLSIAySwKoQhPFnnHsweot9X3B82" class="btn btn-blue"><i class="fa-solid fa-download"></i> PDF डाउनलोड करें</a>
+      </div>
+      <iframe src="https://drive.google.com/file/d/1BKTlTLSIAySwKoQhPFnnHsweot9X3B82/preview" class="drive-iframe" allow="autoplay"></iframe>
+    </div>
 
-  <iframe src="https://drive.google.com/file/d/14EB6w49rE5hw8rejshvJCVHAr-t27MG0/preview" class="drive-iframe" allow="autoplay"></iframe>
-</div>
-
+    <!-- PDF 3 -->
+    <div class="card" data-aos="fade-up">
+      <h2 style="font-size: 18px;">3. विशेष ज्योतिष पाठ भाग</h2>
+      <div class="cta-group" style="margin-top: 15px;">
+        <a href="https://drive.google.com/file/d/1snMsr_1Oznjdpj4UM1BtorbgmOxaEDCn/view?usp=sharing" target="_blank" class="btn btn-orange"><i class="fa-solid fa-book-open"></i> Full Screen Padhne Ke Liye</a>
+        <a href="https://drive.google.com/uc?export=download&id=1snMsr_1Oznjdpj4UM1BtorbgmOxaEDCn" class="btn btn-blue"><i class="fa-solid fa-download"></i> PDF डाउनलोड करें</a>
+      </div>
+      <iframe src="https://drive.google.com/file/d/1snMsr_1Oznjdpj4UM1BtorbgmOxaEDCn/preview" class="drive-iframe" allow="autoplay"></iframe>
+    </div>
 
     <!-- Photo Gallery -->
-    <h3 class="section-title" id="gallery">फोटो गैलरी</h3>
-    <div class="gallery-grid">
+    <h3 class="section-title" id="gallery" data-aos="fade-up">फोटो गैलरी</h3>
+    <div class="gallery-grid" data-aos="fade-up">
       <img src="assets/profile.jpg" class="gallery-img" alt="Gallery Profile">
       <img src="assets/profile1.jpg" class="gallery-img" alt="Gallery Profile 1">
       <img src="assets/gallery1.jpg" class="gallery-img" alt="Gallery 1">
@@ -277,7 +225,7 @@
     </div>
 
     <!-- Contact Box -->
-    <div id="contact" class="card" style="text-align: center; margin-top: 40px;">
+    <div id="contact" class="card" style="text-align: center; margin-top: 40px;" data-aos="fade-up">
       <h2>कथा आयोजन एवं परामर्श हेतु संपर्क करें</h2>
       <p style="color: #9ca3af; margin-bottom: 10px;">श्रीधाम वृंदावन • कथा बुकिंग एवं व्यक्तिगत परामर्श के लिए सीधे जुड़े</p>
       <p style="color: #fbbf24; font-size: 20px; font-weight: bold; margin-bottom: 20px;"><i class="fa-solid fa-phone"></i> +91 7465040426</p>
@@ -294,27 +242,11 @@
     <p>© 2026 Acharya Dev Tiwari Ji Maharaj. All Rights Reserved. • Shri Dham Vrindavan</p>
   </footer>
 
+  <!-- AOS Animation Script -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 
-  
-<script>
-  // Daily Suvichar Collection
-  const suvichars = [
-    { thought: "कर्मण्येवाधिकारस्ते मा फलेषु कदाचन।", meaning: "कर्म करते रहो, फल की चिंता मत करो। आपका कर्तव्य ही आपकी शक्ति है।" },
-    { thought: "सत्यमेव जयते नानृतम्।", meaning: "सत्य की ही सदा विजय होती है, असत्य की नहीं।" },
-    { thought: "अहिंसा परमो धर्मः।", meaning: "अहिंसा और दया ही मानव जीवन का सबसे बड़ा धर्म है।" },
-    { thought: "विद्या ददाति विनयं।", meaning: "सच्ची विद्या मनुष्य को विनम्र और श्रेष्ठ बनाती है।" },
-    { thought: "योगः कर्मसु कौशलम्।", meaning: "अपने कार्य को कुशलता और ईमानदारी से करना ही योग है।" },
-    { thought: "उद्यमेन हि सिध्यन्ति कार्याणि न मनोरथैः।", meaning: "कार्यों की सिद्धि केवल परिश्रम से होती है, सिर्फ इच्छा करने से नहीं।" },
-    { thought: "वसुधैव कुटुम्बकम्।", meaning: "संपूर्ण पृथ्वी ही हमारा एक परिवार है, सभी के प्रति प्रेम रखें।" }
-  ];
+  <!-- External Script Connection -->
+  <script src="script.js"></script>
 
-  // Auto Select Based on Date
-  const today = new Date().getDate();
-  const index = today % suvichars.length;
-
-  document.getElementById('daily-thought').innerText = `"${suvichars[index].thought}"`;
-  document.getElementById('thought-meaning').innerText = `— ${suvichars[index].meaning}`;
-</script>
 </body>
-        </html>
-        
+</html>
