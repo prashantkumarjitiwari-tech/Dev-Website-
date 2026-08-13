@@ -85,10 +85,11 @@
     .grid-card h4 { font-size: 16px; color: #fff; margin-bottom: 6px; }
     .grid-card p { color: #9ca3af; font-size: 12px; }
 
-    /* PDF Section */
-    .pdf-frame { width: 100%; height: 550px; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; margin-top: 15px; }
- <!-- 1. CSS/JS Links (Head Tag me dalein) -->
-<
+    /* Archive Book Reader Frame */
+    .drive-iframe {
+      width: 100%; height: 580px; border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 12px; margin-top: 20px;
+    }
 
     /* Gallery */
     .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
@@ -98,7 +99,7 @@
 
     @media (max-width: 768px) {
       nav ul { display: none; }
-      .pdf-frame { height: 380px; }
+      .drive-iframe { height: 400px; }
     }
   </style>
 </head>
@@ -117,7 +118,7 @@
       <ul>
         <li><a href="#about">परिचय</a></li>
         <li><a href="#services">सेवाएं</a></li>
-        <li><a href="#pdf">ज्योतिष ग्रंथ</a></li>
+        <li><a href="#stotra-jyotish">ज्योतिष एवं स्तोत्र</a></li>
         <li><a href="#gallery">गैलरी</a></li>
         <li><a href="#contact">संपर्क</a></li>
       </ul>
@@ -127,7 +128,7 @@
     </a>
   </header>
 
-  <!-- Hero Header -->
+  <!-- Hero Section -->
   <section class="hero">
     <div class="profile-avatar">
       <img src="assets/profile.jpg" alt="Acharya Dev Tiwari">
@@ -142,7 +143,7 @@
 
     <div class="cta-group">
       <a href="#contact" class="btn btn-orange"><i class="fa-solid fa-book-open"></i> Book Katha</a>
-      <a href="#pdf" class="btn btn-purple"><i class="fa-solid fa-file-pdf"></i> फलित ज्योतिष PDF</a>
+      <a href="#stotra-jyotish" class="btn btn-purple"><i class="fa-solid fa-file-pdf"></i> ज्योतिष एवं स्तोत्र PDF</a>
       <a href="https://wa.me/917465040426" target="_blank" class="btn btn-green"><i class="fa-brands fa-whatsapp"></i> Contact on WhatsApp</a>
     </div>
   </section>
@@ -182,77 +183,22 @@
       </div>
     </div>
 
-    <!-- Multiple PDF Library Section -->
-<div id="pdf" class="card" style="margin-top: 40px;">
-  <h2 style="text-align: center; margin-bottom: 10px;">📜 महत्वपूर्ण ज्योतिष एवं धार्मिक ग्रंथ (PDFs)</h2>
-  <p style="text-align: center; color: #9ca3af; margin-bottom: 30px; font-size: 14px;">
-    नीचे दिए गए ग्रंथों को आप ऑनलाइन पढ़ सकते हैं या अपने फोन में डाउनलोड कर सकते हैं:
-  </p>
-
-  <div class="grid">
-    
-    <!-- PDF Card 1 -->
-    <div class="grid-card" style="text-align: left; background: rgba(31, 41, 55, 0.8);">
-      <i class="fa-solid fa-file-pdf" style="font-size: 32px; color: #f97316; margin-bottom: 10px;"></i>
-      <h4 style="color: #fbbf24; font-size: 18px; margin-bottom: 8px;">1. फलित ज्योतिष ग्रंथ</h4>
-      <p style="color: #d1d5db; font-size: 13px; margin-bottom: 15px;">वैदिक ज्योतिष एवं जन्मपत्री विश्लेषण का महत्वपूर्ण ग्रंथ।</p>
-      
-      <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-        <a href="falit-jyotish.pdf" target="_blank" class="btn btn-orange" style="padding: 8px 15px; font-size: 12px;">
-          <i class="fa-solid fa-eye"></i> ऑनलाइन पढ़ें
-        </a>
-        <a href="falit-jyotish.pdf" download class="btn btn-blue" style="padding: 8px 15px; font-size: 12px;">
-          <i class="fa-solid fa-download"></i> डाउनलोड
-        </a>
-      </div>
-    </div>
-
-    <!-- PDF Card 2 (Nayi PDF ke liye) -->
-    <div class="grid-card" style="text-align: left; background: rgba(31, 41, 55, 0.8);">
-      <i class="fa-solid fa-file-pdf" style="font-size: 32px; color: #f97316; margin-bottom: 10px;"></i>
-      <h4 style="color: #fbbf24; font-size: 18px; margin-bottom: 8px;">2. नवग्रह शांति उपाय</h4>
-      <p style="color: #d1d5db; font-size: 13px; margin-bottom: 15px;">ग्रह दोष निवारण एवं दैनिक मंत्र संग्रह।</p>
-      
-      <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-        <a href="navgrah-shanti.pdf" target="_blank" class="btn btn-orange" style="padding: 8px 15px; font-size: 12px;">
-          <i class="fa-solid fa-eye"></i> ऑनलाइन पढ़ें
-        </a>
-        <a href="navgrah-shanti.pdf" download class="btn btn-blue" style="padding: 8px 15px; font-size: 12px;">
-          <i class="fa-solid fa-download"></i> डाउनलोड
-        </a>
-      </div>
-    </div>
-
-    <!-- PDF Card 3 (Nayi PDF ke liye) -->
-    <div class="grid-card" style="text-align: left; background: rgba(31, 41, 55, 0.8);">
-      <i class="fa-solid fa-file-pdf" style="font-size: 32px; color: #f97316; margin-bottom: 10px;"></i>
-      <h4 style="color: #fbbf24; font-size: 18px; margin-bottom: 8px;">3. वास्तु शास्त्र मार्गदर्शन</h4>
-      <p style="color: #d1d5db; font-size: 13px; margin-bottom: 15px;">गृह एवं व्यापार स्थल वास्तु दोष निवारण पुस्तिका।</p>
-      
-      <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-        <a href="vastu-shastra.pdf" target="_blank" class="btn btn-orange" style="padding: 8px 15px; font-size: 12px;">
-          <i class="fa-solid fa-eye"></i> ऑनलाइन पढ़ें
-        </a>
-        <a href="vastu-shastra.pdf" download class="btn btn-blue" style="padding: 8px 15px; font-size: 12px;">
-          <i class="fa-solid fa-download"></i> डाउनलोड
-        </a>
-      </div>
-    </div>
-
-  </div>
-</div>
-    
-    <div id="pdf" class="card" style="text-align: center; margin-top: 40px;">
-      <h2>📜 फलित ज्योतिष (PDF ग्रंथ)</h2>
-      <p style="color: #9ca3af; margin-bottom: 15px;">वेबसाइट पर ग्रंथ पढ़ने या डाउनलोड करने के लिए नीचे बटन पर क्लिक करें:</p>
+    <!-- Jyotish & Stotra Section (Archive Drive Reader) -->
+    <div id="stotra-jyotish" class="card" style="text-align: center; margin-top: 40px;">
+      <h2>📜 ज्योतिष एवं स्तोत्र संग्रह (Archive Book Reader)</h2>
+      <p style="color: #9ca3af; margin-bottom: 15px;">ज्योतिष ग्रंथ एवं दिव्य स्तोत्र पाठ को सीधे ऑनलाइन पढ़ें या डाउनलोड करें:</p>
       
       <div class="cta-group">
-        <a href="falit-jyotish.pdf" target="_blank" class="btn btn-orange"><i class="fa-solid fa-eye"></i> PDF नए टैब में खोलें</a>
-        <a href="falit-jyotish.pdf" download class="btn btn-blue"><i class="fa-solid fa-download"></i> PDF डाउनलोड करें</a>
+        <a href="https://drive.google.com/file/d/1fB7dMXYu-TLhxLclbYerUSbOf4MJRLUn/view?usp=sharing" target="_blank" class="btn btn-orange">
+          <i class="fa-solid fa-book-open"></i> Full Screen me Padhne Ke Liye
+        </a>
+        <a href="https://drive.google.com/uc?export=download&id=1fB7dMXYu-TLhxLclbYerUSbOf4MJRLUn" class="btn btn-blue">
+          <i class="fa-solid fa-download"></i> PDF डाउनलोड करें
+        </a>
       </div>
 
-      <!-- Google PDF Viewer Embed -->
-      <iframe src="https://docs.google.com/viewer?url=https://prashantkumarjitiwari-tech.github.io/Dev-Website-/falit-jyotish.pdf&embedded=true" class="pdf-frame"></iframe>
+      <!-- Google Drive Embedded Viewer Window -->
+      <iframe src="https://drive.google.com/file/d/1fB7dMXYu-TLhxLclbYerUSbOf4MJRLUn/preview" class="drive-iframe" allow="autoplay"></iframe>
     </div>
 
     <!-- Photo Gallery -->
@@ -284,4 +230,5 @@
   </footer>
 
 </body>
-</html>
+        </html>
+        
