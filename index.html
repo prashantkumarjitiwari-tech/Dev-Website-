@@ -1,7 +1,104 @@
 <!DOCTYPE html>
 <html lang="hi">
 
-<head>
+<head <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+  .hero-section-custom {
+    background: radial-gradient(circle at center, #111827 0%, #030712 100%);
+    color: #ffffff;
+    padding: 60px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  .badge-custom {
+    background: rgba(217, 119, 6, 0.15);
+    border: 1px solid rgba(245, 158, 11, 0.4);
+    color: #fef08a;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    margin-bottom: 25px;
+  }
+
+  .profile-avatar-custom {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #f97316, #3b82f6);
+    padding: 4px;
+    box-shadow: 0 0 30px rgba(249, 115, 22, 0.4);
+    margin-bottom: 25px;
+  }
+
+  .profile-avatar-custom img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .hero-section-custom h1 {
+    font-family: 'Cinzel', serif;
+    font-size: 38px;
+    color: #fef08a;
+    margin-bottom: 8px;
+  }
+
+  .subtitle-custom {
+    color: #9ca3af;
+    font-size: 15px;
+    margin-bottom: 30px;
+  }
+
+  .shloka-box-custom {
+    background: rgba(17, 24, 39, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 20px 30px;
+    border-radius: 12px;
+    max-width: 550px;
+    margin-bottom: 35px;
+    backdrop-filter: blur(5px);
+  }
+
+  .shloka-box-custom .sanskrit {
+    color: #fef08a;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .shloka-box-custom .translation {
+    color: #9ca3af;
+    font-size: 12px;
+  }
+
+  .cta-group-custom {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .btn-custom {
+    padding: 12px 24px;
+    border-radius: 25px;
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: transform 0.2s;
+  }
+
+  .btn-custom:hover { transform: translateY(-2px); }
+  .btn-orange-custom { background: linear-gradient(135deg, #f97316, #ea580c); color: white; }
+  .btn-blue-custom { background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; }
+  .btn-green-custom { background: linear-gradient(135deg, #10b981, #059669); color: white; }
+    </style>
+  
 <meta name="google-site-verification" content="t7t-8SzWM-anGOZAOL0-okJ96r95Jo4PTo8s8Yx1qMo" />
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -395,6 +492,29 @@ WhatsApp करें
 </div>
 
 
-</body>
+</body <!-- Hero Section -->
+<section class="hero-section-custom">
+  <div class="badge-custom">✦ Official Spiritual Portal • Shri Dham Vrindavan</div>
+
+  <div class="profile-avatar-custom">
+    <!-- Yahan apni photo ka path ya link dalein -->
+    <img src="YOUR_IMAGE_URL_HERE.jpg" alt="Acharya Dev Tiwari">
+  </div>
+
+  <h1>Acharya Dev Tiwari Ji Maharaj</h1>
+  <p class="subtitle-custom">Renowned Bhagavat Katha Vachak & Sanatan Scholar</p>
+
+  <div class="shloka-box-custom">
+    <p class="sanskrit">"गुरुर्ब्रह्मा गुरुर्विष्णुः गुरुर्देवो महेश्वरः ।<br>गुरुः साक्षात् परं ब्रह्म तस्मै श्रीगुरवे नमः ॥"</p>
+    <p class="translation">— Guru Stotram (The Supreme Reverence to the Guru)</p>
+  </div>
+
+  <div class="cta-group-custom">
+    <a href="#" class="btn-custom btn-orange-custom">📖 Book Katha</a>
+    <a href="#" class="btn-custom btn-blue-custom">📺 Watch Pravachan</a>
+    <a href="#" class="btn-custom btn-green-custom">💬 Contact on WhatsApp</a>
+  </div>
+</section>
+
 
 </html>
