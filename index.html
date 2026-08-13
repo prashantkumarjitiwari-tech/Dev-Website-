@@ -1,4 +1,4 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="hi">
 <head>
   <meta charset="UTF-8">
@@ -19,7 +19,7 @@
     /* Header Navbar */
     header {
       position: sticky; top: 0; width: 100%; display: flex; justify-content: space-between;
-      align-items: center; padding: 15px 5%; background: rgba(5, 8, 17, 0.95);
+      align-items: center; padding: 12px 4%; background: rgba(5, 8, 17, 0.95);
       backdrop-filter: blur(10px); z-index: 1000; border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
     .logo-container { display: flex; align-items: center; gap: 10px; }
@@ -27,32 +27,58 @@
       width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #f97316, #ea580c);
       display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 20px;
     }
-    .logo-text h2 { font-family: 'Cinzel', serif; font-size: 16px; color: #fbbf24; }
+    .logo-text h2 { font-family: 'Cinzel', serif; font-size: 15px; color: #fbbf24; }
     .logo-text p { font-size: 10px; color: #9ca3af; }
 
-    nav ul { display: flex; list-style: none; gap: 20px; }
-    nav a { color: #e5e7eb; text-decoration: none; font-size: 13px; font-weight: 500; }
-    nav a:hover { color: #fbbf24; }
+    .header-right { display: flex; align-items: center; gap: 10px; position: relative; }
 
     .header-btn {
-      background: #10b981; color: #fff; padding: 8px 18px; border-radius: 20px;
-      text-decoration: none; font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 8px;
+      background: #10b981; color: #fff; padding: 8px 14px; border-radius: 20px;
+      text-decoration: none; font-size: 12px; font-weight: 500; display: flex; align-items: center; gap: 6px;
     }
 
+    /* 3 Dots Menu Button & Dropdown */
+    .menu-dots-btn {
+      background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fbbf24; width: 38px; height: 38px; border-radius: 50%; display: flex;
+      align-items: center; justify-content: center; font-size: 18px; cursor: pointer; transition: 0.2s;
+    }
+    .menu-dots-btn:hover { background: rgba(249, 115, 22, 0.3); }
+
+    .dropdown-menu {
+      display: none; position: absolute; top: 50px; right: 0;
+      background: #0f172a; border: 1px solid rgba(251, 191, 36, 0.3);
+      border-radius: 14px; width: 220px; box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+      overflow: hidden; z-index: 1001;
+    }
+    .dropdown-menu.active { display: block; animation: fadeIn 0.2s ease-in-out; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .dropdown-menu ul { list-style: none; padding: 8px 0; }
+    .dropdown-menu li a {
+      display: flex; align-items: center; gap: 10px; padding: 12px 20px;
+      color: #e5e7eb; text-decoration: none; font-size: 13px; transition: 0.2s;
+    }
+    .dropdown-menu li a:hover { background: rgba(249, 115, 22, 0.2); color: #fbbf24; }
+
     /* Hero Section */
-    .hero { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 50px 20px 20px; }
+    .hero { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 40px 20px 20px; }
     .profile-avatar {
       width: 150px; height: 150px; border-radius: 50%;
       background: linear-gradient(135deg, #f97316, #3b82f6); padding: 4px;
       box-shadow: 0 0 30px rgba(249, 115, 22, 0.4); margin-bottom: 20px; overflow: hidden;
     }
     .profile-avatar img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
-    .hero h1 { font-family: 'Cinzel', serif; font-size: 34px; color: #ffffff; margin-bottom: 6px; }
-    .hero p.subtitle { color: #fbbf24; font-size: 15px; margin-bottom: 20px; }
+    .hero h1 { font-family: 'Cinzel', serif; font-size: 32px; color: #ffffff; margin-bottom: 6px; }
+    .hero p.subtitle { color: #fbbf24; font-size: 14px; margin-bottom: 20px; }
 
-    .cta-group { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-bottom: 20px; }
+    .cta-group { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 20px; }
     .btn {
-      padding: 10px 22px; border-radius: 25px; font-size: 13px; font-weight: 500;
+      padding: 10px 20px; border-radius: 25px; font-size: 13px; font-weight: 500;
       text-decoration: none; display: flex; align-items: center; gap: 8px; transition: 0.2s;
     }
     .btn:hover { transform: translateY(-2px); }
@@ -63,38 +89,35 @@
 
     /* Container & Cards */
     .container { max-width: 1050px; margin: 0 auto; padding: 0 20px 50px; }
-    .section-title { text-align: center; font-family: 'Cinzel', serif; color: #fbbf24; font-size: 24px; margin: 40px 0 20px; }
+    .section-title { text-align: center; font-family: 'Cinzel', serif; color: #fbbf24; font-size: 22px; margin: 40px 0 20px; }
 
     .card {
       background: rgba(17, 24, 39, 0.6); border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 18px; padding: 30px; margin-bottom: 30px;
+      border-radius: 18px; padding: 25px; margin-bottom: 25px;
     }
-    .card h2 { font-family: 'Cinzel', serif; color: #fbbf24; font-size: 22px; margin-bottom: 15px; }
-    .card p { color: #d1d5db; line-height: 1.7; font-size: 14px; }
+    .card h2 { font-family: 'Cinzel', serif; color: #fbbf24; font-size: 20px; margin-bottom: 12px; }
+    .card p { color: #d1d5db; line-height: 1.7; font-size: 13px; }
 
-    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 20px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; }
     .grid-card {
       background: rgba(17, 24, 39, 0.6); border: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 20px; border-radius: 14px; text-align: center;
+      padding: 18px; border-radius: 14px; text-align: center;
     }
-    .grid-card i { font-size: 28px; color: #f97316; margin-bottom: 10px; }
-    .grid-card h4 { font-size: 16px; color: #fff; margin-bottom: 6px; }
+    .grid-card i { font-size: 26px; color: #f97316; margin-bottom: 10px; }
+    .grid-card h4 { font-size: 15px; color: #fff; margin-bottom: 6px; }
     .grid-card p { color: #9ca3af; font-size: 12px; }
 
-    /* Drive Frame */
     .drive-iframe {
-      width: 100%; height: 500px; border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 12px; margin-top: 20px;
+      width: 100%; height: 450px; border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 12px; margin-top: 15px;
     }
 
-    /* Gallery */
-    .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
-    .gallery-img { width: 100%; height: 180px; object-fit: cover; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.1); }
+    .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+    .gallery-img { width: 100%; height: 170px; object-fit: cover; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.1); }
 
     footer { text-align: center; padding: 20px; border-top: 1px solid rgba(255, 255, 255, 0.08); color: #9ca3af; font-size: 12px; }
 
     @media (max-width: 768px) {
-      nav ul { display: none; }
       .drive-iframe { height: 380px; }
     }
   </style>
@@ -110,18 +133,30 @@
         <p>Shri Dham Vrindavan</p>
       </div>
     </div>
-    <nav>
-      <ul>
-        <li><a href="#about">परिचय</a></li>
-        <li><a href="#services">सेवाएं</a></li>
-        <li><a href="#stotra-jyotish">ज्योतिष एवं स्तोत्र</a></li>
-        <li><a href="#gallery">गैलरी</a></li>
-        <li><a href="#contact">संपर्क</a></li>
-      </ul>
-    </nav>
-    <a href="https://wa.me/917465040426" target="_blank" class="header-btn">
-      <i class="fa-brands fa-whatsapp"></i> WhatsApp
-    </a>
+
+    <div class="header-right">
+      <a href="https://wa.me/917465040426" target="_blank" class="header-btn">
+        <i class="fa-brands fa-whatsapp"></i> WhatsApp
+      </a>
+
+      <!-- 3 Dots Button -->
+      <button class="menu-dots-btn" id="menuBtn" onclick="toggleMenu()">
+        <i class="fa-solid fa-ellipsis-vertical"></i>
+      </button>
+
+      <!-- Dropdown Menu -->
+      <div class="dropdown-menu" id="dropdownMenu">
+        <ul>
+          <li><a href="#about" onclick="closeMenu()"><i class="fa-solid fa-user-circle" style="color:#f97316;"></i> परिचय</a></li>
+          <li><a href="#services" onclick="closeMenu()"><i class="fa-solid fa-hand-holding-heart" style="color:#3b82f6;"></i> हमारी सेवाएं</a></li>
+          <li><a href="#stotra-jyotish" onclick="closeMenu()"><i class="fa-solid fa-book-journal-whills" style="color:#8b5cf6;"></i> ज्योतिष एवं स्तोत्र</a></li>
+          <li><a href="#gallery" onclick="closeMenu()"><i class="fa-solid fa-images" style="color:#10b981;"></i> फोटो गैलरी</a></li>
+          <li><a href="#contact" onclick="closeMenu()"><i class="fa-solid fa-phone" style="color:#fbbf24;"></i> संपर्क करें</a></li>
+          <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 5px 0;">
+          <li><a href="javascript:void(0)" onclick="shareWebsite()"><i class="fa-solid fa-share-nodes" style="color:#ec4899;"></i> शेयर करें</a></li>
+        </ul>
+      </div>
+    </div>
   </header>
 
   <!-- Hero Section -->
@@ -142,10 +177,10 @@
   <div class="container">
 
     <!-- Daily Suvichar Box -->
-    <div style="background: linear-gradient(135deg, rgba(249, 115, 22, 0.15), rgba(16, 185, 129, 0.15)); border: 1px solid rgba(251, 191, 36, 0.3); padding: 22px 25px; border-radius: 16px; text-align: center; margin-bottom: 40px; box-shadow: 0 10px 25px rgba(0,0,0,0.3);" data-aos="fade-up">
+    <div style="background: linear-gradient(135deg, rgba(249, 115, 22, 0.15), rgba(16, 185, 129, 0.15)); border: 1px solid rgba(251, 191, 36, 0.3); padding: 20px 22px; border-radius: 16px; text-align: center; margin-bottom: 35px; box-shadow: 0 10px 25px rgba(0,0,0,0.3);" data-aos="fade-up">
       <span style="background: #f97316; color: #fff; padding: 4px 14px; border-radius: 20px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">✨ आज का पवन विचार / श्लोक</span>
-      <p id="daily-thought" style="color: #fbbf24; font-size: 19px; font-weight: 500; margin-top: 14px; font-family: 'Rozha One', serif;"></p>
-      <p id="thought-meaning" style="color: #d1d5db; font-size: 13px; margin-top: 6px;"></p>
+      <p id="daily-thought" style="color: #fbbf24; font-size: 18px; font-weight: 500; margin-top: 12px; font-family: 'Rozha One', serif;"></p>
+      <p id="thought-meaning" style="color: #d1d5db; font-size: 13px; margin-top: 5px;"></p>
     </div>
 
     <!-- About Section -->
@@ -186,8 +221,8 @@
 
     <!-- PDF 1 -->
     <div class="card" data-aos="fade-up">
-      <h2 style="font-size: 18px;">1. फलित ज्योतिष एवं ग्रंथ</h2>
-      <div class="cta-group" style="margin-top: 15px;">
+      <h2 style="font-size: 17px;">1. फलित ज्योतिष एवं ग्रंथ</h2>
+      <div class="cta-group" style="margin-top: 12px;">
         <a href="https://drive.google.com/file/d/1fB7dMXYu-TLhxLclbYerUSbOf4MJRLUn/view?usp=sharing" target="_blank" class="btn btn-orange"><i class="fa-solid fa-book-open"></i> Full Screen Padhne Ke Liye</a>
         <a href="https://drive.google.com/uc?export=download&id=1fB7dMXYu-TLhxLclbYerUSbOf4MJRLUn" class="btn btn-blue"><i class="fa-solid fa-download"></i> PDF डाउनलोड करें</a>
       </div>
@@ -196,8 +231,8 @@
 
     <!-- PDF 2 -->
     <div class="card" data-aos="fade-up">
-      <h2 style="font-size: 18px;">2. स्तोत्र एवं पाठ संग्रह</h2>
-      <div class="cta-group" style="margin-top: 15px;">
+      <h2 style="font-size: 17px;">2. स्तोत्र एवं पाठ संग्रह</h2>
+      <div class="cta-group" style="margin-top: 12px;">
         <a href="https://drive.google.com/file/d/1BKTlTLSIAySwKoQhPFnnHsweot9X3B82/view?usp=sharing" target="_blank" class="btn btn-orange"><i class="fa-solid fa-book-open"></i> Full Screen Padhne Ke Liye</a>
         <a href="https://drive.google.com/uc?export=download&id=1BKTlTLSIAySwKoQhPFnnHsweot9X3B82" class="btn btn-blue"><i class="fa-solid fa-download"></i> PDF डाउनलोड करें</a>
       </div>
@@ -206,8 +241,8 @@
 
     <!-- PDF 3 -->
     <div class="card" data-aos="fade-up">
-      <h2 style="font-size: 18px;">3. विशेष ज्योतिष पाठ भाग</h2>
-      <div class="cta-group" style="margin-top: 15px;">
+      <h2 style="font-size: 17px;">3. विशेष ज्योतिष पाठ भाग</h2>
+      <div class="cta-group" style="margin-top: 12px;">
         <a href="https://drive.google.com/file/d/1snMsr_1Oznjdpj4UM1BtorbgmOxaEDCn/view?usp=sharing" target="_blank" class="btn btn-orange"><i class="fa-solid fa-book-open"></i> Full Screen Padhne Ke Liye</a>
         <a href="https://drive.google.com/uc?export=download&id=1snMsr_1Oznjdpj4UM1BtorbgmOxaEDCn" class="btn btn-blue"><i class="fa-solid fa-download"></i> PDF डाउनलोड करें</a>
       </div>
@@ -245,8 +280,40 @@
   <!-- AOS Animation Script -->
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 
-  <!-- External Script Connection -->
+  <!-- 3 Dots Dropdown JS Logic -->
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById('dropdownMenu');
+      menu.classList.toggle('active');
+    }
+
+    function closeMenu() {
+      const menu = document.getElementById('dropdownMenu');
+      menu.classList.remove('active');
+    }
+
+    // Close menu when clicked outside
+    window.onclick = function(event) {
+      if (!event.target.matches('#menuBtn') && !event.target.matches('.menu-dots-btn') && !event.target.matches('.fa-ellipsis-vertical')) {
+        closeMenu();
+      }
+    }
+
+    function shareWebsite() {
+      if (navigator.share) {
+        navigator.share({
+          title: 'Acharya Dev Tiwari Ji Maharaj',
+          url: window.location.href
+        });
+      } else {
+        alert('Website Link Copied: ' + window.location.href);
+      }
+    }
+  </script>
+
+  <!-- External Script File -->
   <script src="script.js"></script>
 
 </body>
-</html>
+          </html>
+          
