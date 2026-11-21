@@ -151,6 +151,23 @@ if (thoughtEl && meaningEl) {
       list.appendChild(item);
     });
     if (!list.children.length) status.textContent = 'इस Drive फ़ोल्डर में अभी कोई PDF नहीं मिली।';
+
+    const search = document.getElementById('drive-pdf-search');
+    if (search && !search.dataset.ready) {
+      search.dataset.ready = 'true';
+      search.addEventListener('input', function() {
+        const term = search.value.trim().toLocaleLowerCase('hi');
+        let visible = 0;
+        Array.from(list.children).forEach(function(card) {
+          const match = card.textContent.toLocaleLowerCase('hi').includes(term);
+          card.hidden = !match;
+          if (match) visible++;
+        });
+        status.textContent = term
+          ? (visible ? visible + ' पुस्तकें मिलीं।' : 'इस नाम से कोई पुस्तक नहीं मिली।')
+          : 'कुल ' + list.children.length + ' PDF उपलब्ध हैं।';
+      });
+    }
   };
 
   const tag = document.createElement('script');
