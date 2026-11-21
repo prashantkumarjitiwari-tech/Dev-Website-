@@ -106,3 +106,55 @@ if (thoughtEl && meaningEl) {
   meaningEl.innerText = `— ${suvichars[index].meaning}`;
 }
 
+
+
+// Live Google Drive PDF library (JSONP avoids cross-origin fetch restrictions)
+(function loadDrivePdfLibrary() {
+  const status = document.getElementById('drive-pdf-status');
+  const list = document.getElementById('drive-pdf-list');
+  if (!status || !list) return;
+
+  window.handleDrivePdfLibrary = function(data) {
+    list.replaceChildren();
+    if (!data || data.success !== true || !Array.isArray(data.files)) {
+      status.textContent = 'PDF सूची अभी उपलब्ध नहीं है। कृपया थोड़ी देर बाद पुनः प्रयास करें।';
+      return;
+    }
+    if (data.files.length === 0) {
+      status.textContent = 'इस Drive फ़ोल्डर में अभी कोई PDF नहीं मिली।';
+      return;
+    }
+    status.textContent = 'कुल ' + data.files.length + ' PDF उपलब्ध हैं।';
+    data.files.forEach(function(file) {
+      if (!file || !file.id) return;
+      const item = document.createElement('article');
+      item.className = 'drive-pdf-item';
+      const title = document.createElement('h4');
+      title.textContent = file.name || 'बिना नाम की PDF';
+      const actions = document.createElement('div');
+      actions.className = 'drive-pdf-actions';
+      const read = document.createElement('a');
+      read.href = file.preview || ('https://drive.google.com/file/d/' + encodeURIComponent(file.id) + '/preview');
+      read.target = '_blank';
+      read.rel = 'noopener noreferrer';
+      read.textContent = 'ऑनलाइन पढ़ें';
+      const download = document.createElement('a');
+      download.className = 'download';
+      download.href = file.download || ('https://drive.google.com/uc?export=download&id=' + encodeURIComponent(file.id));
+      download.target = '_blank';
+      download.rel = 'noopener noreferrer';
+      download.textContent = 'डाउनलोड करें';
+      actions.append(read, download);
+      item.append(title, actions);
+      list.appendChild(item);
+    });
+    if (!list.children.length) status.textContent = 'इस Drive फ़ोल्डर में अभी कोई PDF नहीं मिली।';
+  };
+
+  const tag = document.createElement('script');
+  tag.src = 'https://script.google.com/macros/s/AKfycbx8GUE-v-_D25t26Iy1k3mo2W2VfyG2Wnh02gsjEVdnOiP9NHUmiHkr0_EjezIhaTLgOw/exec?callback=handleDrivePdfLibrary';
+  tag.onerror = function() {
+    status.textContent = 'PDF सूची लोड नहीं हो पाई। इंटरनेट कनेक्शन जाँचकर पेज रीफ़्रेश करें।';
+  };
+  document.head.appendChild(tag);
+})();
