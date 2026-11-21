@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://dev-tiwari-website-v3.vercel.app/sitemap.xml
