@@ -57,7 +57,10 @@ cards.forEach(card=>{
 card.style.opacity="0";
 card.style.transform="translateY(40px)";
 card.style.transition="0.6s";
-    // Form Submission Alert
+
+});
+
+// Form Submission Alert
 const form = document.getElementById('consultation-form');
 if (form) {
   form.addEventListener('submit', function (e) {
@@ -69,9 +72,7 @@ if (form) {
 
 // Smooth Scroll
 document.documentElement.style.scrollBehavior = 'smooth';
-    
 
-});
 // ==========================================
 // 1. Scroll Reveal Animation Setup
 // ==========================================
