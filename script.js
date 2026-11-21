@@ -193,14 +193,25 @@ if (thoughtEl && meaningEl) {
 })();
 
 
-/* Per-PDF reactions and comment submission. Likes are local; comments are sent by the visitor through WhatsApp. */
+/* Per-PDF reactions, comments and notification backend. */
 (function setupPdfReactions() {
   const STORE = 'devTiwariPdfReactions_v1';
-  const FEEDBACK_NUMBER = '917465040426';
+  const NOTIFICATION_ENDPOINT = 'https://script.google.com/macros/s/AKfycby9NvMn0XIybhTvv16hR6YCsDXGysJtJP5SBC0F52LN2WFk-Abp-w98zYnNMdlQAtJh/exec';
+
   function readVotes() {
     try { return JSON.parse(localStorage.getItem(STORE) || '{}'); }
     catch (e) { return {}; }
   }
+
+  function sendToBackend(payload) {
+    return fetch(NOTIFICATION_ENDPOINT, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload)
+    });
+  }
+
   function addReaction(iframe) {
     if (!iframe || iframe.dataset.reactionsAdded === 'true') return;
     const src = iframe.getAttribute('src') || '';
@@ -208,18 +219,23 @@ if (thoughtEl && meaningEl) {
     const id = match ? match[1] : (iframe.title || 'pdf-' + Math.random().toString(36).slice(2));
     const host = iframe.closest('.drive-pdf-item, .card') || iframe.parentElement?.parentElement;
     if (!host) return;
+
     const bar = document.createElement('section');
     bar.className = 'pdf-reaction-bar';
     bar.dataset.pdfReactionId = id;
     const label = document.createElement('span');
     label.className = 'pdf-reaction-label';
     label.textContent = 'इस PDF पर अपनी राय दें';
+
     const like = document.createElement('button');
-    like.type = 'button'; like.className = 'pdf-reaction-btn like';
-    like.innerHTML = '<i class="fa-solid fa-thumbs-up" aria-hidden="true"></i> पसंद <b>0</b>';
+    like.type = 'button';
+    like.className = 'pdf-reaction-btn like';
+    like.innerHTML = '<i class="fa-solid fa-thumbs-up" aria-hidden="true"></i> पसंद';
     const dislike = document.createElement('button');
-    dislike.type = 'button'; dislike.className = 'pdf-reaction-btn dislike';
-    dislike.innerHTML = '<i class="fa-solid fa-thumbs-down" aria-hidden="true"></i> पसंद नहीं <b>0</b>';
+    dislike.type = 'button';
+    dislike.className = 'pdf-reaction-btn dislike';
+    dislike.innerHTML = '<i class="fa-solid fa-thumbs-down" aria-hidden="true"></i> पसंद नहीं';
+
     const commentLabel = document.createElement('label');
     commentLabel.className = 'pdf-comment-label';
     commentLabel.textContent = 'टिप्पणी / सुझाव लिखें';
@@ -228,12 +244,47 @@ if (thoughtEl && meaningEl) {
     comment.rows = 2;
     comment.maxLength = 1000;
     comment.placeholder = 'इस पुस्तक के बारे में अपनी राय यहाँ लिखें...';
-    const send = document.createElement('a');
+
+    const send = document.createElement('button');
+    send.type = 'button';
     send.className = 'pdf-comment-send';
-    send.href = '#';
-    send.innerHTML = '<i class="fa-brands fa-whatsapp" aria-hidden="true"></i> टिप्पणी भेजें';
-    send.addEventListener('click', function(e) {
-      e.preventDefault();
+    send.innerHTML = '<i class="fa-solid fa-paper-plane" aria-hidden="true"></i> टिप्पणी भेजें';
+
+    const note = document.createElement('small');
+    note.className = 'pdf-reaction-note';
+    note.textContent = 'आपकी पसंद और टिप्पणी सुरक्षित रूप से दर्ज होगी। टिप्पणी पर ईमेल सूचना भेजी जाएगी।';
+
+    function titleOfPdf() {
+      return host.querySelector('h3, h4, h5')?.textContent?.trim() || iframe.title || 'PDF';
+    }
+
+    function render() {
+      const votes = readVotes();
+      const current = votes[id] || '';
+      like.setAttribute('aria-pressed', String(current === 'like'));
+      dislike.setAttribute('aria-pressed', String(current === 'dislike'));
+    }
+
+    function vote(value) {
+      const votes = readVotes();
+      const next = votes[id] === value ? '' : value;
+      if (next) votes[id] = next; else delete votes[id];
+      try { localStorage.setItem(STORE, JSON.stringify(votes)); } catch (e) {}
+      render();
+      sendToBackend({
+        type: value,
+        pdfId: id,
+        pdfName: titleOfPdf(),
+        pageUrl: window.location.href
+      }).catch(function() {
+        note.textContent = 'प्रतिक्रिया भेजने में समस्या हुई। कृपया पुनः प्रयास करें।';
+      });
+    }
+
+    like.addEventListener('click', () => vote('like'));
+    dislike.addEventListener('click', () => vote('dislike'));
+
+    send.addEventListener('click', function() {
       const message = comment.value.trim();
       if (!message) {
         comment.focus();
@@ -242,29 +293,25 @@ if (thoughtEl && meaningEl) {
         comment.setCustomValidity('');
         return;
       }
-      const title = host.querySelector('h3, h4, h5')?.textContent?.trim() || iframe.title || 'PDF';
-      const body = 'नमस्ते, वेबसाइट की PDF "' + title + '" के बारे में मेरी राय/सुझाव:\n\n' + message;
-      window.open('https://wa.me/' + FEEDBACK_NUMBER + '?text=' + encodeURIComponent(body), '_blank', 'noopener,noreferrer');
+      send.disabled = true;
+      send.textContent = 'भेज रहे हैं…';
+      sendToBackend({
+        type: 'comment',
+        pdfId: id,
+        pdfName: titleOfPdf(),
+        comment: message,
+        pageUrl: window.location.href
+      }).then(function() {
+        note.textContent = 'आपकी टिप्पणी भेज दी गई है। धन्यवाद!';
+        comment.value = '';
+      }).catch(function() {
+        note.textContent = 'टिप्पणी भेजने में समस्या हुई। कृपया पुनः प्रयास करें।';
+      }).finally(function() {
+        send.disabled = false;
+        send.innerHTML = '<i class="fa-solid fa-paper-plane" aria-hidden="true"></i> टिप्पणी भेजें';
+      });
     });
-    const note = document.createElement('small');
-    note.className = 'pdf-reaction-note';
-    note.textContent = 'पसंद/नापसंद इसी ब्राउज़र में सेव होगी। टिप्पणी WhatsApp पर भेजी जाएगी।';
-    function render() {
-      const votes = readVotes();
-      const current = votes[id] || '';
-      like.setAttribute('aria-pressed', String(current === 'like'));
-      dislike.setAttribute('aria-pressed', String(current === 'dislike'));
-      like.querySelector('b').textContent = current === 'like' ? '1' : '0';
-      dislike.querySelector('b').textContent = current === 'dislike' ? '1' : '0';
-    }
-    function vote(value) {
-      const votes = readVotes();
-      if (votes[id] === value) delete votes[id]; else votes[id] = value;
-      try { localStorage.setItem(STORE, JSON.stringify(votes)); } catch (e) {}
-      render();
-    }
-    like.addEventListener('click', () => vote('like'));
-    dislike.addEventListener('click', () => vote('dislike'));
+
     bar.append(label, like, dislike, commentLabel, comment, send, note);
     const target = iframe.closest('.drive-pdf-item, .card');
     if (target) target.appendChild(bar);
@@ -272,6 +319,7 @@ if (thoughtEl && meaningEl) {
     iframe.dataset.reactionsAdded = 'true';
     render();
   }
+
   function scan(root) {
     if (root.matches && root.matches('iframe[src*="/preview"]')) addReaction(root);
     if (root.querySelectorAll) root.querySelectorAll('iframe[src*="/preview"]').forEach(addReaction);
@@ -280,5 +328,5 @@ if (thoughtEl && meaningEl) {
   const observer = new MutationObserver(records => records.forEach(record =>
     record.addedNodes.forEach(node => { if (node.nodeType === 1) scan(node); })
   ));
-  observer.observe(document.body, { childList:true, subtree:true });
+  observer.observe(document.body, { childList: true, subtree: true });
 })();
