@@ -543,6 +543,35 @@
       .header-right { gap: 6px !important; }
       .follow-header-btn { padding: 8px 10px !important; font-size: 10px !important; }
     }
+  <style id="community-engagement-styles">
+    .community-card {
+      margin:54px auto 28px; padding:clamp(22px,4vw,38px); text-align:center;
+      border:1px solid rgba(232,184,91,.32); border-radius:22px;
+      background:radial-gradient(circle at 50% 0%,rgba(232,184,91,.15),transparent 58%),linear-gradient(145deg,#172338,#0c1524);
+      box-shadow:0 18px 45px rgba(0,0,0,.22);
+    }
+    .community-kicker { display:inline-flex; gap:8px; align-items:center; color:#f1ce87; font-size:12px; font-weight:700; letter-spacing:.5px; }
+    .community-card h2 { color:#f7d994; font-size:clamp(21px,3vw,29px); margin:10px 0 8px; }
+    .community-card>p { max-width:700px; margin:0 auto 22px; color:#c3ccda; font-size:14px; }
+    .community-actions { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; max-width:850px; margin:0 auto; }
+    .community-action { min-height:76px; display:flex; align-items:center; justify-content:center; gap:12px; padding:13px 15px; border-radius:14px; color:#fff; text-decoration:none; border:1px solid rgba(255,255,255,.12); cursor:pointer; font:inherit; transition:transform .2s,box-shadow .2s; }
+    .community-action:hover { transform:translateY(-3px); box-shadow:0 10px 22px rgba(0,0,0,.22); }
+    .community-action>i { font-size:23px; }
+    .community-action span { display:flex; flex-direction:column; text-align:left; }
+    .community-action strong { font-size:13px; }
+    .community-action small { color:rgba(255,255,255,.78); font-size:10px; margin-top:2px; }
+    .community-follow { background:linear-gradient(135deg,#16866a,#105b49); }
+    .community-share { background:linear-gradient(135deg,#a87928,#d6ad5c); color:#211809; }
+    .community-share small { color:#392b17; }
+    .community-feedback { background:linear-gradient(135deg,#67508f,#463568); }
+    .community-share-links { display:flex; justify-content:center; gap:18px; margin-top:18px; }
+    .community-share-links a { color:#e8c878; font-size:12px; text-decoration:none; }
+    @media(max-width:700px) {
+      .community-card { margin:38px auto 24px; padding:22px 15px; }
+      .community-actions { grid-template-columns:1fr; gap:9px; }
+      .community-action { justify-content:flex-start; min-height:65px; }
+      .community-action span { flex:1; }
+    }
   </style>
 
 </head>
@@ -559,8 +588,8 @@
     </div>
 
     <div class="header-right">
-      <a href="#contact" class="header-btn follow-header-btn">
-        <i class="fa-solid fa-user-plus"></i> Follow करें
+      <a href="https://wa.me/917465040426?text=Namaste%2C%20mujhe%20website%20ke%20naye%20updates%20prapt%20karne%20hain." target="_blank" rel="noopener noreferrer" class="header-btn follow-header-btn">
+        <i class="fa-brands fa-whatsapp"></i> Updates Follow करें
       </a>
       <a href="https://wa.me/917465040426" target="_blank" class="header-btn">
         <i class="fa-brands fa-whatsapp"></i> WhatsApp
@@ -769,6 +798,28 @@
       <img src="assets/gallery3.jpg" class="gallery-img" alt="Gallery 3">
     </div>
 
+    <!-- Community & Engagement -->
+    <section id="community" class="community-card" data-aos="fade-up" aria-labelledby="community-title">
+      <span class="community-kicker"><i class="fa-solid fa-sparkles"></i> जुड़े रहें • ज्ञान साझा करें</span>
+      <h2 id="community-title">सनातन ज्ञान की इस यात्रा से जुड़ें</h2>
+      <p>नए लेख, उपयोगी ग्रंथ और आध्यात्मिक जानकारी पाने के लिए WhatsApp पर जुड़ें। वेबसाइट को अपने मित्रों और परिवार के साथ साझा करें या अपना सुझाव भेजें।</p>
+      <div class="community-actions">
+        <a class="community-action community-follow" href="https://wa.me/917465040426?text=Namaste%2C%20mujhe%20website%20ke%20naye%20updates%20prapt%20karne%20hain." target="_blank" rel="noopener noreferrer">
+          <i class="fa-brands fa-whatsapp"></i><span><strong>Updates के लिए जुड़ें</strong><small>WhatsApp पर संदेश भेजें</small></span>
+        </a>
+        <button class="community-action community-share" type="button" onclick="shareWebsite()">
+          <i class="fa-solid fa-share-nodes"></i><span><strong>वेबसाइट साझा करें</strong><small>मित्रों तक ज्ञान पहुँचाएँ</small></span>
+        </button>
+        <a class="community-action community-feedback" href="https://wa.me/917465040426?text=Namaste%2C%20main%20aapki%20website%20ke%20liye%20ek%20sujhav%20bhejna%20chahta%2Fchahti%20hoon." target="_blank" rel="noopener noreferrer">
+          <i class="fa-regular fa-comment-dots"></i><span><strong>Feedback / सुझाव</strong><small>अपनी प्रतिक्रिया भेजें</small></span>
+        </a>
+      </div>
+      <div class="community-share-links">
+        <a href="https://wa.me/?text=आचार्य%20देव%20तिवारी%20जी%20महाराज%20की%20आधिकारिक%20वेबसाइट%20देखें%3A%20https%3A%2F%2Fdev-tiwari-website-v3.vercel.app%2F" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
+        <a href="https://t.me/share/url?url=https%3A%2F%2Fdev-tiwari-website-v3.vercel.app%2F&text=आचार्य%20देव%20तिवारी%20जी%20महाराज%20की%20आधिकारिक%20वेबसाइट" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-telegram"></i> Telegram</a>
+      </div>
+    </section>
+
     <!-- Contact Box -->
     <div id="contact" class="card" style="text-align: center; margin-top: 40px;" data-aos="fade-up">
       <h2>कथा आयोजन एवं परामर्श हेतु संपर्क करें</h2>
@@ -809,14 +860,21 @@
       }
     }
 
-    function shareWebsite() {
+    async function shareWebsite() {
+      const shareData = {
+        title: 'आचार्य देव तिवारी जी महाराज',
+        text: 'सनातन ज्ञान, संस्कृत साहित्य एवं आध्यात्मिक जानकारी के लिए आधिकारिक वेबसाइट देखें।',
+        url: 'https://dev-tiwari-website-v3.vercel.app/'
+      };
       if (navigator.share) {
-        navigator.share({
-          title: 'Acharya Dev Tiwari Ji Maharaj',
-          url: window.location.href
-        });
+        try { await navigator.share(shareData); } catch (error) { if (error.name !== 'AbortError') console.error(error); }
       } else {
-        alert('Website Link Copied: ' + window.location.href);
+        try {
+          await navigator.clipboard.writeText(shareData.url);
+          alert('वेबसाइट का लिंक कॉपी हो गया है। अब आप इसे साझा कर सकते हैं।');
+        } catch (error) {
+          window.prompt('वेबसाइट लिंक कॉपी करें:', shareData.url);
+        }
       }
     }
   </script>
