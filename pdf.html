@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <title>ग्रंथकोश | Dev Tiwari Ji Maharaj</title>
+  <meta name="description" content="ग्रंथकोश में पुस्तक का ऑनलाइन अध्ययन करें।">
+  <link rel="canonical" href="https://dev-tiwari-website-v3.vercel.app/pdf.html">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box}body{margin:0;background:#050811;color:#fff;font-family:Poppins,sans-serif}
+    header{padding:16px 5%;background:#0b1220;border-bottom:1px solid #344054}
+    header a{color:#fbbf24;text-decoration:none;font-weight:600}
+    main{max-width:1100px;margin:28px auto;padding:0 16px}
+    .book-card{background:#111827;border:1px solid rgba(251,191,36,.25);border-radius:18px;padding:20px}
+    h1{font-size:clamp(20px,4vw,30px);color:#fbbf24;line-height:1.5;margin:0 0 14px;overflow-wrap:anywhere}
+    .actions{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0}
+    .btn{display:inline-block;padding:10px 16px;border-radius:22px;text-decoration:none;color:#fff;background:linear-gradient(135deg,#f97316,#ea580c);font-size:13px}
+    .btn.download{background:linear-gradient(135deg,#2563eb,#1d4ed8)}
+    .viewer{width:100%;height:min(78vh,900px);min-height:520px;border:1px solid #475569;border-radius:12px;background:#000}
+    .note{color:#9ca3af;font-size:12px;line-height:1.7;margin-top:14px}
+    @media(max-width:600px){.book-card{padding:14px}.viewer{height:72vh;min-height:440px}}
+  </style>
+</head>
+<body>
+  <header><a href="index.html#drive-pdf-library">← ग्रंथकोश में वापस जाएँ</a></header>
+  <main>
+    <article class="book-card">
+      <h1 id="book-title">पुस्तक लोड हो रही है...</h1>
+      <div class="actions">
+        <a id="download-link" class="btn download" href="#" rel="noopener">मूल PDF डाउनलोड करें</a>
+        <a id="drive-link" class="btn" href="#" target="_blank" rel="noopener noreferrer">नए टैब में खोलें</a>
+      </div>
+      <iframe id="pdf-viewer" class="viewer" title="पुस्तक PDF Preview" loading="eager" allow="autoplay"></iframe>
+      <p class="note">यह पुस्तक आपकी वेबसाइट के ग्रंथकोश से प्रस्तुत की गई है। बड़ी PDF को खुलने में कुछ समय लग सकता है।</p>
+    </article>
+  </main>
+  <script>
+    (function(){
+      const params=new URLSearchParams(location.search);
+      const id=params.get('id')||'';
+      const name=params.get('name')||'ग्रंथ';
+      const title=document.getElementById('book-title');
+      if(!/^[a-zA-Z0-9_-]{10,}$/.test(id)){
+        title.textContent='पुस्तक का लिंक सही नहीं है।';
+        document.getElementById('pdf-viewer').remove();
+        return;
+      }
+      title.textContent=name;
+      document.title=name+' | ग्रंथकोश | Dev Tiwari Ji Maharaj';
+      document.querySelector('meta[name="description"]').setAttribute('content',name+' का ऑनलाइन अध्ययन करें — ग्रंथकोश, Dev Tiwari Ji Maharaj.');
+      const preview='https://drive.google.com/file/d/'+encodeURIComponent(id)+'/preview';
+      document.getElementById('pdf-viewer').src=preview;
+      document.getElementById('drive-link').href='https://drive.google.com/file/d/'+encodeURIComponent(id)+'/view';
+      document.getElementById('download-link').href='https://drive.google.com/uc?export=download&id='+encodeURIComponent(id);
+    })();
+  </script>
+</body>
+</html>
