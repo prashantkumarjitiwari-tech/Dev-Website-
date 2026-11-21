@@ -135,10 +135,11 @@ if (thoughtEl && meaningEl) {
       const actions = document.createElement('div');
       actions.className = 'drive-pdf-actions';
       const read = document.createElement('a');
-      read.href = file.preview || ('https://drive.google.com/file/d/' + encodeURIComponent(file.id) + '/preview');
-      read.target = '_blank';
-      read.rel = 'noopener noreferrer';
-      read.textContent = 'ऑनलाइन पढ़ें';
+      const bookUrl = new URL('pdf.html', window.location.href);
+      bookUrl.searchParams.set('id', file.id);
+      bookUrl.searchParams.set('name', file.name || 'ग्रंथ');
+      read.href = bookUrl.href;
+      read.textContent = 'वेबसाइट पर पढ़ें';
       const download = document.createElement('a');
       download.className = 'download';
       download.href = file.download || ('https://drive.google.com/uc?export=download&id=' + encodeURIComponent(file.id));
