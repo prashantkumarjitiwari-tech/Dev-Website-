@@ -139,15 +139,43 @@ if (thoughtEl && meaningEl) {
       bookUrl.searchParams.set('id', file.id);
       bookUrl.searchParams.set('name', file.name || 'ग्रंथ');
       read.href = bookUrl.href;
-      read.textContent = 'वेबसाइट पर पढ़ें';
+      read.textContent = 'पूरे पेज पर पढ़ें';
+
+      const previewButton = document.createElement('button');
+      previewButton.type = 'button';
+      previewButton.textContent = 'यहीं Preview देखें';
+      previewButton.style.cssText = 'padding:9px 12px;border:0;border-radius:20px;color:#fff;font-size:12px;background:linear-gradient(135deg,#0f766e,#059669);cursor:pointer;';
+      const previewFrame = document.createElement('iframe');
+      previewFrame.className = 'drive-iframe';
+      previewFrame.title = (file.name || 'PDF') + ' का Preview';
+      previewFrame.loading = 'lazy';
+      previewFrame.style.display = 'none';
+      previewFrame.style.width = '100%';
+      previewFrame.style.height = '520px';
+      previewFrame.style.marginTop = '12px';
+      previewFrame.style.border = '1px solid rgba(255,255,255,.15)';
+      previewFrame.style.borderRadius = '12px';
+      previewFrame.allow = 'autoplay';
+      previewButton.addEventListener('click', function() {
+        if (previewFrame.style.display === 'none') {
+          previewFrame.src = file.preview || ('https://drive.google.com/file/d/' + encodeURIComponent(file.id) + '/preview');
+          previewFrame.style.display = 'block';
+          previewButton.textContent = 'Preview बंद करें';
+        } else {
+          previewFrame.style.display = 'none';
+          previewButton.textContent = 'यहीं Preview देखें';
+          previewFrame.src = 'about:blank';
+        }
+      });
+
       const download = document.createElement('a');
       download.className = 'download';
       download.href = file.download || ('https://drive.google.com/uc?export=download&id=' + encodeURIComponent(file.id));
       download.target = '_blank';
       download.rel = 'noopener noreferrer';
       download.textContent = 'डाउनलोड करें';
-      actions.append(read, download);
-      item.append(title, actions);
+      actions.append(previewButton, read, download);
+      item.append(title, actions, previewFrame);
       list.appendChild(item);
     });
     if (!list.children.length) status.textContent = 'इस Drive फ़ोल्डर में अभी कोई PDF नहीं मिली।';
