@@ -530,6 +530,19 @@
       .gallery-grid .gallery-img { border-radius:10px !important; }
       .drive-iframe, #drive-pdf-list .drive-pdf-item .drive-iframe { height:340px !important; }
     }
+  <style id="premium-follow-button">
+    .follow-header-btn {
+      background: linear-gradient(135deg, #b8862d, #e8c878) !important;
+      color: #241b0b !important;
+      border: 1px solid rgba(255,255,255,.55) !important;
+      box-shadow: 0 5px 16px rgba(168,121,40,.22);
+      font-weight: 700 !important;
+    }
+    .follow-header-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(168,121,40,.3); }
+    @media (max-width: 520px) {
+      .header-right { gap: 6px !important; }
+      .follow-header-btn { padding: 8px 10px !important; font-size: 10px !important; }
+    }
   </style>
 
 </head>
@@ -546,6 +559,9 @@
     </div>
 
     <div class="header-right">
+      <a href="#contact" class="header-btn follow-header-btn">
+        <i class="fa-solid fa-user-plus"></i> Follow करें
+      </a>
       <a href="https://wa.me/917465040426" target="_blank" class="header-btn">
         <i class="fa-brands fa-whatsapp"></i> WhatsApp
       </a>
