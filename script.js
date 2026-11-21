@@ -193,9 +193,10 @@ if (thoughtEl && meaningEl) {
 })();
 
 
-/* Per-PDF like/dislike controls. Votes are saved locally in this visitor's browser. */
+/* Per-PDF reactions and comment submission. Likes are local; comments are sent by the visitor through WhatsApp. */
 (function setupPdfReactions() {
   const STORE = 'devTiwariPdfReactions_v1';
+  const FEEDBACK_NUMBER = '917465040426';
   function readVotes() {
     try { return JSON.parse(localStorage.getItem(STORE) || '{}'); }
     catch (e) { return {}; }
@@ -207,21 +208,47 @@ if (thoughtEl && meaningEl) {
     const id = match ? match[1] : (iframe.title || 'pdf-' + Math.random().toString(36).slice(2));
     const host = iframe.closest('.drive-pdf-item, .card') || iframe.parentElement?.parentElement;
     if (!host) return;
-    const bar = document.createElement('div');
+    const bar = document.createElement('section');
     bar.className = 'pdf-reaction-bar';
     bar.dataset.pdfReactionId = id;
     const label = document.createElement('span');
     label.className = 'pdf-reaction-label';
-    label.textContent = 'इस PDF पर आपकी राय';
+    label.textContent = 'इस PDF पर अपनी राय दें';
     const like = document.createElement('button');
     like.type = 'button'; like.className = 'pdf-reaction-btn like';
     like.innerHTML = '<i class="fa-solid fa-thumbs-up" aria-hidden="true"></i> पसंद <b>0</b>';
     const dislike = document.createElement('button');
     dislike.type = 'button'; dislike.className = 'pdf-reaction-btn dislike';
     dislike.innerHTML = '<i class="fa-solid fa-thumbs-down" aria-hidden="true"></i> पसंद नहीं <b>0</b>';
+    const commentLabel = document.createElement('label');
+    commentLabel.className = 'pdf-comment-label';
+    commentLabel.textContent = 'टिप्पणी / सुझाव लिखें';
+    const comment = document.createElement('textarea');
+    comment.className = 'pdf-comment-input';
+    comment.rows = 2;
+    comment.maxLength = 1000;
+    comment.placeholder = 'इस पुस्तक के बारे में अपनी राय यहाँ लिखें...';
+    const send = document.createElement('a');
+    send.className = 'pdf-comment-send';
+    send.href = '#';
+    send.innerHTML = '<i class="fa-brands fa-whatsapp" aria-hidden="true"></i> टिप्पणी भेजें';
+    send.addEventListener('click', function(e) {
+      e.preventDefault();
+      const message = comment.value.trim();
+      if (!message) {
+        comment.focus();
+        comment.setCustomValidity('कृपया पहले अपनी टिप्पणी लिखें।');
+        comment.reportValidity();
+        comment.setCustomValidity('');
+        return;
+      }
+      const title = host.querySelector('h3, h4, h5')?.textContent?.trim() || iframe.title || 'PDF';
+      const body = 'नमस्ते, वेबसाइट की PDF "' + title + '" के बारे में मेरी राय/सुझाव:\n\n' + message;
+      window.open('https://wa.me/' + FEEDBACK_NUMBER + '?text=' + encodeURIComponent(body), '_blank', 'noopener,noreferrer');
+    });
     const note = document.createElement('small');
     note.className = 'pdf-reaction-note';
-    note.textContent = 'आपकी प्रतिक्रिया इसी डिवाइस/ब्राउज़र में सेव होगी।';
+    note.textContent = 'पसंद/नापसंद इसी ब्राउज़र में सेव होगी। टिप्पणी WhatsApp पर भेजी जाएगी।';
     function render() {
       const votes = readVotes();
       const current = votes[id] || '';
@@ -229,7 +256,6 @@ if (thoughtEl && meaningEl) {
       dislike.setAttribute('aria-pressed', String(current === 'dislike'));
       like.querySelector('b').textContent = current === 'like' ? '1' : '0';
       dislike.querySelector('b').textContent = current === 'dislike' ? '1' : '0';
-      note.textContent = current ? 'आपकी प्रतिक्रिया सेव हो गई है। दोबारा दबाकर हटाएँ या दूसरी प्रतिक्रिया चुनें।' : 'आपकी प्रतिक्रिया इसी डिवाइस/ब्राउज़र में सेव होगी।';
     }
     function vote(value) {
       const votes = readVotes();
@@ -239,7 +265,7 @@ if (thoughtEl && meaningEl) {
     }
     like.addEventListener('click', () => vote('like'));
     dislike.addEventListener('click', () => vote('dislike'));
-    bar.append(label, like, dislike, note);
+    bar.append(label, like, dislike, commentLabel, comment, send, note);
     const target = iframe.closest('.drive-pdf-item, .card');
     if (target) target.appendChild(bar);
     else iframe.parentElement.insertAdjacentElement('afterend', bar);
