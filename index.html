@@ -758,6 +758,7 @@
         <button type="button" class="category-tile" onclick="openLibraryCategory('category-bhajan')"><i class="fa-solid fa-music"></i><strong>भजन एवं कीर्तन</strong><small>भक्ति-संगीत और कीर्तन संग्रह</small><span>विभाग खोलें <i class="fa-solid fa-arrow-right"></i></span></button>
         <button type="button" class="category-tile" onclick="openLibraryCategory('category-katha')"><i class="fa-solid fa-book-open"></i><strong>कथा-कहानी</strong><small>प्रेरक, धार्मिक और साहित्यिक कथाएँ</small><span>विभाग खोलें <i class="fa-solid fa-arrow-right"></i></span></button>
         <button type="button" class="category-tile" onclick="openLibraryCategory('category-dhyan')"><i class="fa-solid fa-spa"></i><strong>ध्यान एवं साधना</strong><small>ध्यान, जप और साधना संबंधी सामग्री</small><span>विभाग खोलें <i class="fa-solid fa-arrow-right"></i></span></button>
+        <button type="button" class="category-tile" onclick="openLibraryCategory('category-study')"><i class="fa-solid fa-book-open-reader"></i><strong>अध्ययन कक्ष</strong><small>पाठ्य-सामग्री, नोट्स और स्वाध्याय</small><span>विभाग खोलें <i class="fa-solid fa-arrow-right"></i></span></button>
         <button type="button" class="category-tile" onclick="openLibraryCategory('category-gallery')"><i class="fa-solid fa-images"></i><strong>फोटो गैलरी</strong><small>आध्यात्मिक यात्रा और स्मृतियाँ</small><span>विभाग खोलें <i class="fa-solid fa-arrow-right"></i></span></button>
       </div>
     </section>
@@ -768,6 +769,7 @@
       .category-tile{display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:8px;min-height:160px;padding:18px 16px;border:1px solid rgba(168,121,40,.22);border-radius:15px;background:linear-gradient(145deg,#fff,#f7efdf);color:#493b2b;cursor:pointer;transition:transform .2s,box-shadow .2s}
       .category-tile:hover{transform:translateY(-3px);box-shadow:0 9px 22px rgba(76,55,24,.12)}.category-tile>i{font-size:23px;color:#98702d}.category-tile strong{font-size:15px;color:#654719}.category-tile small{font-size:11px;line-height:1.55;color:#625543}.category-tile span{margin-top:auto;font-size:11px;font-weight:700;color:#91651f}
       .library-category{margin:28px 0;border:1px solid rgba(168,121,40,.25);border-radius:18px;background:#fffaf1;overflow:hidden;scroll-margin-top:92px}
+      .library-category>summary{display:none!important}
       .library-category>summary{list-style:none;display:flex;align-items:center;gap:12px;padding:18px 20px;background:linear-gradient(110deg,#f4e6c9,#fffaf0);cursor:pointer;color:#654719;font-weight:800;font-size:17px}
       .library-category>summary::-webkit-details-marker{display:none}.library-category>summary:after{content:'＋';margin-left:auto;font-size:22px;color:#91651f}.library-category[open]>summary:after{content:'−'}
       .library-category-body{padding:20px}.library-category-body>.section-title:first-child{margin-top:8px}
@@ -952,7 +954,11 @@
 
     
 
-    <details class="library-category" id="category-gallery"><summary><i class="fa-solid fa-images"></i> फोटो गैलरी</summary><div class="library-category-body">
+    <details class="library-category" id="category-study">
+      <summary><i class="fa-solid fa-book-open-reader"></i> अध्ययन कक्ष</summary>
+      <div class="library-category-body"><div class="category-empty"><i class="fa-solid fa-book-open-reader"></i><h3>अध्ययन एवं स्वाध्याय</h3><p>यह विभाग नियमित अध्ययन, विषयवार नोट्स, पाठ्यक्रम, प्रश्नोत्तर और अभ्यास-सामग्री के लिए है। उपयोगी अध्ययन सामग्री यहाँ क्रमबद्ध रूप से उपलब्ध कराई जाएगी।</p><a href="https://wa.me/917465040426?text=Namaste%2C%20website%20ke%20Adhyayan%20Kaksh%20me%20study%20material%20jodni%20hai." target="_blank" rel="noopener noreferrer">अध्ययन सामग्री भेजें</a></div></div>
+    </details>
+        <details class="library-category" id="category-gallery"><summary><i class="fa-solid fa-images"></i> फोटो गैलरी</summary><div class="library-category-body">
     <!-- Photo Gallery -->
     <h3 class="section-title" id="gallery" data-aos="fade-up">फोटो गैलरी</h3>
     <div class="gallery-grid" data-aos="fade-up">
