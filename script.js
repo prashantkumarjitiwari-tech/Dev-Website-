@@ -191,3 +191,68 @@ if (thoughtEl && meaningEl) {
   };
   document.head.appendChild(tag);
 })();
+
+
+/* Per-PDF like/dislike controls. Votes are saved locally in this visitor's browser. */
+(function setupPdfReactions() {
+  const STORE = 'devTiwariPdfReactions_v1';
+  function readVotes() {
+    try { return JSON.parse(localStorage.getItem(STORE) || '{}'); }
+    catch (e) { return {}; }
+  }
+  function addReaction(iframe) {
+    if (!iframe || iframe.dataset.reactionsAdded === 'true') return;
+    const src = iframe.getAttribute('src') || '';
+    const match = src.match(/\/d\/([^/]+)\//);
+    const id = match ? match[1] : (iframe.title || 'pdf-' + Math.random().toString(36).slice(2));
+    const host = iframe.closest('.drive-pdf-item, .card') || iframe.parentElement?.parentElement;
+    if (!host) return;
+    const bar = document.createElement('div');
+    bar.className = 'pdf-reaction-bar';
+    bar.dataset.pdfReactionId = id;
+    const label = document.createElement('span');
+    label.className = 'pdf-reaction-label';
+    label.textContent = 'इस PDF पर आपकी राय';
+    const like = document.createElement('button');
+    like.type = 'button'; like.className = 'pdf-reaction-btn like';
+    like.innerHTML = '<i class="fa-solid fa-thumbs-up" aria-hidden="true"></i> पसंद <b>0</b>';
+    const dislike = document.createElement('button');
+    dislike.type = 'button'; dislike.className = 'pdf-reaction-btn dislike';
+    dislike.innerHTML = '<i class="fa-solid fa-thumbs-down" aria-hidden="true"></i> पसंद नहीं <b>0</b>';
+    const note = document.createElement('small');
+    note.className = 'pdf-reaction-note';
+    note.textContent = 'आपकी प्रतिक्रिया इसी डिवाइस/ब्राउज़र में सेव होगी।';
+    function render() {
+      const votes = readVotes();
+      const current = votes[id] || '';
+      like.setAttribute('aria-pressed', String(current === 'like'));
+      dislike.setAttribute('aria-pressed', String(current === 'dislike'));
+      like.querySelector('b').textContent = current === 'like' ? '1' : '0';
+      dislike.querySelector('b').textContent = current === 'dislike' ? '1' : '0';
+      note.textContent = current ? 'आपकी प्रतिक्रिया सेव हो गई है। दोबारा दबाकर हटाएँ या दूसरी प्रतिक्रिया चुनें।' : 'आपकी प्रतिक्रिया इसी डिवाइस/ब्राउज़र में सेव होगी।';
+    }
+    function vote(value) {
+      const votes = readVotes();
+      if (votes[id] === value) delete votes[id]; else votes[id] = value;
+      try { localStorage.setItem(STORE, JSON.stringify(votes)); } catch (e) {}
+      render();
+    }
+    like.addEventListener('click', () => vote('like'));
+    dislike.addEventListener('click', () => vote('dislike'));
+    bar.append(label, like, dislike, note);
+    const target = iframe.closest('.drive-pdf-item, .card');
+    if (target) target.appendChild(bar);
+    else iframe.parentElement.insertAdjacentElement('afterend', bar);
+    iframe.dataset.reactionsAdded = 'true';
+    render();
+  }
+  function scan(root) {
+    if (root.matches && root.matches('iframe[src*="/preview"]')) addReaction(root);
+    if (root.querySelectorAll) root.querySelectorAll('iframe[src*="/preview"]').forEach(addReaction);
+  }
+  scan(document);
+  const observer = new MutationObserver(records => records.forEach(record =>
+    record.addedNodes.forEach(node => { if (node.nodeType === 1) scan(node); })
+  ));
+  observer.observe(document.body, { childList:true, subtree:true });
+})();
