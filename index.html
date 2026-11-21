@@ -659,6 +659,7 @@
           <li><a href="#about" onclick="closeMenu()"><i class="fa-solid fa-user-circle" style="color:#f97316;"></i> परिचय</a></li>
           <li><a href="#services" onclick="closeMenu()"><i class="fa-solid fa-hand-holding-heart" style="color:#3b82f6;"></i> हमारी सेवाएं</a></li>
           <li><a href="#stotra-jyotish" onclick="closeMenu()"><i class="fa-solid fa-book-journal-whills" style="color:#8b5cf6;"></i> ज्योतिष एवं स्तोत्र</a></li>
+          <li><a href="#katha-sagar" onclick="closeMenu()"><i class="fa-solid fa-book-open" style="color:#a87928;"></i> कथा-सागर</a></li>
           <li><a href="#gallery" onclick="closeMenu()"><i class="fa-solid fa-images" style="color:#10b981;"></i> फोटो गैलरी</a></li>
           <li><a href="#contact" onclick="closeMenu()"><i class="fa-solid fa-phone" style="color:#fbbf24;"></i> संपर्क करें</a></li>
           <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 5px 0;">
@@ -747,6 +748,54 @@
         <p>जीवन समस्याओं का सनातन एवं आध्यात्मिक समाधान।</p>
       </div>
     </div>
+
+    <!-- Katha Sagar: original stories and reader submissions -->
+    <section id="katha-sagar" class="katha-section" data-aos="fade-up" aria-labelledby="katha-title">
+      <div class="katha-heading">
+        <span class="katha-kicker"><i class="fa-solid fa-feather-pointed"></i> कथा • चिंतन • प्रेरणा</span>
+        <h2 id="katha-title">कथा-सागर</h2>
+        <p>भारतीय संस्कृति, जीवन-मूल्यों और मानवीय संवेदनाओं से जुड़ी प्रेरक कथाओं का साहित्यिक कोना।</p>
+      </div>
+      <article class="katha-feature">
+        <div class="katha-mark"><i class="fa-solid fa-book-open"></i></div>
+        <div class="katha-feature-copy">
+          <span class="katha-category">प्रेरक लघुकथा</span>
+          <h3>दीपक और आँधी</h3>
+          <p>एक छोटे-से दीपक ने अँधेरी रात में अपना प्रकाश जलाए रखा। आँधी बार-बार उसे बुझाने आई, पर दीपक हर बार फिर जल उठा। पास खड़े यात्री ने पूछा—“तुम इतनी छोटी लौ होकर भी हार क्यों नहीं मानते?” दीपक मानो कह उठा—“मेरा काम अँधेरे से लड़ना नहीं, अपने हिस्से का प्रकाश देना है।”</p>
+          <p class="katha-moral"><strong>संदेश:</strong> परिस्थितियाँ कैसी भी हों, अपने कर्तव्य और सद्भाव का प्रकाश बनाए रखें।</p>
+        </div>
+      </article>
+      <div class="katha-submit">
+        <div>
+          <h3><i class="fa-solid fa-pen-nib"></i> अपनी कहानी साझा करें</h3>
+          <p>आपकी मौलिक कहानी, प्रेरक प्रसंग या साहित्यिक रचना हमें भेजें। समीक्षा के बाद उसे कथा-सागर में प्रकाशित किया जा सकता है।</p>
+        </div>
+        <form id="story-submit-form" class="katha-form">
+          <label for="story-author">आपका नाम</label>
+          <input id="story-author" name="author" type="text" maxlength="80" placeholder="अपना नाम लिखें" required>
+          <label for="story-title">कहानी का शीर्षक</label>
+          <input id="story-title" name="title" type="text" maxlength="120" placeholder="कहानी का नाम" required>
+          <label for="story-category">श्रेणी</label>
+          <select id="story-category" name="category" required>
+            <option value="प्रेरक">प्रेरक</option><option value="धार्मिक एवं पौराणिक">धार्मिक एवं पौराणिक</option><option value="ऐतिहासिक">ऐतिहासिक</option><option value="सामाजिक">सामाजिक</option><option value="बाल-कथा">बाल-कथा</option><option value="अन्य">अन्य</option>
+          </select>
+          <label for="story-content">कहानी</label>
+          <textarea id="story-content" name="content" rows="6" maxlength="8000" placeholder="अपनी पूरी कहानी यहाँ लिखें..." required></textarea>
+          <button class="katha-send" type="submit"><i class="fa-brands fa-whatsapp"></i> कहानी WhatsApp पर भेजें</button>
+          <small>कहानी सीधे WhatsApp संदेश में खुलेगी; भेजने के लिए WhatsApp में Send दबाएँ।</small>
+        </form>
+      </div>
+    </section>
+    <style id="katha-sagar-styles">
+      .katha-section{margin:54px auto 46px;padding:clamp(20px,3vw,34px);border:1px solid rgba(168,121,40,.25);border-radius:22px;background:linear-gradient(145deg,#fffefa,#f5eddf);box-shadow:0 14px 36px rgba(76,55,24,.09)}
+      .katha-heading{text-align:center;margin-bottom:24px}.katha-kicker{color:#91651f;font-size:12px;font-weight:800;letter-spacing:.5px}.katha-heading h2{color:#76521d;font-size:clamp(25px,4vw,32px);margin:6px 0}.katha-heading p{color:#625543;font-size:14px}
+      .katha-feature{display:flex;gap:18px;padding:22px;border-radius:17px;background:linear-gradient(135deg,#f8efdD,#fffaf0);border:1px solid rgba(168,121,40,.2)}
+      .katha-mark{width:48px;height:48px;flex:0 0 48px;border-radius:14px;display:grid;place-items:center;background:#ead8b5;color:#80591e;font-size:21px}
+      .katha-category{font-size:11px;color:#946a2b;font-weight:800}.katha-feature h3{color:#493516;font-size:21px;margin:4px 0 9px}.katha-feature p{color:#514638;font-size:14px;line-height:1.9}.katha-feature .katha-moral{margin-top:10px;color:#674a1d}
+      .katha-submit{margin-top:22px;padding:22px;border-radius:17px;background:#fffdf8;border:1px solid rgba(168,121,40,.2)}.katha-submit h3{color:#76521d;font-size:19px}.katha-submit>div>p{color:#625543;font-size:13px;margin:5px 0 16px}
+      .katha-form{display:grid;gap:8px}.katha-form label{font-size:12px;font-weight:700;color:#5b482d;margin-top:5px}.katha-form input,.katha-form select,.katha-form textarea{width:100%;padding:12px 13px;border:1px solid #d5c39f!important;border-radius:10px;background:#fff!important;color:#33291f!important;font:inherit;font-size:13px}.katha-form textarea{resize:vertical}.katha-send{justify-self:start;border:0;border-radius:10px;padding:12px 18px;background:linear-gradient(135deg,#43816c,#2c6653);color:white;font-weight:700;cursor:pointer;margin-top:7px}.katha-form small{color:#756b5d;font-size:11px}
+      @media(max-width:600px){.katha-section{margin:36px auto;padding:17px 13px;border-radius:16px}.katha-feature{padding:16px 13px;gap:11px}.katha-mark{width:38px;height:38px;flex-basis:38px;font-size:17px}.katha-feature h3{font-size:18px}.katha-feature p{font-size:13px}.katha-submit{padding:16px 13px}.katha-send{width:100%;justify-self:stretch}}
+    </style>
 
     <!-- Jyotish & Stotra Section -->
     <h3 class="section-title" id="stotra-jyotish" data-aos="fade-up">📜 ज्योतिष एवं स्तोत्र संग्रह</h3>
@@ -912,6 +961,23 @@
       if (!event.target.matches('#menuBtn') && !event.target.matches('.menu-dots-btn') && !event.target.matches('.fa-ellipsis-vertical')) {
         closeMenu();
       }
+    }
+
+
+    const storyForm = document.getElementById('story-submit-form');
+    if (storyForm) {
+      storyForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        const author = document.getElementById('story-author').value.trim();
+        const title = document.getElementById('story-title').value.trim();
+        const category = document.getElementById('story-category').value;
+        const content = document.getElementById('story-content').value.trim();
+        if (!author || !title || !content) return;
+        const message = 'कथा-सागर हेतु नई रचना\\n\\nलेखक: ' + author +
+          '\\nशीर्षक: ' + title + '\\nश्रेणी: ' + category +
+          '\\n\\nकहानी:\\n' + content;
+        window.open('https://wa.me/917465040426?text=' + encodeURIComponent(message), '_blank', 'noopener,noreferrer');
+      });
     }
 
     async function shareWebsite() {
