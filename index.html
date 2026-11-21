@@ -33,7 +33,7 @@
   "jobTitle": "Sanskrit Acharya",
   "description": "Dev Tiwari Ji Maharaj from Shri Dham Vrindavan, offering Sanskrit, Bhagwat Katha, Vedic Knowledge, Puja and spiritual services."
 }
-</script>Acharya Dev Tiwari Ji Maharaj | Official Spiritual Portal</title>
+</script>
   
   <!-- Google Fonts & FontAwesome -->
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Poppins:wght@300;400;500;600&family=Rozha+One&display=swap" rel="stylesheet">
@@ -41,6 +41,104 @@
 
   <!-- AOS Animation CSS -->
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+
+  <style id="professional-layout-overrides">
+    :root {
+      --page:#070b14; --panel:#101827; --panel-soft:#131f31;
+      --gold:#e8b85b; --gold-light:#f7d994; --muted:#aeb8c8;
+      --line:rgba(232,184,91,.19); --shadow:0 18px 48px rgba(0,0,0,.28);
+    }
+    html { scroll-padding-top:88px; }
+    body {
+      background: radial-gradient(ellipse at 50% -12%, #18263a 0, #090f1b 42%, var(--page) 78%);
+      color:#f4f6fa; line-height:1.75; letter-spacing:.05px;
+    }
+    header {
+      min-height:74px; padding:12px clamp(16px,5vw,72px);
+      background:rgba(7,11,20,.88); border-bottom:1px solid var(--line);
+      box-shadow:0 8px 30px rgba(0,0,0,.16);
+    }
+    .logo-icon { background:linear-gradient(145deg,#f4d18a,#b77924); color:#17120a; box-shadow:0 5px 18px #e8b85b30; }
+    .logo-text h2 { color:var(--gold-light); letter-spacing:.3px; }
+    .header-btn { background:#147c61; padding:10px 17px; font-weight:600; }
+    .hero {
+      max-width:1180px; margin:0 auto; min-height:410px; padding:54px 20px 38px;
+      background:radial-gradient(ellipse at center,rgba(232,184,91,.09),transparent 65%);
+    }
+    .profile-avatar { width:164px;height:164px;padding:4px;background:linear-gradient(145deg,#f6d58e,#9b6727);box-shadow:0 12px 42px rgba(232,184,91,.18); }
+    .hero h1 { font-family:'Rozha One','Cinzel',serif; font-size:clamp(27px,4vw,42px); letter-spacing:.2px; }
+    .hero p.subtitle { color:var(--gold-light); font-size:15px; letter-spacing:.35px; }
+    .container { width:min(1120px,100%); margin:0 auto; padding:0 clamp(14px,3vw,28px) 64px; }
+    .section-title { color:var(--gold-light); font-size:clamp(21px,3vw,27px); margin:58px 0 24px; letter-spacing:.3px; }
+    .card {
+      background:linear-gradient(145deg,rgba(19,31,49,.96),rgba(12,20,33,.97));
+      border:1px solid var(--line); border-radius:20px; padding:clamp(19px,3vw,30px);
+      margin:0 0 24px; box-shadow:var(--shadow);
+    }
+    .card h2 { color:var(--gold-light); font-size:21px; line-height:1.45; }
+    .card p { color:#c3ccda; font-size:14px; line-height:1.9; }
+    #about { margin-top:8px; }
+    #about p { font-size:15px; }
+    .grid { grid-template-columns:repeat(auto-fit,minmax(min(100%,235px),1fr)); gap:18px; }
+    .grid-card {
+      min-height:160px; display:flex; flex-direction:column; justify-content:center;
+      background:linear-gradient(145deg,#142238,#0e1828); border:1px solid rgba(255,255,255,.08);
+      border-radius:17px; padding:23px 20px; transition:transform .25s,border-color .25s,box-shadow .25s;
+    }
+    .grid-card:hover { transform:translateY(-4px); border-color:var(--line); box-shadow:var(--shadow); }
+    .grid-card i { color:var(--gold); }
+    .grid-card h4 { font-size:15px; margin-bottom:8px; }
+    .grid-card p { color:var(--muted); line-height:1.7; }
+    .btn { min-height:42px; padding:11px 18px; font-weight:600; border:1px solid rgba(255,255,255,.08); }
+    .btn-orange { background:linear-gradient(135deg,#c78a35,#9b5b1e); }
+    .btn-blue { background:linear-gradient(135deg,#315d9c,#24436f); }
+    .btn-green { background:linear-gradient(135deg,#16866a,#10634f); }
+    .btn-purple { background:linear-gradient(135deg,#7352a6,#4c3677); }
+    .cta-group { gap:11px; }
+    .drive-iframe { display:block; width:100%; height:560px; background:#080d16; border:1px solid var(--line); border-radius:14px; margin-top:18px; }
+    #drive-pdf-search { max-width:100%!important; border-radius:12px!important; min-height:48px; }
+    #drive-pdf-list { display:flex; flex-direction:column; gap:18px; margin-top:8px; }
+    #drive-pdf-list .drive-pdf-item {
+      width:100%; background:linear-gradient(145deg,#142238,#0d1727);
+      border:1px solid var(--line); border-radius:17px; padding:20px;
+      box-shadow:0 12px 30px rgba(0,0,0,.2);
+    }
+    #drive-pdf-list .drive-pdf-item h4 { font-size:16px; color:var(--gold-light); }
+    #drive-pdf-list .drive-pdf-item .drive-iframe { height:560px; margin-top:4px; }
+    #drive-pdf-list .drive-pdf-actions { justify-content:flex-start; }
+    #drive-pdf-list .drive-pdf-actions a { border-radius:9px; padding:10px 16px; font-weight:600; }
+    #drive-pdf-list .drive-pdf-actions a:not(.download) { background:linear-gradient(135deg,#315d9c,#24436f); }
+    #gallery { margin-top:58px; }
+    .gallery-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:16px; }
+    .gallery-img { height:230px; border-radius:16px; border:1px solid var(--line); box-shadow:var(--shadow); transition:transform .25s; }
+    .gallery-img:hover { transform:translateY(-4px); }
+    #contact { margin-top:58px!important; text-align:center; }
+    footer { background:#060a12; border-top:1px solid var(--line); padding:28px 16px; color:#9ca8b9; }
+    a:focus-visible,button:focus-visible,input:focus-visible { outline:2px solid var(--gold-light); outline-offset:3px; }
+    @media(max-width:700px) {
+      header { min-height:66px; padding:10px 14px; }
+      .logo-text h2 { font-size:12px; }
+      .logo-text p { font-size:9px; }
+      .logo-icon { width:36px;height:36px;font-size:18px; }
+      .header-btn { padding:8px 11px;font-size:11px; }
+      .hero { min-height:auto;padding:36px 16px 28px; }
+      .profile-avatar { width:132px;height:132px;margin-bottom:15px; }
+      .hero p.subtitle { font-size:12px; }
+      .container { padding-left:14px;padding-right:14px; }
+      .section-title { margin:42px 0 18px; }
+      .card { border-radius:16px; }
+      .drive-iframe,#drive-pdf-list .drive-pdf-item .drive-iframe { height:420px; }
+      .gallery-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+      .gallery-img { height:175px; }
+      .cta-group .btn { justify-content:center; }
+    }
+    @media(max-width:380px) {
+      .header-btn { font-size:0;gap:0;width:36px;height:36px;justify-content:center;padding:0; }
+      .header-btn i { font-size:16px; }
+      .drive-iframe,#drive-pdf-list .drive-pdf-item .drive-iframe { height:350px; }
+    }
+  </style>
 
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; scroll-behavior: smooth; }
