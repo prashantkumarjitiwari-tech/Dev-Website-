@@ -660,6 +660,7 @@
           <li><a href="#services" onclick="closeMenu()"><i class="fa-solid fa-hand-holding-heart" style="color:#3b82f6;"></i> हमारी सेवाएं</a></li>
           <li><a href="#stotra-jyotish" onclick="closeMenu()"><i class="fa-solid fa-book-journal-whills" style="color:#8b5cf6;"></i> ज्योतिष एवं स्तोत्र</a></li>
           <li><a href="#katha-sagar" onclick="closeMenu()"><i class="fa-solid fa-book-open" style="color:#a87928;"></i> कथा-सागर</a></li>
+          <li><a href="#knowledge-categories" onclick="closeMenu()"><i class="fa-solid fa-layer-group" style="color:#a87928;"></i> सभी श्रेणियाँ</a></li>
           <li><a href="#gallery" onclick="closeMenu()"><i class="fa-solid fa-images" style="color:#10b981;"></i> फोटो गैलरी</a></li>
           <li><a href="#contact" onclick="closeMenu()"><i class="fa-solid fa-phone" style="color:#fbbf24;"></i> संपर्क करें</a></li>
           <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 5px 0;">
@@ -749,6 +750,32 @@
       </div>
     </div>
 
+    <!-- Knowledge categories -->
+    <section id="knowledge-categories" class="category-hub" aria-label="सामग्री की श्रेणियाँ">
+      <div class="category-hub-heading"><span>आपका डिजिटल ज्ञान-संग्रह</span><h2>अपनी रुचि की श्रेणी चुनें</h2><p>हर विषय का अलग विभाग — खोलें और उसी श्रेणी की सामग्री देखें।</p></div>
+      <div class="category-hub-grid">
+        <button type="button" class="category-tile" onclick="openLibraryCategory('category-pdfs')"><i class="fa-solid fa-file-pdf"></i><strong>ग्रंथ एवं PDF</strong><small>सभी पुस्तकें, ग्रंथ और अध्ययन सामग्री</small><span>विभाग खोलें <i class="fa-solid fa-arrow-right"></i></span></button>
+        <button type="button" class="category-tile" onclick="openLibraryCategory('category-bhajan')"><i class="fa-solid fa-music"></i><strong>भजन एवं कीर्तन</strong><small>भक्ति-संगीत और कीर्तन संग्रह</small><span>विभाग खोलें <i class="fa-solid fa-arrow-right"></i></span></button>
+        <button type="button" class="category-tile" onclick="openLibraryCategory('category-katha')"><i class="fa-solid fa-book-open"></i><strong>कथा-कहानी</strong><small>प्रेरक, धार्मिक और साहित्यिक कथाएँ</small><span>विभाग खोलें <i class="fa-solid fa-arrow-right"></i></span></button>
+        <button type="button" class="category-tile" onclick="openLibraryCategory('category-dhyan')"><i class="fa-solid fa-spa"></i><strong>ध्यान एवं साधना</strong><small>ध्यान, जप और साधना संबंधी सामग्री</small><span>विभाग खोलें <i class="fa-solid fa-arrow-right"></i></span></button>
+        <button type="button" class="category-tile" onclick="openLibraryCategory('category-gallery')"><i class="fa-solid fa-images"></i><strong>फोटो गैलरी</strong><small>आध्यात्मिक यात्रा और स्मृतियाँ</small><span>विभाग खोलें <i class="fa-solid fa-arrow-right"></i></span></button>
+      </div>
+    </section>
+    <style id="category-library-styles">
+      .category-hub{margin:42px auto 30px;padding:26px 22px;border:1px solid rgba(168,121,40,.23);border-radius:22px;background:linear-gradient(145deg,#fffefa,#f4ead8);box-shadow:0 12px 32px rgba(76,55,24,.08)}
+      .category-hub-heading{text-align:center;margin-bottom:20px}.category-hub-heading>span{font-size:11px;font-weight:800;color:#9a702e;letter-spacing:.7px}.category-hub-heading h2{font-size:25px;color:#654719;margin:5px 0}.category-hub-heading p{font-size:13px;color:#625543}
+      .category-hub-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:13px}
+      .category-tile{display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:8px;min-height:160px;padding:18px 16px;border:1px solid rgba(168,121,40,.22);border-radius:15px;background:linear-gradient(145deg,#fff,#f7efdf);color:#493b2b;cursor:pointer;transition:transform .2s,box-shadow .2s}
+      .category-tile:hover{transform:translateY(-3px);box-shadow:0 9px 22px rgba(76,55,24,.12)}.category-tile>i{font-size:23px;color:#98702d}.category-tile strong{font-size:15px;color:#654719}.category-tile small{font-size:11px;line-height:1.55;color:#625543}.category-tile span{margin-top:auto;font-size:11px;font-weight:700;color:#91651f}
+      .library-category{margin:28px 0;border:1px solid rgba(168,121,40,.25);border-radius:18px;background:#fffaf1;overflow:hidden;scroll-margin-top:92px}
+      .library-category>summary{list-style:none;display:flex;align-items:center;gap:12px;padding:18px 20px;background:linear-gradient(110deg,#f4e6c9,#fffaf0);cursor:pointer;color:#654719;font-weight:800;font-size:17px}
+      .library-category>summary::-webkit-details-marker{display:none}.library-category>summary:after{content:'＋';margin-left:auto;font-size:22px;color:#91651f}.library-category[open]>summary:after{content:'−'}
+      .library-category-body{padding:20px}.library-category-body>.section-title:first-child{margin-top:8px}
+      .category-empty{padding:24px;text-align:center;border:1px dashed rgba(168,121,40,.35);border-radius:14px;background:#fffdf8}.category-empty i{font-size:27px;color:#a87928}.category-empty h3{margin:9px 0;color:#654719}.category-empty p{max-width:650px;margin:0 auto 14px;color:#625543;font-size:13px}.category-empty a{display:inline-flex;padding:10px 16px;border-radius:22px;background:#43816c;color:white!important;text-decoration:none;font-size:12px;font-weight:700}
+      @media(max-width:600px){.category-hub{padding:20px 13px}.category-hub-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.category-tile{min-height:148px;padding:14px 11px}.category-tile strong{font-size:13px}.category-tile small{font-size:10px}.library-category>summary{padding:15px;font-size:15px}.library-category-body{padding:12px}}
+    </style>
+
+    <details class="library-category" id="category-katha"><summary><i class="fa-solid fa-book-open"></i> कथा-कहानी संग्रह</summary><div class="library-category-body">
     <!-- Katha Sagar: original stories and reader submissions -->
     <section id="katha-sagar" class="katha-section" data-aos="fade-up" aria-labelledby="katha-title">
       <div class="katha-heading">
@@ -797,6 +824,17 @@
       @media(max-width:600px){.katha-section{margin:36px auto;padding:17px 13px;border-radius:16px}.katha-feature{padding:16px 13px;gap:11px}.katha-mark{width:38px;height:38px;flex-basis:38px;font-size:17px}.katha-feature h3{font-size:18px}.katha-feature p{font-size:13px}.katha-submit{padding:16px 13px}.katha-send{width:100%;justify-self:stretch}}
     </style>
 
+    </div></details>
+    <details class="library-category" id="category-bhajan">
+      <summary><i class="fa-solid fa-music"></i> भजन एवं कीर्तन संग्रह</summary>
+      <div class="library-category-body"><div class="category-empty"><i class="fa-solid fa-music"></i><h3>भक्ति-संगीत विभाग</h3><p>यहाँ भजन, कीर्तन, आरती और संकीर्तन की सामग्री अलग-अलग सुव्यवस्थित रूप से रखी जाएगी। अभी इस विभाग में सामग्री जोड़ी जानी बाकी है।</p><a href="https://wa.me/917465040426?text=Namaste%2C%20website%20ke%20Bhajan%20evam%20Kirtan%20section%20me%20samagri%20jodni%20hai." target="_blank" rel="noopener noreferrer">भजन सामग्री भेजें</a></div></div>
+    </details>
+    <details class="library-category" id="category-dhyan">
+      <summary><i class="fa-solid fa-spa"></i> ध्यान एवं साधना</summary>
+      <div class="library-category-body"><div class="category-empty"><i class="fa-solid fa-spa"></i><h3>ध्यान-साधना विभाग</h3><p>ध्यान, जप, प्रार्थना और साधना से संबंधित मार्गदर्शिका एवं उपयोगी सामग्री इस अलग विभाग में संकलित की जाएगी।</p><a href="https://wa.me/917465040426?text=Namaste%2C%20website%20ke%20Dhyan%20evam%20Sadhana%20section%20me%20samagri%20jodni%20hai." target="_blank" rel="noopener noreferrer">ध्यान सामग्री भेजें</a></div></div>
+    </details>
+    <details class="library-category" id="category-pdfs"><summary><i class="fa-solid fa-file-pdf"></i> ग्रंथ एवं PDF संग्रह</summary><div class="library-category-body">
+    <p style="text-align:center;color:#625543;font-size:13px;margin:0 0 18px;">सभी उपलब्ध पुस्तकें, ज्योतिष-स्तोत्र ग्रंथ, ग्रंथकोश और प्रतियोगी परीक्षा सामग्री एक ही विभाग में।</p>
     <!-- Jyotish & Stotra Section -->
     <h3 class="section-title" id="stotra-jyotish" data-aos="fade-up">📜 ज्योतिष एवं स्तोत्र संग्रह</h3>
 
@@ -906,6 +944,7 @@
 
 </section>
 <!-- ================= COMPETITION EXAM SECTION END ================= -->
+    </div></details>
     
   
 
@@ -913,6 +952,7 @@
 
     
 
+    <details class="library-category" id="category-gallery"><summary><i class="fa-solid fa-images"></i> फोटो गैलरी</summary><div class="library-category-body">
     <!-- Photo Gallery -->
     <h3 class="section-title" id="gallery" data-aos="fade-up">फोटो गैलरी</h3>
     <div class="gallery-grid" data-aos="fade-up">
@@ -923,6 +963,7 @@
       <img src="assets/gallery3.jpg" class="gallery-img" alt="Gallery 3">
     </div>
 
+    </div></details>
     <!-- Contact Box -->
     <div id="contact" class="card" style="text-align: center; margin-top: 40px;" data-aos="fade-up">
       <h2>कथा आयोजन एवं परामर्श हेतु संपर्क करें</h2>
@@ -946,6 +987,16 @@
 
   <!-- 3 Dots Dropdown JS Logic -->
   <script>
+    function openLibraryCategory(id) {
+      document.querySelectorAll('.library-category').forEach(function(section) {
+        section.open = section.id === id;
+      });
+      const target = document.getElementById(id);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
     function toggleMenu() {
       const menu = document.getElementById('dropdownMenu');
       menu.classList.toggle('active');
