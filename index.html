@@ -3575,6 +3575,23 @@ document.addEventListener('toggle',function(event){
 </script>
 
 
+<script id="daily-panchang-deduplicate">
+(function(){
+  function keepOnePanchang(){
+    const cards=[...document.querySelectorAll('#daily-panchang, .panchang-dashboard')];
+    if(!cards.length) return;
+    const preferred=cards.find(card=>{
+      const thought=document.getElementById('daily-thought');
+      return thought && thought.compareDocumentPosition(card)&Node.DOCUMENT_POSITION_FOLLOWING;
+    }) || cards[cards.length-1];
+    cards.forEach(card=>{if(card!==preferred) card.remove();});
+    if(preferred.id!=='daily-panchang') preferred.id='daily-panchang';
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',keepOnePanchang,{once:true});
+  else keepOnePanchang();
+  new MutationObserver(keepOnePanchang).observe(document.documentElement,{childList:true,subtree:true});
+})();
+</script>
 <script id="daily-panchang-live-script">
 (function(){
   const ids={tithi:'panchang-tithi',nakshatra:'panchang-nakshatra',yoga:'panchang-yoga',karana:'panchang-karana',sunrise:'panchang-sunrise',sunset:'panchang-sunset',moonrise:'panchang-moonrise',moonset:'panchang-moonset',rahuKaal:'panchang-rahu',gulika:'panchang-gulika',yamagand:'panchang-yamagand',vara:'panchang-vara',abhijit:'panchang-abhijit',brahma:'panchang-brahma',amrit:'panchang-amrit',choghadiya:'panchang-choghadiya',hora:'panchang-hora'};
