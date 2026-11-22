@@ -168,6 +168,48 @@ function planetaryLongitudes(jd, ay) {
   return planets;
 }
 
+
+function lunarLatitude(jd) {
+  const T=centuries(jd);
+  const D=norm(297.8501921+445267.1114034*T-0.0018819*T*T);
+  const Mp=norm(134.9633964+477198.8675055*T+0.0087414*T*T);
+  const F=norm(93.2720950+483202.0175233*T-0.0036539*T*T);
+  return 5.128189*sin(F)+0.280606*sin(Mp+F)+0.277693*sin(Mp-F)
+    +0.173238*sin(2*D-F)+0.055413*sin(2*D-Mp+F)
+    +0.046272*sin(2*D+F)+0.032573*sin(2*Mp+F)
+    +0.017198*sin(2*D+Mp-F)+0.009267*sin(2*D-Mp-F);
+}
+function altitudeAt(jd, lat, lon, body) {
+  const T=centuries(jd), eps=(23.439291-0.0130042*T)*DEG;
+  const lambda=(body==='sun'?solarLongitude(jd):lunarLongitude(jd))*DEG;
+  const beta=(body==='sun'?0:lunarLatitude(jd))*DEG;
+  const ra=Math.atan2(Math.sin(lambda)*Math.cos(eps)-Math.tan(beta)*Math.sin(eps),Math.cos(lambda));
+  const dec=Math.asin(Math.sin(beta)*Math.cos(eps)+Math.cos(beta)*Math.sin(eps)*Math.sin(lambda));
+  const jd0=Math.floor(jd-0.5)+0.5;
+  const H=(280.46061837+360.98564736629*(jd-jd0)+lon-ra/DEG);
+  const hour=((H%360)+360)%360*DEG;
+  const phi=lat*DEG;
+  return Math.asin(Math.sin(phi)*Math.sin(dec)+Math.cos(phi)*Math.cos(dec)*Math.cos(hour))/DEG;
+}
+function riseSetForLocalDate(dateText, lat, lon, offset, body) {
+  const [y,m,d]=dateText.split('-').map(Number);
+  const start=julianDay(new Date(Date.UTC(y,m-1,d)-offset*3600000));
+  const threshold=body==='sun'?-0.833:0.125;
+  let prevT=start, prev=altitudeAt(start,lat,lon,body)-threshold;
+  let rise=null,set=null;
+  for(let i=1;i<=288;i++){
+    const t=start+i/288, val=altitudeAt(t,lat,lon,body)-threshold;
+    if(prev<=0&&val>0) rise=bisectAltitude(prevT,t,lat,lon,body,threshold);
+    if(prev>=0&&val<0) set=bisectAltitude(prevT,t,lat,lon,body,threshold);
+    prevT=t;prev=val;
+  }
+  return {rise:rise===null?null:localIsoFromJd(rise,offset),set:set===null?null:localIsoFromJd(set,offset),method:'approximate-geocentric-horizon'};
+}
+function bisectAltitude(lo,hi,lat,lon,body,threshold){
+  for(let i=0;i<35;i++){const mid=(lo+hi)/2;if((altitudeAt(mid,lat,lon,body)-threshold)>0)hi=mid;else lo=mid;}
+  return (lo+hi)/2;
+}
+
 function calculate(input={}) {
   const dateText = input.date || new Date().toISOString().slice(0,10);
   const timeText = input.time || '12:00:00';
@@ -185,7 +227,12 @@ function calculate(input={}) {
   const utc = new Date(check.getTime() - offset*3600000);
   const jd = julianDay(utc), ay = ayanamsha(jd, system);
   const sunTropical = solarLongitude(jd), moonTropical = lunarLongitude(jd);
-  const limbs = describeLimbs(jd, system);\n  const grahas = planetaryLongitudes(jd, ay);
+  const limbs = describeLimbs(jd, system);
+  const riseSet = input.latitude !== undefined && input.longitude !== undefined ? {
+    sun: riseSetForLocalDate(dateText, Number(input.latitude), Number(input.longitude), offset, 'sun'),
+    moon: riseSetForLocalDate(dateText, Number(input.latitude), Number(input.longitude), offset, 'moon')
+  } : null;
+  const grahas = planetaryLongitudes(jd, ay);
   const endsAt = {};
   for (const key of ['tithi','nakshatra','yoga','karana']) {
     const boundary = nextBoundary(jd, key, system);
@@ -193,7 +240,7 @@ function calculate(input={}) {
   }
   return {
     engine: 'independent-meeus-lite',
-    engineVersion: '0.3.0',
+    engineVersion: '0.4.0',
     julianDay: Number(jd.toFixed(6)),
     utc: utc.toISOString(),
     ayanamsha: { system, degrees: Number(ay.toFixed(6)), status: 'approximate' },
@@ -202,9 +249,10 @@ function calculate(input={}) {
       moon: { tropicalLongitude: Number(moonTropical.toFixed(6)), siderealLongitude: Number(norm(moonTropical-ay).toFixed(6)) }
     },
     limbs,
+    riseSet,
     endsAt,
     accuracyNotice: 'प्रारंभिक स्वतंत्र गणना: सूर्य/चन्द्रमा के निम्न-परिशुद्धता सूत्र और अनुमानित अयनांश। अंगों के समाप्ति समय संख्यात्मक रूप से निकाले गए हैं, पर उच्च-परिशुद्धता ephemeris तथा प्रमाणित काशी/ऋषिकेश पंचांग से मिलान बाकी है; अभी इसे धार्मिक निर्णय का अंतिम आधार न मानें।'
   };
 }
 
-module.exports = { calculate, julianDay, solarLongitude, lunarLongitude, ayanamsha, limbIndices, nextBoundary, planetaryLongitudes };
+module.exports = { calculate, julianDay, solarLongitude, lunarLongitude, ayanamsha, limbIndices, nextBoundary, planetaryLongitudes, riseSetForLocalDate, lunarLatitude };
