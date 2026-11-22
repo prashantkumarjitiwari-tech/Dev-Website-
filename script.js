@@ -330,3 +330,7 @@ if (thoughtEl && meaningEl) {
   ));
   observer.observe(document.body, { childList: true, subtree: true });
 })();
+
+
+// Load the daily Panchang dashboard and Acharya AI assistant.
+(function(){var s=document.createElement('script');s.src='/dashboard.js';s.defer=true;document.head.appendChild(s);})();
