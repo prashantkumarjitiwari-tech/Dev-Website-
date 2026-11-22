@@ -47,17 +47,18 @@ function timeValue(obj, keys) { const value=first(obj,keys)||deepFind(obj,keys);
 function compact(value, depth=0) {
   if (value == null || depth > 4) return '';
   if (typeof value === 'string' || typeof value === 'number') return String(value);
-  if (Array.isArray(value)) return value.map(v=>compact(v,depth+1)).filter(Boolean).join('  •  ');
+  if (Array.isArray(value)) return value.map(v=>compact(v,depth+1)).filter(Boolean).join('\\n');
   if (typeof value === 'object') {
     if (value.start && value.end) return clock(value.start)+' – '+clock(value.end);
     if (value.start_time && value.end_time) return clock(value.start_time)+' – '+clock(value.end_time);
+    const labels={day:'दिन',night:'रात्रि',morning:'प्रातःकाल',afternoon:'दोपहर',evening:'सायंकाल',name:'नाम',period:'काल',time:'समय',start:'आरम्भ',end:'समाप्ति',good:'शुभ',bad:'अशुभ',choghadiya:'चौघड़िया',hora:'होरा',amrit:'अमृत',kaal:'काल',rahu:'राहु',gulika:'गुलिक',yamaganda:'यमगण्ड'};
     const out=[];
     for (const [k,v] of Object.entries(value)) {
       if (['statusCode','utc_datetime','weekday_basis','number','degrees_remaining','lord'].includes(k)) continue;
       const val=compact(v,depth+1);
-      if(val) out.push(k.replace(/_/g,' ')+': '+val);
+      if(val) out.push((labels[k.toLowerCase()]||k.replace(/_/g,' '))+' : '+val);
     }
-    return out.join('  |  ');
+    return out.join('\\n');
   }
   return '';
 }
