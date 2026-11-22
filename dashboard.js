@@ -25,7 +25,7 @@
   else root.appendChild(area);
 
   const labels = {
-    tithi:'तिथि',paksha:'पक्ष',nakshatra:'नक्षत्र',pada:'चरण',yoga:'योग',karana:'करण',
+    tithi:'तिथि',tithiEnd:'तिथि समाप्ति',paksha:'पक्ष',nakshatra:'नक्षत्र',nakshatraEnd:'नक्षत्र समाप्ति',pada:'चरण',yoga:'योग',karana:'करण',
     weekday:'वार',vara:'वार',sunrise:'सूर्योदय',sunset:'सूर्यास्त',moonrise:'चन्द्रोदय',moonset:'चन्द्रास्त',
     rahu_kaal:'राहुकाल',rahuKaal:'राहुकाल',gulika_kaal:'गुलिक काल',gulika:'गुलिक काल',
     yamaganda:'यमगण्ड',abhijit:'अभिजित मुहूर्त',brahma:'ब्रह्म मुहूर्त',amrit:'अमृत काल',
@@ -56,8 +56,7 @@
     return '';
   };
   function card(label,value){
-    const text = scalar(value);
-    if (!text || text === '—') return null;
+    const text = scalar(value) || 'इस गणना स्रोत से आज का डेटा प्राप्त नहीं हुआ';
     const item=document.createElement('div');item.className='panchang-complete-item';
     const title=document.createElement('b');title.textContent=label;
     const body=document.createElement('span');body.textContent=text;
@@ -91,7 +90,7 @@
       const d=payload.data||{},t=payload.traditional||{},details=payload.details||{};
       area.replaceChildren();
       section('पंचांग के पाँच अंग',[
-        ['तिथि / पक्ष',d.tithi],['नक्षत्र / चरण',d.nakshatra],['योग',d.yoga],['करण',d.karana],['वार',d.vara]
+        ['तिथि / पक्ष',d.tithi],['तिथि समाप्ति',d.tithiEnd],['नक्षत्र / चरण',d.nakshatra],['नक्षत्र समाप्ति',d.nakshatraEnd],['योग',d.yoga],['करण',d.karana],['वार',d.vara]
       ]);
       section('सूर्य और चन्द्रमा',[
         ['सूर्योदय',d.sunrise],['सूर्यास्त',d.sunset],['चन्द्रोदय',d.moonrise],['चन्द्रास्त',d.moonset]
@@ -106,7 +105,7 @@
       ]);
       section('विक्रमादित्य कालगणना एवं पर्व',[
         ['विक्रम संवत',t.vikramSamvat],['संवत्सर',t.samvatsara],['अयन',t.ayana],
-        ['ऋतु',t.ritu],['चन्द्र मास',t.lunarMonth],['पक्ष',t.paksha],['आज के व्रत / त्योहार',t.festival]
+        ['ऋतु',t.ritu],['चन्द्र मास',t.lunarMonth],['पक्ष',t.paksha||d.tithi],['आज के व्रत / त्योहार',t.festival]
       ]);
       section('नवग्रह राशि स्थिति',[
         ['ग्रहों की स्थिति',(t.grahas||[]).map(g=>g.name+' — '+g.sign).join(' • ')]
@@ -126,7 +125,7 @@
       note.textContent='गणना स्थान: श्रीधाम वृंदावन • लाहिड़ी अयनांश • भारतीय मानक समय (IST) • तिथि बदलने पर नया दैनिक डेटा स्वतः प्राप्त होगा।';
       area.appendChild(note);
       const status=document.getElementById('panchang-status');
-      if(status)status.textContent='आज का पंचांग स्वतः अपडेट • अंतिम प्राप्ति: '+new Intl.DateTimeFormat('hi-IN',{timeStyle:'short',timeZone:'Asia/Kolkata'}).format(new Date());
+      if(status){const p=payload.providers||{};const sources=[p.navamsha?'Navamsha ✓':'Navamsha अनुपलब्ध',p.astroLogics?'AstroLogics ✓':'AstroLogics अनुपलब्ध',p.goPixel?'GoPixel ✓':'GoPixel अनुपलब्ध'];status.textContent='आज का पंचांग • '+sources.join(' • ')+' • प्राप्ति: '+new Intl.DateTimeFormat('hi-IN',{timeStyle:'short',timeZone:'Asia/Kolkata'}).format(new Date());}
       lastDay=day;
     }catch(error){
       const status=document.getElementById('panchang-status');
