@@ -43,7 +43,7 @@ function element(obj, key) {
   if(v.pada) extra.push('पाद '+v.pada);
   return [...extra,name].filter(Boolean).join(' • ') || null;
 }
-function timeValue(obj, keys) { return first(obj,keys); }
+function timeValue(obj, keys) { const value=first(obj,keys)||deepFind(obj,keys); return value ? clock(value) : null; }
 function compact(value, depth=0) {
   if (value == null || depth > 4) return '';
   if (typeof value === 'string' || typeof value === 'number') return String(value);
