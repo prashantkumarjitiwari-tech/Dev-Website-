@@ -2957,12 +2957,14 @@
       @media(max-width:600px){.appointment-fields{grid-template-columns:1fr}.appointment-section{margin:28px 12px;padding:20px 15px}}
     
 /* Acharya AI + Help Desk floating assistant */
-#acharya-ai-widget{position:fixed;right:22px;bottom:22px;z-index:99999;font-family:inherit}
+@media(max-width:600px){#acharya-ai-widget{top:74px;right:12px}#acharya-ai-panel{top:90px;height:min(650px,calc(100dvh - 104px));width:min(430px,calc(100vw - 24px))}}
+
+#acharya-ai-widget{position:fixed;right:18px;top:78px;z-index:99999;font-family:inherit}
 #acharya-ai-launch{width:78px;height:78px;padding:0;border:3px solid #fff8e9;border-radius:50%;background:radial-gradient(circle at 32% 25%,#f8df9e 0%,#d5a64d 48%,#80551e 100%);color:#38230b;box-shadow:0 8px 26px #0005,0 0 0 4px #b8863530;cursor:pointer;display:flex;align-items:center;justify-content:center;position:relative;transition:transform .2s,box-shadow .2s}
 #acharya-ai-launch:hover{transform:translateY(-3px) scale(1.04);box-shadow:0 12px 32px #0005,0 0 0 6px #b8863540}
 #acharya-ai-launch svg{width:43px;height:43px;display:block}
 #acharya-ai-launch .ai-launch-label{position:absolute;bottom:-9px;left:50%;transform:translateX(-50%);background:#563a1d;color:#fff;border:2px solid #fff4df;border-radius:20px;padding:3px 9px;font-size:11px;font-weight:800;white-space:nowrap;letter-spacing:.2px}
-#acharya-ai-panel{position:absolute;right:0;bottom:94px;width:min(430px,calc(100vw - 28px));height:min(650px,calc(100dvh - 130px));background:#fffdf8;color:#302719;border:1px solid #d9c18f;border-radius:22px;box-shadow:0 18px 55px #0005;display:none;overflow:hidden}
+#acharya-ai-panel{position:absolute;right:0;top:94px;width:min(430px,calc(100vw - 28px));height:min(650px,calc(100dvh - 110px));background:#fffdf8;color:#302719;border:1px solid #d9c18f;border-radius:22px;box-shadow:0 18px 55px #0005;display:none;overflow:hidden}
 #acharya-ai-panel.open{display:flex;flex-direction:column}
 .acharya-ai-head{background:linear-gradient(135deg,#573b1c,#9b7135);color:#fff;padding:15px 16px;display:flex;justify-content:space-between;align-items:center}
 .acharya-ai-head strong{display:block;font-size:16px}.acharya-ai-head small{opacity:.85}
