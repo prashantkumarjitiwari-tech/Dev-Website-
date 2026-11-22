@@ -845,6 +845,13 @@
     .panchang-metric span{display:block;font-size:12px;color:#806b4d;margin-bottom:5px}
     .panchang-metric strong{font-size:15px;color:#493b2b;font-weight:600}
     .panchang-status{margin-top:14px;font-size:12px;color:#806b4d}
+    .panchang-more{margin-top:16px;border-top:1px solid rgba(168,121,40,.2);padding-top:13px}
+    .panchang-more summary{cursor:pointer;color:#76521d;font-weight:700;font-size:14px;padding:5px 0}
+    .panchang-extra-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}
+    .panchang-extra{padding:13px;border:1px solid rgba(168,121,40,.17);border-radius:12px;background:rgba(255,255,255,.72);min-width:0}
+    .panchang-extra b{display:block;color:#806b4d;font-size:12px;margin-bottom:6px}
+    .panchang-extra p{margin:0;color:#493b2b;font-size:13px;line-height:1.6;overflow-wrap:anywhere}
+    @media(max-width:650px){.panchang-extra-grid{grid-template-columns:1fr}.panchang-extra p{font-size:12px}}
     @media(max-width:650px){.panchang-dashboard-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.panchang-dashboard{border-radius:16px}}
   </style>
 </head>
@@ -945,15 +952,28 @@
         <span class="panchang-dashboard-date">दैनिक दर्शन</span>
       </div>
       <div class="panchang-dashboard-grid">
-        <div class="panchang-metric"><span>तिथि</span><strong id="panchang-tithi">लोड हो रहा है…</strong></div>
-        <div class="panchang-metric"><span>नक्षत्र</span><strong id="panchang-nakshatra">लोड हो रहा है…</strong></div>
+        <div class="panchang-metric"><span>तिथि / पक्ष</span><strong id="panchang-tithi">लोड हो रहा है…</strong></div>
+        <div class="panchang-metric"><span>नक्षत्र / चरण</span><strong id="panchang-nakshatra">लोड हो रहा है…</strong></div>
         <div class="panchang-metric"><span>योग</span><strong id="panchang-yoga">लोड हो रहा है…</strong></div>
         <div class="panchang-metric"><span>करण</span><strong id="panchang-karana">लोड हो रहा है…</strong></div>
+        <div class="panchang-metric"><span>वार</span><strong id="panchang-vara">—</strong></div>
         <div class="panchang-metric"><span>सूर्योदय</span><strong id="panchang-sunrise">—</strong></div>
         <div class="panchang-metric"><span>सूर्यास्त</span><strong id="panchang-sunset">—</strong></div>
+        <div class="panchang-metric"><span>चन्द्रोदय</span><strong id="panchang-moonrise">—</strong></div>
+        <div class="panchang-metric"><span>चन्द्रास्त</span><strong id="panchang-moonset">—</strong></div>
         <div class="panchang-metric"><span>राहुकाल</span><strong id="panchang-rahu">—</strong></div>
-        <div class="panchang-metric"><span>वार</span><strong id="panchang-vara">—</strong></div>
+        <div class="panchang-metric"><span>गुलिक काल</span><strong id="panchang-gulika">—</strong></div>
+        <div class="panchang-metric"><span>यमगण्ड</span><strong id="panchang-yamagand">—</strong></div>
       </div>
+      <details class="panchang-more"><summary>मुहूर्त, चौघड़िया और होरा का विस्तृत विवरण देखें</summary>
+        <div class="panchang-extra-grid">
+          <div class="panchang-extra"><b>अभिजित मुहूर्त</b><p id="panchang-abhijit">—</p></div>
+          <div class="panchang-extra"><b>ब्रह्म मुहूर्त</b><p id="panchang-brahma">—</p></div>
+          <div class="panchang-extra"><b>अमृत काल</b><p id="panchang-amrit">—</p></div>
+          <div class="panchang-extra"><b>चौघड़िया</b><p id="panchang-choghadiya">—</p></div>
+          <div class="panchang-extra"><b>होरा</b><p id="panchang-hora">—</p></div>
+        </div>
+      </details>
       <div class="panchang-status" id="panchang-status" role="status" aria-live="polite">दैनिक पंचांग प्राप्त किया जा रहा है…</div>
     </section>
 
@@ -3557,7 +3577,7 @@ document.addEventListener('toggle',function(event){
 
 <script id="daily-panchang-live-script">
 (function(){
-  const ids={tithi:'panchang-tithi',nakshatra:'panchang-nakshatra',yoga:'panchang-yoga',karana:'panchang-karana',sunrise:'panchang-sunrise',sunset:'panchang-sunset',rahuKaal:'panchang-rahu',vara:'panchang-vara'};
+  const ids={tithi:'panchang-tithi',nakshatra:'panchang-nakshatra',yoga:'panchang-yoga',karana:'panchang-karana',sunrise:'panchang-sunrise',sunset:'panchang-sunset',moonrise:'panchang-moonrise',moonset:'panchang-moonset',rahuKaal:'panchang-rahu',gulika:'panchang-gulika',yamagand:'panchang-yamagand',vara:'panchang-vara',abhijit:'panchang-abhijit',brahma:'panchang-brahma',amrit:'panchang-amrit',choghadiya:'panchang-choghadiya',hora:'panchang-hora'};
   const names={
     Ashwini:'अश्विनी',Bharani:'भरणी',Krittika:'कृत्तिका',Rohini:'रोहिणी',Mrigashira:'मृगशिरा',Ardra:'आर्द्रा',Punarvasu:'पुनर्वसु',Pushya:'पुष्य',Ashlesha:'आश्लेषा',Magha:'मघा',PurvaPhalguni:'पूर्वा फाल्गुनी',UttaraPhalguni:'उत्तरा फाल्गुनी',Hasta:'हस्त',Chitra:'चित्रा',Swati:'स्वाती',Vishakha:'विशाखा',Anuradha:'अनुराधा',Jyeshtha:'ज्येष्ठा',Mula:'मूल',PurvaAshadha:'पूर्वाषाढ़ा',UttaraAshadha:'उत्तराषाढ़ा',Shravana:'श्रवण',Dhanishta:'धनिष्ठा',Shatabhisha:'शतभिषा',PurvaBhadrapada:'पूर्वाभाद्रपद',UttaraBhadrapada:'उत्तराभाद्रपद',Revati:'रेवती',
     Pratipada:'प्रतिपदा',Dwitiya:'द्वितीया',Tritiya:'तृतीया',Chaturthi:'चतुर्थी',Panchami:'पंचमी',Shashthi:'षष्ठी',Saptami:'सप्तमी',Ashtami:'अष्टमी',Navami:'नवमी',Dashami:'दशमी',Ekadashi:'एकादशी',Dwadashi:'द्वादशी',Trayodashi:'त्रयोदशी',Chaturdashi:'चतुर्दशी',Purnima:'पूर्णिमा',Amavasya:'अमावस्या',
@@ -3581,7 +3601,7 @@ document.addEventListener('toggle',function(event){
       const result=await response.json();
       if(!response.ok)throw new Error(result.error||'पंचांग उपलब्ध नहीं है');
       const d=result.data||{};
-      Object.keys(ids).forEach(k=>{if(k==='sunrise'||k==='sunset')set(k,time(d[k]));else set(k,d[k]);});
+      Object.keys(ids).forEach(k=>{if(k==='sunrise'||k==='sunset'||k==='moonrise'||k==='moonset')set(k,time(d[k]));else set(k,d[k]);});
       const dateEl=document.getElementById('panchang-date');
       if(dateEl&&result.date){const dt=new Date(Date.UTC(result.date.year,result.date.month-1,result.date.date));dateEl.textContent='श्रीधाम वृंदावन • '+new Intl.DateTimeFormat('hi-IN',{day:'numeric',month:'long',year:'numeric',timeZone:'UTC'}).format(dt);}
       if(status)status.textContent='आज का पंचांग • Navamsha दैनिक गणना से अपडेट';
