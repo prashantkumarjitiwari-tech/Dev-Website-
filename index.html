@@ -973,6 +973,16 @@
         <div class="panchang-metric"><span>गुलिक काल</span><strong id="panchang-gulika">—</strong></div>
         <div class="panchang-metric"><span>यमगण्ड</span><strong id="panchang-yamagand">—</strong></div>
       </div>
+      <div class="panchang-extra-grid panchang-traditional-grid" aria-label="पारंपरिक पंचांग विवरण">
+        <div class="panchang-extra"><b>विक्रम संवत</b><p id="panchang-samvat">—</p></div>
+        <div class="panchang-extra"><b>संवत्सर</b><p id="panchang-samvatsara">—</p></div>
+        <div class="panchang-extra"><b>अयन</b><p id="panchang-ayana">—</p></div>
+        <div class="panchang-extra"><b>ऋतु</b><p id="panchang-ritu">—</p></div>
+        <div class="panchang-extra"><b>चन्द्र मास</b><p id="panchang-month">—</p></div>
+        <div class="panchang-extra"><b>पक्ष</b><p id="panchang-paksha">—</p></div>
+        <div class="panchang-extra"><b>पर्व / व्रत</b><p id="panchang-festival">—</p></div>
+        <div class="panchang-extra panchang-extra-wide"><b>ग्रहों की राशि स्थिति</b><p id="panchang-grahas">—</p></div>
+      </div>
       <details class="panchang-more"><summary>मुहूर्त, चौघड़िया और होरा का विस्तृत विवरण देखें</summary>
         <div class="panchang-extra-grid">
           <div class="panchang-extra"><b>अभिजित मुहूर्त</b><p id="panchang-abhijit">—</p></div>
@@ -3607,17 +3617,19 @@ document.addEventListener('toggle',function(event){
     Ashwini:'अश्विनी',Bharani:'भरणी',Krittika:'कृत्तिका',Rohini:'रोहिणी',Mrigashira:'मृगशिरा',Ardra:'आर्द्रा',Punarvasu:'पुनर्वसु',Pushya:'पुष्य',Ashlesha:'आश्लेषा',Magha:'मघा',PurvaPhalguni:'पूर्वा फाल्गुनी',UttaraPhalguni:'उत्तरा फाल्गुनी',Hasta:'हस्त',Chitra:'चित्रा',Swati:'स्वाती',Vishakha:'विशाखा',Anuradha:'अनुराधा',Jyeshtha:'ज्येष्ठा',Mula:'मूल',PurvaAshadha:'पूर्वाषाढ़ा',UttaraAshadha:'उत्तराषाढ़ा',Shravana:'श्रवण',Dhanishta:'धनिष्ठा',Shatabhisha:'शतभिषा',PurvaBhadrapada:'पूर्वाभाद्रपद',UttaraBhadrapada:'उत्तराभाद्रपद',Revati:'रेवती',
     Pratipada:'प्रतिपदा',Dwitiya:'द्वितीया',Tritiya:'तृतीया',Chaturthi:'चतुर्थी',Panchami:'पंचमी',Shashthi:'षष्ठी',Saptami:'सप्तमी',Ashtami:'अष्टमी',Navami:'नवमी',Dashami:'दशमी',Ekadashi:'एकादशी',Dwadashi:'द्वादशी',Trayodashi:'त्रयोदशी',Chaturdashi:'चतुर्दशी',Purnima:'पूर्णिमा',Amavasya:'अमावस्या',
     Sunday:'रविवार',Monday:'सोमवार',Tuesday:'मंगलवार',Wednesday:'बुधवार',Thursday:'गुरुवार',Friday:'शुक्रवार',Saturday:'शनिवार',
-    Shukla:'शुक्ल पक्ष',Krishna:'कृष्ण पक्ष',
+    Shukla:'शुक्ल पक्ष',Krishna:'कृष्ण पक्ष',Uttarayana:'उत्तरायण',Dakshinayana:'दक्षिणायन',
+    Vasanta:'वसन्त',Grishma:'ग्रीष्म',Varsha:'वर्षा',Sharad:'शरद',Hemanta:'हेमन्त',Shishira:'शिशिर',
+    Aries:'मेष',Taurus:'वृषभ',Gemini:'मिथुन',Cancer:'कर्क',Leo:'सिंह',Virgo:'कन्या',Libra:'तुला',Scorpio:'वृश्चिक',Sagittarius:'धनु',Capricorn:'मकर',Aquarius:'कुम्भ',Pisces:'मीन',
     Vishkambha:'विष्कुम्भ',Priti:'प्रीति',Ayushman:'आयुष्मान',Saubhagya:'सौभाग्य',Shobhana:'शोभन',Atiganda:'अतिगण्ड',Sukarma:'सुकर्मा',Dhriti:'धृति',Shula:'शूल',Ganda:'गण्ड',Vriddhi:'वृद्धि',Dhruva:'ध्रुव',Vyaghata:'व्याघात',Harshana:'हर्षण',Vajra:'वज्र',Siddhi:'सिद्धि',Vyatipata:'व्यतीपात',Variyan:'वरीयान',Parigha:'परिघ',Shiva:'शिव',Siddha:'सिद्ध',Sadhya:'साध्य',Shubha:'शुभ',ShuklaYoga:'शुक्ल',Brahma:'ब्रह्म',Indra:'इन्द्र',Vaidhriti:'वैधृति',
     Bava:'बव',Balava:'बालव',Kaulava:'कौलव',Taitila:'तैतिल',Garaja:'गर',Vanija:'वणिज',Vishti:'विष्टि',Shakuni:'शकुनि',Chatushpada:'चतुष्पद',Naga:'नाग',Kimstughna:'किंस्तुघ्न'
   };
   function hindi(value){
-    if(value==null||value==='') return '—';
+    if(value==null||value==='')return '—';
     let text=String(value).trim();
     Object.keys(names).sort((a,b)=>b.length-a.length).forEach(k=>{text=text.replace(new RegExp('\\b'+k+'\\b','gi'),names[k]);});
     return text;
   }
-  function set(key,value){const el=document.getElementById(ids[key]);if(el)el.textContent=hindi(value);}
+  function set(key,value){const el=document.getElementById(key);if(el)el.textContent=hindi(value);}
   function time(value){if(!value)return '—';let v=String(value);const m=v.match(/T?(\\d{1,2}):(\\d{2})(?::(\\d{2}))?/);return m?m[1].padStart(2,'0')+':'+m[2]:hindi(v);}
   async function load(){
     const status=document.getElementById('panchang-status');
@@ -3625,11 +3637,16 @@ document.addEventListener('toggle',function(event){
       const response=await fetch('/api/panchang',{headers:{'Accept':'application/json'},cache:'no-store'});
       const result=await response.json();
       if(!response.ok)throw new Error(result.error||'पंचांग उपलब्ध नहीं है');
-      const d=result.data||{};
-      Object.keys(ids).forEach(k=>{if(k==='sunrise'||k==='sunset'||k==='moonrise'||k==='moonset')set(k,time(d[k]));else set(k,d[k]);});
+      const d=result.data||{},t=result.traditional||{};
+      Object.keys(ids).forEach(k=>{if(['sunrise','sunset','moonrise','moonset'].includes(k))set(ids[k],time(d[k]));else set(ids[k],d[k]);});
+      set('panchang-samvat',t.vikramSamvat);set('panchang-samvatsara',t.samvatsara);
+      set('panchang-ayana',t.ayana);set('panchang-ritu',t.ritu);set('panchang-month',t.lunarMonth);
+      set('panchang-paksha',t.paksha||((d.tithi||'').match(/शुक्ल पक्ष|कृष्ण पक्ष/)||[])[0]);
+      set('panchang-festival',t.festival);
+      set('panchang-grahas',(t.grahas||[]).map(g=>g.name+' — '+g.sign).join(' • '));
       const dateEl=document.getElementById('panchang-date');
       if(dateEl&&result.date){const dt=new Date(Date.UTC(result.date.year,result.date.month-1,result.date.date));dateEl.textContent='श्रीधाम वृंदावन • '+new Intl.DateTimeFormat('hi-IN',{day:'numeric',month:'long',year:'numeric',timeZone:'UTC'}).format(dt);}
-      if(status)status.textContent='आज का पंचांग • Navamsha दैनिक गणना से अपडेट';
+      if(status)status.textContent=result.extendedAvailable?'आज का पंचांग • दैनिक गणना एवं ग्रह स्थिति से अपडेट':'आज का पंचांग अपडेट • विस्तृत संवत/ग्रह जानकारी हेतु अतिरिक्त API कुंजी आवश्यक';
     }catch(error){if(status)status.textContent='पंचांग डेटा अभी नहीं मिल पाया। कृपया थोड़ी देर बाद पुनः प्रयास करें।';console.error('Panchang load:',error);}
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',load,{once:true});else load();
@@ -3638,59 +3655,51 @@ document.addEventListener('toggle',function(event){
 
 <script id="daily-panchang-share-script">
 async function shareDailyPanchang(){
-  const button=document.getElementById('panchang-share');
-  if(!button)return;
-  const original=button.innerHTML;
-  const read=id=>(document.getElementById(id)?.textContent||'—').trim();
-  // Status image intentionally contains only the core Panchang details.
+  const button=document.getElementById('panchang-share');if(!button)return;
+  const original=button.innerHTML,read=id=>(document.getElementById(id)?.textContent||'').trim();
   const items=[
-    ['तिथि / पक्ष','panchang-tithi'],
-    ['शुभ वार','panchang-vara'],
-    ['शुभ नक्षत्र / चरण','panchang-nakshatra'],
-    ['शुभ योग','panchang-yoga'],
-    ['शुभ करण','panchang-karana']
-  ];
+    ['विक्रम संवत','panchang-samvat'],['संवत्सर','panchang-samvatsara'],['अयन','panchang-ayana'],['ऋतु','panchang-ritu'],
+    ['मास','panchang-month'],['पक्ष','panchang-paksha'],['तिथि','panchang-tithi'],['शुभ वार','panchang-vara'],
+    ['शुभ नक्षत्र','panchang-nakshatra'],['शुभ योग','panchang-yoga'],['शुभ करण','panchang-karana'],
+    ['ग्रहों की राशि स्थिति','panchang-grahas'],['पर्व / व्रत','panchang-festival']
+  ].filter(([label,id])=>read(id)&&read(id)!=='—');
   const date=read('panchang-date');
+  if(items.length<5){alert('पंचांग की जानकारी अभी पूरी तरह लोड नहीं हुई है। कृपया थोड़ी देर बाद फिर प्रयास करें।');return;}
   button.disabled=true;button.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> पंचांग तस्वीर बन रही है…';
   try{
-    const canvas=document.createElement('canvas');canvas.width=1080;canvas.height=1500;
-    const ctx=canvas.getContext('2d');
-    const grad=ctx.createLinearGradient(0,0,1080,1500);grad.addColorStop(0,'#fffdf8');grad.addColorStop(1,'#f1e4cc');
-    ctx.fillStyle=grad;ctx.fillRect(0,0,1080,1500);
-    ctx.strokeStyle='#a87928';ctx.lineWidth=6;ctx.strokeRect(28,28,1024,1444);
+    const canvas=document.createElement('canvas');canvas.width=1080;canvas.height=760+items.length*116+190;
+    const ctx=canvas.getContext('2d'),grad=ctx.createLinearGradient(0,0,1080,canvas.height);
+    grad.addColorStop(0,'#fffdf8');grad.addColorStop(1,'#f1e4cc');ctx.fillStyle=grad;ctx.fillRect(0,0,1080,canvas.height);
+    ctx.strokeStyle='#a87928';ctx.lineWidth=6;ctx.strokeRect(28,28,1024,canvas.height-56);
     const photo=new Image();photo.src='/assets/profile.jpg';
     await new Promise((resolve,reject)=>{photo.onload=resolve;photo.onerror=reject;});
-    ctx.save();ctx.beginPath();ctx.arc(540,190,112,0,Math.PI*2);ctx.clip();ctx.drawImage(photo,428,78,224,224);ctx.restore();
-    ctx.strokeStyle='#a87928';ctx.lineWidth=7;ctx.beginPath();ctx.arc(540,190,116,0,Math.PI*2);ctx.stroke();
-    ctx.textAlign='center';ctx.fillStyle='#76521d';ctx.font='bold 39px sans-serif';ctx.fillText('परम पूज्य आचार्य',540,365);
-    ctx.font='bold 52px sans-serif';ctx.fillText('श्री देव तिवारी जी महाराज',540,435);
-    ctx.fillStyle='#756b5d';ctx.font='29px sans-serif';ctx.fillText(date,540,500);
-    ctx.fillStyle='#493b2b';ctx.font='bold 34px sans-serif';ctx.fillText('आज का दैनिक पंचांग',540,585);
-    ctx.font='26px sans-serif';ctx.fillText('श्रीधाम वृंदावन',540,635);
-    const startY=700,cellH=125;
+    ctx.save();ctx.beginPath();ctx.arc(540,165,100,0,Math.PI*2);ctx.clip();ctx.drawImage(photo,440,65,200,200);ctx.restore();
+    ctx.strokeStyle='#a87928';ctx.lineWidth=7;ctx.beginPath();ctx.arc(540,165,104,0,Math.PI*2);ctx.stroke();
+    ctx.textAlign='center';ctx.fillStyle='#76521d';ctx.font='bold 37px sans-serif';ctx.fillText('परम पूज्य आचार्य',540,315);
+    ctx.font='bold 49px sans-serif';ctx.fillText('श्री देव तिवारी जी महाराज',540,380);
+    ctx.fillStyle='#756b5d';ctx.font='27px sans-serif';ctx.fillText(date,540,435);
+    ctx.fillStyle='#493b2b';ctx.font='bold 34px sans-serif';ctx.fillText('आज का दैनिक पंचांग',540,505);
+    ctx.font='26px sans-serif';ctx.fillText('श्रीधाम वृंदावन',540,548);
+    const startY=590,cellH=116;
     items.forEach(([label,id],i)=>{
-      const y=startY+i*cellH;
-      ctx.fillStyle='rgba(255,255,255,.92)';ctx.strokeStyle='rgba(168,121,40,.4)';ctx.lineWidth=2;
-      ctx.beginPath();ctx.roundRect(95,y,890,102,18);ctx.fill();ctx.stroke();
-      ctx.textAlign='left';ctx.fillStyle='#806b4d';ctx.font='26px sans-serif';ctx.fillText(label,125,y+39);
-      const value=read(id);let font=34;ctx.font='bold '+font+'px sans-serif';
-      while(ctx.measureText(value).width>820&&font>23){font--;ctx.font='bold '+font+'px sans-serif';}
-      ctx.fillStyle='#493b2b';ctx.fillText(value,125,y+79);
+      const y=startY+i*cellH,value=read(id);
+      ctx.fillStyle='rgba(255,255,255,.94)';ctx.strokeStyle='rgba(168,121,40,.4)';ctx.lineWidth=2;
+      ctx.beginPath();ctx.roundRect(75,y,930,100,18);ctx.fill();ctx.stroke();
+      ctx.textAlign='left';ctx.fillStyle='#806b4d';ctx.font='25px sans-serif';ctx.fillText(label,108,y+34);
+      let font=33;ctx.font='bold '+font+'px sans-serif';
+      while(ctx.measureText(value).width>850&&font>21){font--;ctx.font='bold '+font+'px sans-serif';}
+      ctx.fillStyle='#493b2b';ctx.fillText(value,108,y+76);
     });
     ctx.textAlign='center';ctx.fillStyle='#76521d';ctx.font='bold 27px sans-serif';
-    ctx.fillText('शेष विस्तृत पंचांग एवं मुहूर्त वेबसाइट पर देखें',540,1370);
-    ctx.fillStyle='#756b5d';ctx.font='23px sans-serif';ctx.fillText(location.hostname,540,1415);
-    const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/png'));
-    if(!blob)throw new Error('Image creation failed');
+    ctx.fillText('शेष विस्तृत पंचांग एवं मुहूर्त वेबसाइट पर देखें',540,canvas.height-112);
+    ctx.fillStyle='#756b5d';ctx.font='23px sans-serif';ctx.fillText(location.hostname,540,canvas.height-70);
+    const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/png'));if(!blob)throw new Error('Image creation failed');
     const file=new File([blob],'aaj-ka-panchang.png',{type:'image/png'});
     if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
-      await navigator.share({title:'आज का पंचांग — आचार्य देव तिवारी जी महाराज',text:'आज का पंचांग • आचार्य देव तिवारी जी महाराज',files:[file]});
-      return;
+      await navigator.share({title:'आज का पंचांग — आचार्य देव तिवारी जी महाराज',text:'आज का पंचांग • आचार्य देव तिवारी जी महाराज',files:[file]});return;
     }
     const url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download=file.name;link.click();setTimeout(()=>URL.revokeObjectURL(url),1500);
-    const shareText='आज का पंचांग — आचार्य देव तिवारी जी महाराज\n'+date+'\n'+items.map(([label,id])=>label+' : '+read(id)).join('\n')+'\n\nविस्तृत पंचांग: '+location.href;
-    if(navigator.clipboard?.writeText)await navigator.clipboard.writeText(shareText);
-    alert('साफ पंचांग तस्वीर डाउनलोड हो गई है। अब इसे WhatsApp Status पर लगा सकते हैं।');
+    alert('पूरी पंचांग तस्वीर डाउनलोड हो गई है। अब इसे WhatsApp Status पर लगा सकते हैं।');
   }catch(error){if(error.name!=='AbortError'){console.error('Panchang share:',error);alert('शेयर नहीं हो पाया। कृपया दोबारा प्रयास करें।');}}
   finally{button.disabled=false;button.innerHTML=original;}
 }
