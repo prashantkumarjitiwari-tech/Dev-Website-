@@ -3765,7 +3765,14 @@ document.addEventListener('toggle',function(event){
       set('panchang-ayana',t.ayana);set('panchang-ritu',t.ritu);set('panchang-month',t.lunarMonth);
       set('panchang-paksha',t.paksha||((d.tithi||'').match(/शुक्ल पक्ष|कृष्ण पक्ष/)||[])[0]);
       set('panchang-festival',t.festival);
-      set('panchang-grahas',(t.grahas||[]).map(g=>g.name+' — '+g.sign).join(' • '));
+      const grahas=d.grahas||result.details?.grahas||t.grahas||[];
+      set('panchang-grahas',grahas.map(g=>g.name+' — '+g.rashi+(g.degrees!==undefined?' '+g.degrees+'°':'')).join(' • '));
+      const endText=(label,value)=>value?label+' समाप्ति: '+time(value):'';
+      const ends=result.details?.astronomyEndsAt||result.endsAt||{};
+      if(d.tithiEnd)set('panchang-detail-tithi',d.tithi+' ('+endText('तिथि',d.tithiEnd)+')');
+      if(d.nakshatraEnd)set('panchang-detail-nakshatra',d.nakshatra+' ('+endText('नक्षत्र',d.nakshatraEnd)+')');
+      const engineLine=result.engine?(' • गणना इंजन '+result.engine+' v'+(result.engineVersion||'')):'';
+      if(status)status.textContent=(result.fallback?'स्वतंत्र प्रारंभिक गणना':'स्वतंत्र पंचांग गणना')+engineLine+' • '+(result.accuracyNotice||'गणना उपलब्ध');
       const dateEl=document.getElementById('panchang-date');
       if(dateEl&&result.date){const dt=new Date(Date.UTC(result.date.year,result.date.month-1,result.date.date));dateEl.textContent='श्रीधाम वृंदावन • '+new Intl.DateTimeFormat('hi-IN',{day:'numeric',month:'long',year:'numeric',timeZone:'UTC'}).format(dt);}
       if(status)status.textContent=result.fallback?'आज का पंचांग • स्वतंत्र प्रारंभिक गणना (मुख्य सेवा उपलब्ध नहीं)':'आज का पंचांग • '+(result.astroAvailable?'AstroLogics गणना से अपडेट':'प्राथमिक पंचांग सेवा से अपडेट');
