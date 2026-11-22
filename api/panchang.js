@@ -154,173 +154,41 @@ async function getExtra(path, key){
   return j;
 }
 module.exports = async (req,res) => {
-  res.setHeader('Cache-Control','s-maxage=1800, stale-while-revalidate=3600');
+  res.setHeader('Cache-Control','no-store');
   if(req.method!=='GET') return res.status(405).json({error:'Method not allowed'});
-  const key=process.env.NAVAMSHA_API_KEY;
-  if(!key) return res.status(200).json(independentFallback('मुख्य पंचांग प्रदाता की API key उपलब्ध नहीं है।'));
   try {
     const date=todayIST();
-    const body={...date,hours:7,minutes:0,seconds:0,latitude:LAT,longitude:LON,timezone:TZ,settings:{ayanamsha:'lahiri',observation_point:'geocentric',language:'en'}};
-    const headers={'X-API-Key':key,'Content-Type':'application/json'};
-    const routes=['full','sun-times','inauspicious-periods','moon-times','abhijit-muhurat','brahma-muhurta','amrit-kaal','choghadiya','hora'];
-    const settled=await Promise.all(routes.map(async route=>{
-      try {
-        const r=await fetch(API+'/'+route,{method:'POST',headers,body:JSON.stringify(body)});
-        const j=await r.json();
-        if(!r.ok) throw new Error(j.message||j.error||'Provider error');
-        return {route,data:j.output||j.data||j};
-      } catch(error) {
-        console.warn('Optional Panchang route '+route+':',error.message);
-        return {route,data:null};
-      }
-    }));
-    const result=Object.fromEntries(settled.map(x=>[x.route,x.data]));
-    if(!result.full) throw new Error('Full Panchang endpoint unavailable');
-    const full=result.full, sun=result['sun-times']||{}, bad=result['inauspicious-periods']||{}, moon=result['moon-times']||{};
-    let data={
-      tithi:element(full,'tithi'), tithiEnd:timeValue(full.tithi,['ends_at','end','end_time']), vara:element(full,'weekday')||element(full,'vara'),
-      nakshatra:element(full,'nakshatra'), nakshatraEnd:timeValue(full.nakshatra,['ends_at','end','end_time']), yoga:element(full,'yoga'), karana:element(full,'karana'),
-      sunrise:timeValue(sun,['sunrise','sunrise_time','sunriseTime']),
-      sunset:timeValue(sun,['sunset','sunset_time','sunsetTime']),
-      moonrise:timeValue(moon,['moonrise','moonrise_time','moonriseTime']),
-      moonset:timeValue(moon,['moonset','moonset_time','moonsetTime']),
-      rahuKaal:compact(bad.rahu_kaal||bad.rahukaal||bad.rahuKaal||bad.rahu_kalam),
-      gulika:compact(bad.gulika_kaal||bad.gulikaKaal||bad.gulika),
-      yamagand:compact(bad.yamaganda||bad.yama_ganda||bad.yamaganda_kaal),
-      abhijit:compact(result['abhijit-muhurat']),brahma:compact(result['brahma-muhurta']),
-      amrit:compact(result['amrit-kaal']),choghadiya:compact(result.choghadiya),hora:compact(result.hora)
+    const ymd=date.year+'-'+String(date.month).padStart(2,'0')+'-'+String(date.date).padStart(2,'0');
+    const calculated=independentEngine.calculate({date:ymd,time:'12:00:00',timezone:TZ,ayanamsha:'lahiri'});
+    const daily=dailyEngine.calculate(ymd);
+    const timeText=value=>value?new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Kolkata',hour:'2-digit',minute:'2-digit',hour12:false}).format(new Date(value)):null;
+    const rangeText=value=>value?timeText(value.start)+' – '+timeText(value.end):null;
+    const data={
+      vara:daily.weekday,
+      tithi:calculated.limbs.tithi,tithiEnd:calculated.endsAt.tithi,
+      nakshatra:calculated.limbs.nakshatra,nakshatraEnd:calculated.endsAt.nakshatra,
+      yoga:calculated.limbs.yoga,karana:calculated.limbs.karana,
+      sunrise:timeText(daily.sunrise),sunset:timeText(daily.sunset),
+      moonrise:null,moonset:null,
+      rahuKaal:rangeText(daily.periods.rahuKaal),
+      gulika:rangeText(daily.periods.gulika),
+      yamagand:rangeText(daily.periods.yamagand),
+      abhijit:rangeText(daily.periods.abhijit),
+      brahma:rangeText(daily.periods.brahma),
+      amrit:null,choghadiya:daily.choghadiya,hora:daily.hora
     };
-
-    // AstroLogics is the primary cross-check provider for the five limbs and periods.
-    let traditional={}, astroAvailable=false, astroFestival='';
-    const astroKey=process.env.ASTROLOGICS_API_KEY;
-    if(astroKey){
-      const ymd=date.year+'-'+String(date.month).padStart(2,'0')+'-'+String(date.date).padStart(2,'0');
-      const q='?date='+ymd+'&lat='+LAT+'&lon='+LON+'&lang=hi';
-      const calls=await Promise.allSettled([
-        getAstro('/panchang'+q,astroKey),
-        getAstro('/panchang/choghadiya'+q,astroKey),
-        getAstro('/panchang/hora?date='+ymd+'&lat='+LAT+'&lon='+LON,astroKey),
-        postAstro('/planets/positions',astroKey,{date:ymd,time:'12:00',place:{latitude:LAT,longitude:LON},options:{ayanamsa:'lahiri',node:'true',lang:'hi'}}),
-        getAstro('/calendar/festivals?year='+date.year+'&lat='+LAT+'&lon='+LON,astroKey)
-      ]);
-      const p=calls[0].status==='fulfilled'?calls[0].value:null;
-      const ch=calls[1].status==='fulfilled'?calls[1].value:null;
-      const hr=calls[2].status==='fulfilled'?calls[2].value:null;
-      const planets=calls[3].status==='fulfilled'?calls[3].value:null;
-      const festivals=calls[4].status==='fulfilled'?calls[4].value:null;
-      if(p){
-        const limb=v=>hindiName(v?.label_hi||v?.name_hi||v?.label||v?.name||'');
-        data={
-          ...data,
-          tithi:p.tithi?((p.tithi.paksha==='shukla'?'शुक्ल पक्ष • ':p.tithi.paksha==='krishna'?'कृष्ण पक्ष • ':'')+limb(p.tithi)):data.tithi,
-          tithiEnd:p.tithi?.ends_at||data.tithiEnd,
-          nakshatra:p.nakshatra?limb(p.nakshatra):data.nakshatra,
-          nakshatraEnd:p.nakshatra?.ends_at||data.nakshatraEnd,
-          yoga:p.yoga?limb(p.yoga):data.yoga,
-          karana:p.karana?limb(p.karana):data.karana,
-          vara:p.vara?limb(p.vara):data.vara,
-          sunrise:p.sunrise||data.sunrise,
-          sunset:p.sunset||data.sunset,
-          rahuKaal:astroWindow(p.rahu_kaal)||data.rahuKaal,
-          gulika:astroWindow(p.gulika_kaal)||data.gulika,
-          yamagand:astroWindow(p.yamaganda)||data.yamagand,
-          abhijit:astroWindow(p.abhijit)||data.abhijit
-        };
-        astroAvailable=true;
-      }
-      if(ch?.periods)data.choghadiya=ch.periods.map(x=>(x.part==='night'?'रात्रि ':'दिन ')+(x.label||x.name)+' '+clock(x.start)+'–'+clock(x.end)).join(' • ');
-      if(hr){
-        const horaNames={sun:'सूर्य',moon:'चन्द्र',mars:'मंगल',mercury:'बुध',jupiter:'बृहस्पति',venus:'शुक्र',saturn:'शनि'};
-        data.hora=[...(hr.day||[]).map(x=>'दिन '+(horaNames[x.lord]||x.lord)+' '+clock(x.start)+'–'+clock(x.end)),...(hr.night||[]).map(x=>'रात्रि '+(horaNames[x.lord]||x.lord)+' '+clock(x.start)+'–'+clock(x.end))].join(' • ');
-      }
-      if(planets?.bodies){
-        const bodies=planets.bodies.filter(x=>planetHi[x.id]).map(x=>({name:planetHi[x.id],sign:signHi[x.sign]||x.sign}));
-        if(bodies.length)traditional.grahas=bodies;
-        const sun=planets.bodies.find(x=>x.id==='sun');
-        if(sun){const season=solarSeason(sun.sign);traditional.ayana=season.ayana;traditional.ritu=season.ritu;}
-      }
-      if(festivals?.festivals){
-        const todays=festivals.festivals.filter(x=>x.date===ymd);
-        astroFestival=todays.map(x=>x.name_hi||x.name).join(' • ');
-        if(astroFestival)traditional.festival=astroFestival;
-      }
-    }
-
-    // Extended Hindu calendar and nine-graha positions use a separate provider.
-    // Its key is optional so the existing daily Panchang remains available.
-    const extraKey=process.env.GOPIXEL_API_KEY;
-    let extraAvailable=false;
-    if(extraKey){
-      const ymd=date.year+'-'+String(date.month).padStart(2,'0')+'-'+String(date.date).padStart(2,'0');
-      const optional=await Promise.allSettled([
-        getExtra('/panchang?date='+ymd+'&lat='+LAT+'&lon='+LON+'&lang=hi',extraKey),
-        getExtra('/tool?name=hindu&y='+date.year+'&m='+date.month+'&d='+date.date+'&lat='+LAT+'&lon='+LON,extraKey),
-        getExtra('/tool?name=samvat&y='+date.year+'&m='+date.month+'&d='+date.date+'&lat='+LAT+'&lon='+LON,extraKey),
-        getExtra('/graha?date='+ymd+'&hour=12&lang=hi',extraKey),
-        getExtra('/tool?name=festival&y='+date.year+'&mode=year',extraKey)
-      ]);
-      const daily=optional[0].status==='fulfilled'?optional[0].value:null;
-      const hindu=optional[1].status==='fulfilled'?optional[1].value:null;
-      const samvat=optional[2].status==='fulfilled'?optional[2].value:null;
-      const planets=optional[3].status==='fulfilled'?optional[3].value:null;
-      const festivalCalendar=optional[4].status==='fulfilled'?optional[4].value:null;
-      extraAvailable=optional.some(x=>x.status==='fulfilled');
-      const dailyData=daily?.output||daily?.data||daily;
-      const hinduData=hindu?.output||hindu?.data||hindu;
-      const samvatData=samvat?.output||samvat?.data||samvat;
-      const pick=(...values)=>values.find(v=>v!=null&&v!=='')||null;
-      const asText=(v)=>first({v},['v'])||null;
-      const timeText=(v)=>v&&typeof v==='object'?(v.ist||v.local||v.time||v.value||v.iso||''):v;
-      if(dailyData){
-        const limb=(v)=>v&&typeof v==='object'?(v.name_hi||v.nameHi||v.hindi||v.name||v.label_hi||v.label||''):v;
-        data={
-          ...data,
-          tithi:pick(limb(dailyData.tithi),data.tithi),
-          nakshatra:pick(limb(dailyData.nakshatra),data.nakshatra),
-          yoga:pick(limb(dailyData.yoga),data.yoga),
-          karana:pick(limb(dailyData.karana),data.karana),
-          vara:pick(limb(dailyData.vara||dailyData.weekday),data.vara),
-          sunrise:pick(timeText(dailyData.sunrise),data.sunrise),
-          sunset:pick(timeText(dailyData.sunset),data.sunset),
-          moonrise:pick(timeText(dailyData.moonrise),data.moonrise),
-          moonset:pick(timeText(dailyData.moonset),data.moonset),
-          rahuKaal:pick(compact(dailyData.rahu_kaal||dailyData.rahuKaal),data.rahuKaal),
-          gulika:pick(compact(dailyData.gulika_kaal||dailyData.gulika),data.gulika),
-          yamagand:pick(compact(dailyData.yamaganda||dailyData.yama_ganda),data.yamagand),
-          choghadiya:pick(compact(dailyData.choghadiya),data.choghadiya)
-        };
-      }
-      if(festivalCalendar){
-        const root=festivalCalendar.output||festivalCalendar.data||festivalCalendar;
-        const list=root.festivals||root.items||root.calendar||[];
-        const todays=Array.isArray(list)?list.filter(x=>(x.date||x.gregorian_date||'').slice(0,10)===ymd):[];
-        if(todays.length)traditional.festival=todays.map(x=>x.name_hi||x.name||x.title).filter(Boolean).join(' • ');
-      }
-      if(hinduData||samvatData){
-        traditional={
-          ...traditional,
-          vikramSamvat:pick(deepFind(samvatData,['vikram_samvat','vikramSamvat','vikram','samvat_vikram','vs']),deepFind(hinduData,['vikram_samvat','vikramSamvat','vikram','samvat_vikram','vs'])),
-          samvatsara:pick(deepFind(samvatData,['samvatsara','samvatsar','year_name','samvatsara_name']),deepFind(hinduData,['samvatsara','samvatsar','year_name','samvatsara_name'])),
-          ayana:pick(deepFind(samvatData,['ayana','ayan']),deepFind(hinduData,['ayana','ayan']),traditional.ayana),
-          ritu:pick(deepFind(samvatData,['ritu','season']),deepFind(hinduData,['ritu','season']),traditional.ritu),
-          lunarMonth:pick(deepFind(samvatData,['lunar_month','lunarMonth','masa','month_name','maas']),deepFind(hinduData,['lunar_month','lunarMonth','masa','month_name','maas'])),
-          paksha:pick(deepFind(samvatData,['paksha','fortnight']),deepFind(hinduData,['paksha','fortnight'])),
-          festival:pick(deepFind(hinduData,['festival','festivals','parva']),traditional.festival)
-        };
-      }
-      if(planets){const gp=grahaList(planets);if(gp.length)traditional.grahas=gp;}
-      if(optional.some(x=>x.status==='rejected'))console.warn('Some extended Panchang fields unavailable');
-    }
-    if(data.tithi)data.tithi=hindiName(data.tithi);if(data.nakshatra)data.nakshatra=hindiName(data.nakshatra);if(data.yoga)data.yoga=hindiName(data.yoga);if(data.karana)data.karana=hindiName(data.karana);if(data.vara)data.vara=hindiName(data.vara);if(traditional.lunarMonth)traditional.lunarMonth=hindiName(traditional.lunarMonth);if(traditional.ayana)traditional.ayana=hindiName(traditional.ayana);if(traditional.ritu)traditional.ritu=hindiName(traditional.ritu);if(traditional.paksha)traditional.paksha=hindiName(traditional.paksha);
-    return res.status(200).json({date,location:{name:'श्रीधाम वृंदावन',latitude:LAT,longitude:LON,timezone:'Asia/Kolkata',ayanamsha:'Lahiri'},data,traditional,details:result,astroAvailable,extendedAvailable:extraAvailable,providers:{navamsha:Boolean(result.full),astroLogics:astroAvailable,goPixel:extraAvailable},updatedAt:new Date().toISOString()});
+    return res.status(200).json({
+      date,
+      location:{name:'श्रीधाम वृंदावन',latitude:LAT,longitude:LON,timezone:'Asia/Kolkata',ayanamsha:'Lahiri'},
+      data,traditional:{},details:{choghadiya:daily.choghadiya,hora:daily.hora,periods:daily.periods,astronomy:calculated.positions},
+      astroAvailable:false,extendedAvailable:false,
+      providers:{navamsha:false,astroLogics:false,goPixel:false,independent:true},
+      fallback:false,engine:calculated.engine,engineVersion:calculated.engineVersion,
+      accuracyNotice:calculated.accuracyNotice,
+      updatedAt:new Date().toISOString()
+    });
   } catch(error) {
-    console.error('Panchang API:',error.message);
-    try {
-      return res.status(200).json(independentFallback(error.message||'मुख्य पंचांग प्रदाता से डेटा प्राप्त नहीं हुआ।'));
-    } catch(fallbackError) {
-      console.error('Independent Panchang fallback:',fallbackError.message);
-      return res.status(502).json({error:'मुख्य और वैकल्पिक दोनों पंचांग गणनाएँ उपलब्ध नहीं हो पाईं।'});
-    }
+    console.error('Independent Panchang engine:',error.stack||error.message);
+    return res.status(500).json({error:'स्वतंत्र पंचांग गणना में त्रुटि हुई।',detail:error.message});
   }
 };
