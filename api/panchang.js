@@ -21,7 +21,7 @@ function independentFallback(reason) {
       tithi:calculated.limbs.tithi, tithiEnd:calculated.endsAt.tithi,
       nakshatra:calculated.limbs.nakshatra, nakshatraEnd:calculated.endsAt.nakshatra,
       yoga:calculated.limbs.yoga, karana:calculated.limbs.karana,
-      sunrise:null,sunset:null,moonrise:null,moonset:null,
+      sunrise:null,sunset:null,moonrise:calculated.riseSet?.moon?.rise ? timeText(calculated.riseSet.moon.rise) : null,moonset:calculated.riseSet?.moon?.set ? timeText(calculated.riseSet.moon.set) : null,
       rahuKaal:null,gulika:null,yamagand:null,abhijit:null,brahma:null,amrit:null,
       choghadiya:null,hora:null
     },
@@ -159,7 +159,7 @@ module.exports = async (req,res) => {
   try {
     const date=todayIST();
     const ymd=date.year+'-'+String(date.month).padStart(2,'0')+'-'+String(date.date).padStart(2,'0');
-    const calculated=independentEngine.calculate({date:ymd,time:'12:00:00',timezone:TZ,ayanamsha:'lahiri'});
+    const calculated=independentEngine.calculate({date:ymd,time:'12:00:00',timezone:TZ,ayanamsha:'lahiri',latitude:LAT,longitude:LON});
     const daily=dailyEngine.calculate(ymd);
     const timeText=value=>value?new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Kolkata',hour:'2-digit',minute:'2-digit',hour12:false}).format(new Date(value)):null;
     const rangeText=value=>value?timeText(value.start)+' – '+timeText(value.end):null;
@@ -180,7 +180,7 @@ module.exports = async (req,res) => {
     return res.status(200).json({
       date,
       location:{name:'श्रीधाम वृंदावन',latitude:LAT,longitude:LON,timezone:'Asia/Kolkata',ayanamsha:'Lahiri'},
-      data,traditional:{},details:{choghadiya:daily.choghadiya,hora:daily.hora,periods:daily.periods,astronomy:calculated.positions,grahas:calculated.grahas},
+      data,traditional:{},details:{choghadiya:daily.choghadiya,hora:daily.hora,periods:daily.periods,astronomy:calculated.positions,grahas:calculated.grahas,riseSet:calculated.riseSet},
       astroAvailable:false,extendedAvailable:false,
       providers:{navamsha:false,astroLogics:false,goPixel:false,independent:true},
       fallback:false,engine:calculated.engine,engineVersion:calculated.engineVersion,
