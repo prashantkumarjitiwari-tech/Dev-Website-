@@ -110,7 +110,7 @@
         const enginePayload = await engineResponse.json();
         if (engineResponse.ok) independent = enginePayload;
       } catch (engineError) { console.warn('Independent Panchang engine unavailable:',engineError); }
-      area.replaceChildren();
+      area.replaceChildren(methodBar);
       if (independent) {
         const endLabel = value => value ? new Intl.DateTimeFormat('hi-IN',{timeZone:'Asia/Kolkata',hour:'2-digit',minute:'2-digit',hour12:true}).format(new Date(value)) : 'उपलब्ध नहीं';
         section('स्वतंत्र गणना — प्रायोगिक तुलना',[
