@@ -629,48 +629,73 @@
   </style>
 
 <style id="active-reading-styles">
-/* स्पष्ट पहचान: खुला हुआ विभाग और वर्तमान पाठ */
-.library-category{transition:border-color .22s,box-shadow .22s,background .22s}
-.library-category[open]{border:2px solid #b8862f!important;box-shadow:0 12px 34px rgba(111,75,20,.18);background:#fff8e9}
-.library-category[open]>.library-category-body{background:linear-gradient(180deg,#fff8e9 0%,#fffdf8 180px)}
-.library-category[open]>.library-category-body>.category-empty{border:1px solid rgba(184,134,47,.28);background:#fffdf7}
-.library-category[open]>summary{display:flex!important;background:linear-gradient(100deg,#8c5d16,#c99a43)!important;color:#fff!important;padding:17px 20px!important}
-.library-category[open]>summary:after{color:#fff!important}
-.library-category details{transition:background .2s,border-color .2s,box-shadow .2s}
-.library-category details[open]{border-color:#bd8a32!important;box-shadow:0 7px 20px rgba(119,82,22,.12);background:#fff4d9!important}
-.library-category details[open]>summary{background:linear-gradient(100deg,#f2dfb7,#fff4d9);color:#70470d!important;border-left:5px solid #b77d20}
-.library-category details[open]>.stotra-text,.library-category details[open]>.aarti-lyrics{background:#fffdf7;border-top:1px solid #e8d4aa;border-radius:0 0 12px 12px;padding:18px!important}
-#category-aarti[open] details[open]>.aarti-lyrics{background:#fff8e8;color:#382b18}
-#category-stotra[open] .stotra-entry[open]>.stotra-text{background:#fff9e9;color:#302719}
-.library-category details[open]>.subject-grid{padding:12px;background:#fffaf0;border-radius:0 0 12px 12px}
+/* Premium reading focus: deep teal, champagne and warm ivory */
+.library-category,
+.library-category details{transition:background .22s,border-color .22s,box-shadow .22s}
+.library-category[open]{
+  background:#f5f1e8!important;
+  border:1px solid #c6a66b!important;
+  box-shadow:0 10px 28px rgba(46,59,52,.10)!important;
+}
+.library-category[open]>.library-category-body{
+  background:linear-gradient(180deg,#f5f1e8 0%,#fbfaf6 220px)!important;
+}
+.library-category[open]>.library-category-body>.category-empty{
+  background:#fffefa!important;
+  border:1px solid #e4dac7!important;
+  border-radius:12px;
+}
+.library-category[open]>summary{
+  background:linear-gradient(110deg,#244b46 0%,#35665d 65%,#52796c 100%)!important;
+  color:#fff!important;
+  padding:17px 20px!important;
+  border-left:5px solid #d4b16b!important;
+}
+.library-category[open]>summary:after{color:#f4dfb2!important}
+.library-category details[open]{
+  background:#f1eee5!important;
+  border:1px solid #c9b98f!important;
+  border-radius:11px!important;
+  box-shadow:0 5px 16px rgba(45,59,52,.08)!important;
+  margin:9px 0!important;
+}
+.library-category details[open]>summary{
+  background:linear-gradient(100deg,#e5eadf 0%,#f4f1e7 100%)!important;
+  color:#244b46!important;
+  border-left:4px solid #b58b45!important;
+  border-radius:9px 9px 0 0!important;
+  padding:13px 16px!important;
+  font-weight:700!important;
+}
 .library-category details>summary{cursor:pointer}
-@media(max-width:600px){.library-category[open]>summary{padding:14px!important}.library-category[open]>.library-category-body{padding:12px}.library-category details[open]>.stotra-text,.library-category details[open]>.aarti-lyrics{padding:13px!important}}
-
-/* Open/active reading panels: softly darkened for clear focus */
-.library-category[open] {
-  background: #eee7d8 !important;
-  border-color: #b58a43 !important;
+.library-category details[open]>.stotra-text,
+.library-category details[open]>.aarti-lyrics{
+  display:block;
+  background:#fffefa!important;
+  color:#292f2b!important;
+  border:1px solid #e5ddce!important;
+  border-top:2px solid #d4b16b!important;
+  border-radius:0 0 10px 10px!important;
+  padding:20px!important;
+  line-height:2.05!important;
+  font-size:16px!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.9);
 }
-.library-category[open] > summary {
-  background: linear-gradient(135deg,#8b6a35,#b18a4b) !important;
-  color: #fff !important;
+#category-aarti[open] details[open]>.aarti-lyrics{
+  background:#fffefa!important;color:#292f2b!important;
 }
-.library-category details[open] {
-  background: #e7dfd0 !important;
-  border-color: #a98957 !important;
+#category-stotra[open] .stotra-entry[open]>.stotra-text{
+  background:#fffefa!important;color:#292f2b!important;
 }
-.library-category details[open] > summary {
-  background: #d8cbb4 !important;
-  color: #382b1b !important;
+.library-category details[open]>.subject-grid{
+  padding:14px;background:#fffefa!important;border-radius:0 0 10px 10px;
 }
-.library-category .stotra-text,
-.library-category .aarti-lyrics,
-.library-category details[open] .stotra-text,
-.library-category details[open] .aarti-lyrics {
-  background: #e3dccf !important;
-  color: #29251f !important;
-  border: 1px solid #c4b69d !important;
-  border-radius: 10px;
+@media(max-width:600px){
+  .library-category[open]>summary{padding:14px!important}
+  .library-category[open]>.library-category-body{padding:12px}
+  .library-category details[open]>summary{padding:12px!important}
+  .library-category details[open]>.stotra-text,
+  .library-category details[open]>.aarti-lyrics{padding:14px!important;font-size:15px!important}
 }
 </style>
 </head>
