@@ -12,7 +12,7 @@ function independentFallback(reason) {
   const ymd=date.year+'-'+String(date.month).padStart(2,'0')+'-'+String(date.date).padStart(2,'0');
   const calculated = independentEngine.calculate({
     date: date.year+'-'+String(date.month).padStart(2,'0')+'-'+String(date.date).padStart(2,'0'),
-    time: '12:00:00', timezone: TZ, ayanamsha: 'lahiri'
+    time: '12:00:00', timezone: TZ, ayanamsha: 'lahiri', latitude: LAT, longitude: LON
   });
   return {
     date,
@@ -169,7 +169,7 @@ module.exports = async (req,res) => {
       nakshatra:calculated.limbs.nakshatra,nakshatraEnd:calculated.endsAt.nakshatra,
       yoga:calculated.limbs.yoga,karana:calculated.limbs.karana,
       sunrise:timeText(daily.sunrise),sunset:timeText(daily.sunset),
-      moonrise:null,moonset:null,
+      moonrise:calculated.riseSet?.moon?.rise ? clock(calculated.riseSet.moon.rise) : null,moonset:calculated.riseSet?.moon?.set ? clock(calculated.riseSet.moon.set) : null,
       rahuKaal:rangeText(daily.periods.rahuKaal),
       gulika:rangeText(daily.periods.gulika),
       yamagand:rangeText(daily.periods.yamagand),
@@ -180,7 +180,7 @@ module.exports = async (req,res) => {
     return res.status(200).json({
       date,
       location:{name:'श्रीधाम वृंदावन',latitude:LAT,longitude:LON,timezone:'Asia/Kolkata',ayanamsha:'Lahiri'},
-      data,traditional:{},details:{choghadiya:daily.choghadiya,hora:daily.hora,periods:daily.periods,astronomy:calculated.positions,grahas:calculated.grahas,riseSet:calculated.riseSet},
+      data,traditional:{},details:{choghadiya:daily.choghadiya,hora:daily.hora,periods:daily.periods,astronomy:calculated.positions,grahas:calculated.grahas,riseSet:calculated.riseSet,riseSet:calculated.riseSet},
       astroAvailable:false,extendedAvailable:false,
       providers:{navamsha:false,astroLogics:false,goPixel:false,independent:true},
       fallback:false,engine:calculated.engine,engineVersion:calculated.engineVersion,
