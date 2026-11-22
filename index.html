@@ -834,6 +834,19 @@
     @media(max-width:700px){.facebook-photo-section{width:calc(100% - 20px);margin:8px auto 26px;padding:15px 12px;border-radius:17px}.facebook-photo-heading{margin-bottom:12px}.facebook-photo-heading p{font-size:11px}.facebook-photo-badge{font-size:10px;padding:7px 9px}.facebook-photo-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}}
     @media(max-width:380px){.facebook-photo-grid{gap:4px}}
   </style>
+
+  <style id="daily-panchang-dashboard">
+    .panchang-dashboard{margin:0 0 35px;padding:clamp(18px,3vw,28px);border:1px solid rgba(168,121,40,.28);border-radius:20px;background:linear-gradient(135deg,#fffdf8,#f5ecdc);box-shadow:0 12px 32px rgba(76,55,24,.09);color:#493b2b}
+    .panchang-dashboard-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+    .panchang-dashboard h2{margin:0;color:#76521d;font-size:clamp(21px,3vw,27px)}
+    .panchang-dashboard-date{font-size:13px;color:#756b5d}
+    .panchang-dashboard-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+    .panchang-metric{padding:14px 12px;border:1px solid rgba(168,121,40,.17);border-radius:13px;background:rgba(255,255,255,.72);min-height:82px}
+    .panchang-metric span{display:block;font-size:12px;color:#806b4d;margin-bottom:5px}
+    .panchang-metric strong{font-size:15px;color:#493b2b;font-weight:600}
+    .panchang-status{margin-top:14px;font-size:12px;color:#806b4d}
+    @media(max-width:650px){.panchang-dashboard-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.panchang-dashboard{border-radius:16px}}
+  </style>
 </head>
 <body>
 
@@ -924,6 +937,25 @@
       <p id="daily-thought" style="color: #fbbf24; font-size: 18px; font-weight: 500; margin-top: 12px; font-family: 'Rozha One', serif;"></p>
       <p id="thought-meaning" style="color: #d1d5db; font-size: 13px; margin-top: 5px;"></p>
     </div>
+
+    <!-- Daily Panchang dashboard: directly below Suvichar and above photo gallery -->
+    <section id="daily-panchang" class="panchang-dashboard" aria-labelledby="panchang-title" data-aos="fade-up">
+      <div class="panchang-dashboard-head">
+        <div><h2 id="panchang-title">🪔 आज का पंचांग</h2><div class="panchang-dashboard-date" id="panchang-date">श्रीधाम वृंदावन • दैनिक पंचांग</div></div>
+        <span class="panchang-dashboard-date">दैनिक दर्शन</span>
+      </div>
+      <div class="panchang-dashboard-grid">
+        <div class="panchang-metric"><span>तिथि</span><strong>जानकारी शीघ्र उपलब्ध होगी</strong></div>
+        <div class="panchang-metric"><span>नक्षत्र</span><strong>जानकारी शीघ्र उपलब्ध होगी</strong></div>
+        <div class="panchang-metric"><span>योग</span><strong>जानकारी शीघ्र उपलब्ध होगी</strong></div>
+        <div class="panchang-metric"><span>करण</span><strong>जानकारी शीघ्र उपलब्ध होगी</strong></div>
+        <div class="panchang-metric"><span>सूर्योदय</span><strong>—</strong></div>
+        <div class="panchang-metric"><span>सूर्यास्त</span><strong>—</strong></div>
+        <div class="panchang-metric"><span>राहुकाल</span><strong>—</strong></div>
+        <div class="panchang-metric"><span>व्रत / त्योहार</span><strong>—</strong></div>
+      </div>
+      <div class="panchang-status">दैनिक पंचांग सेवा का लाइव डेटा कनेक्शन अभी बाकी है।</div>
+    </section>
 
     <!-- Facebook-style photo gallery, immediately below daily thought -->
     <section id="gallery" class="facebook-photo-section" aria-labelledby="gallery-title" data-aos="fade-up">
