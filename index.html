@@ -192,13 +192,17 @@
       color: #e5e7eb; text-decoration: none; font-size: 13px; transition: 0.2s;
     }
     .dropdown-menu li a:hover { background: rgba(249, 115, 22, 0.2); color: #fbbf24; }
-    .language-menu-item{padding:10px 14px 12px;border-top:1px solid rgba(168,121,40,.18)}
+    .language-menu-item{padding:12px 14px 14px;border-top:1px solid rgba(168,121,40,.18)}
     .language-menu-label{display:flex;align-items:center;gap:9px;margin:0 4px 8px;font-size:13px;font-weight:700;color:#f7d994}
-    #google_translate_element{min-height:34px}
-    #google_translate_element .goog-te-gadget{font-family:inherit!important;font-size:0!important;color:transparent!important}
-    #google_translate_element .goog-te-combo{width:100%;max-width:100%;height:36px;padding:0 9px;border:1px solid rgba(168,121,40,.35);border-radius:8px;background:#fffdf8;color:#493b2b;font-size:13px!important;outline:none}
-    #google_translate_element img,.goog-te-gadget span{display:none!important}
-    .goog-te-banner-frame{z-index:99999!important}
+    .language-menu-label i{color:#e8b85b}
+    .site-language-select{display:block;width:100%;height:40px;padding:0 12px;border:1px solid rgba(232,184,91,.38);border-radius:10px;background:#111d2d;color:#f8e8c5;font:500 13px 'Poppins',sans-serif;outline:none;appearance:auto}
+    .site-language-select:focus{border-color:#e8b85b;box-shadow:0 0 0 3px rgba(232,184,91,.12)}
+    #google_translate_element{position:fixed!important;left:-10000px!important;top:0!important;width:1px!important;height:1px!important;overflow:hidden!important;opacity:0!important;pointer-events:none!important}
+    .goog-te-banner-frame,.skiptranslate iframe{display:none!important}
+    body{top:0!important}
+    .goog-te-gadget{font-size:0!important}
+    .goog-tooltip,.goog-tooltip:hover{display:none!important}
+    .goog-text-highlight{background:transparent!important;box-shadow:none!important}
 
 
     /* Hero Section */
@@ -837,8 +841,20 @@
           <li><a href="#contact" onclick="closeMenu()"><i class="fa-solid fa-phone" style="color:#fbbf24;"></i> संपर्क करें</a></li>
           <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 5px 0;">
           <li class="language-menu-item">
-            <div class="language-menu-label"><i class="fa-solid fa-language" style="color:#0d9488;"></i> भाषा चुनें / Language</div>
-            <div id="google_translate_element"></div>
+            <label class="language-menu-label" for="site-language"><i class="fa-solid fa-globe" aria-hidden="true"></i> भाषा / Language</label>
+            <select id="site-language" class="site-language-select" aria-label="Choose website language" onchange="changeSiteLanguage(this.value)">
+              <option value="">भाषा चुनें</option>
+              <option value="hi">हिन्दी</option>
+              <option value="en">English</option>
+              <option value="bn">বাংলা</option>
+              <option value="gu">ગુજરાતી</option>
+              <option value="mr">मराठी</option>
+              <option value="pa">ਪੰਜਾਬੀ</option>
+              <option value="ta">தமிழ்</option>
+              <option value="te">తెలుగు</option>
+              <option value="sa">संस्कृतम्</option>
+            </select>
+            <div id="google_translate_element" aria-hidden="true"></div>
           </li>
           <li><a href="javascript:void(0)" onclick="shareWebsite()"><i class="fa-solid fa-share-nodes" style="color:#ec4899;"></i> शेयर करें</a></li>
         </ul>
@@ -2956,6 +2972,22 @@
         includedLanguages: 'hi,en,bn,gu,mr,pa,ta,te,sa',
         autoDisplay: false
       }, 'google_translate_element');
+    }
+    function changeSiteLanguage(language) {
+      if (!language) return;
+      var attempts = 0;
+      var timer = setInterval(function() {
+        var combo = document.querySelector('#google_translate_element select.goog-te-combo');
+        attempts++;
+        if (combo) {
+          combo.value = language;
+          combo.dispatchEvent(new Event('change', { bubbles: true }));
+          clearInterval(timer);
+        } else if (attempts >= 30) {
+          clearInterval(timer);
+          alert('भाषा सेवा अभी लोड नहीं हुई। कृपया थोड़ी देर बाद पुनः प्रयास करें।');
+        }
+      }, 350);
     }
   </script>
   <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" async></script>
