@@ -5,9 +5,11 @@ const LAT = 27.565;
 const LON = 77.659;
 const TZ = 5.5;
 const independentEngine = require('./panchang-astronomy');
+const dailyEngine = require('./panchang-daily');
 
 function independentFallback(reason) {
   const date = todayIST();
+  const ymd=date.year+'-'+String(date.month).padStart(2,'0')+'-'+String(date.date).padStart(2,'0');
   const calculated = independentEngine.calculate({
     date: date.year+'-'+String(date.month).padStart(2,'0')+'-'+String(date.date).padStart(2,'0'),
     time: '12:00:00', timezone: TZ, ayanamsha: 'lahiri'
@@ -23,7 +25,7 @@ function independentFallback(reason) {
       rahuKaal:null,gulika:null,yamagand:null,abhijit:null,brahma:null,amrit:null,
       choghadiya:null,hora:null
     },
-    traditional:{},details:{},astroAvailable:false,extendedAvailable:false,
+    traditional:{},details:{choghadiya:daily.choghadiya,hora:daily.hora,periods:daily.periods},astroAvailable:false,extendedAvailable:false,
     providers:{navamsha:false,astroLogics:false,goPixel:false,independent:true},
     fallback:true, fallbackReason:reason,
     accuracyNotice:calculated.accuracyNotice,
