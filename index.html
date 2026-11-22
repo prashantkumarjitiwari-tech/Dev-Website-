@@ -3646,7 +3646,7 @@ document.addEventListener('toggle',function(event){
       set('panchang-grahas',(t.grahas||[]).map(g=>g.name+' — '+g.sign).join(' • '));
       const dateEl=document.getElementById('panchang-date');
       if(dateEl&&result.date){const dt=new Date(Date.UTC(result.date.year,result.date.month-1,result.date.date));dateEl.textContent='श्रीधाम वृंदावन • '+new Intl.DateTimeFormat('hi-IN',{day:'numeric',month:'long',year:'numeric',timeZone:'UTC'}).format(dt);}
-      if(status)status.textContent=result.extendedAvailable?'आज का पंचांग • दैनिक गणना एवं ग्रह स्थिति से अपडेट':'आज का पंचांग अपडेट • विस्तृत संवत/ग्रह जानकारी हेतु अतिरिक्त API कुंजी आवश्यक';
+      if(status)status.textContent=result.astroAvailable?'आज का पंचांग • AstroLogics गणना से अपडेट':'आज का पंचांग • वैकल्पिक गणना सेवा उपलब्ध नहीं, प्राथमिक डेटा दिखाया जा रहा है';
     }catch(error){if(status)status.textContent='पंचांग डेटा अभी नहीं मिल पाया। कृपया थोड़ी देर बाद पुनः प्रयास करें।';console.error('Panchang load:',error);}
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',load,{once:true});else load();
