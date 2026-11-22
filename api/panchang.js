@@ -223,17 +223,49 @@ module.exports = async (req,res) => {
     if(extraKey){
       const ymd=date.year+'-'+String(date.month).padStart(2,'0')+'-'+String(date.date).padStart(2,'0');
       const optional=await Promise.allSettled([
+        getExtra('/panchang?date='+ymd+'&lat='+LAT+'&lon='+LON+'&lang=hi',extraKey),
         getExtra('/tool?name=hindu&y='+date.year+'&m='+date.month+'&d='+date.date+'&lat='+LAT+'&lon='+LON,extraKey),
         getExtra('/tool?name=samvat&y='+date.year+'&m='+date.month+'&d='+date.date+'&lat='+LAT+'&lon='+LON,extraKey),
-        getExtra('/graha?date='+ymd+'&hour=12&lang=hi',extraKey)
+        getExtra('/graha?date='+ymd+'&hour=12&lang=hi',extraKey),
+        getExtra('/tool?name=festival&y='+date.year+'&mode=year',extraKey)
       ]);
-      const hindu=optional[0].status==='fulfilled'?optional[0].value:null;
-      const samvat=optional[1].status==='fulfilled'?optional[1].value:null;
-      const planets=optional[2].status==='fulfilled'?optional[2].value:null;
+      const daily=optional[0].status==='fulfilled'?optional[0].value:null;
+      const hindu=optional[1].status==='fulfilled'?optional[1].value:null;
+      const samvat=optional[2].status==='fulfilled'?optional[2].value:null;
+      const planets=optional[3].status==='fulfilled'?optional[3].value:null;
+      const festivalCalendar=optional[4].status==='fulfilled'?optional[4].value:null;
       extraAvailable=optional.some(x=>x.status==='fulfilled');
+      const dailyData=daily?.output||daily?.data||daily;
       const hinduData=hindu?.output||hindu?.data||hindu;
       const samvatData=samvat?.output||samvat?.data||samvat;
       const pick=(...values)=>values.find(v=>v!=null&&v!=='')||null;
+      const asText=(v)=>first({v},['v'])||null;
+      const timeText=(v)=>v&&typeof v==='object'?(v.ist||v.local||v.time||v.value||v.iso||''):v;
+      if(dailyData){
+        const limb=(v)=>v&&typeof v==='object'?(v.name_hi||v.nameHi||v.hindi||v.name||v.label_hi||v.label||''):v;
+        data={
+          ...data,
+          tithi:pick(limb(dailyData.tithi),data.tithi),
+          nakshatra:pick(limb(dailyData.nakshatra),data.nakshatra),
+          yoga:pick(limb(dailyData.yoga),data.yoga),
+          karana:pick(limb(dailyData.karana),data.karana),
+          vara:pick(limb(dailyData.vara||dailyData.weekday),data.vara),
+          sunrise:pick(timeText(dailyData.sunrise),data.sunrise),
+          sunset:pick(timeText(dailyData.sunset),data.sunset),
+          moonrise:pick(timeText(dailyData.moonrise),data.moonrise),
+          moonset:pick(timeText(dailyData.moonset),data.moonset),
+          rahuKaal:pick(compact(dailyData.rahu_kaal||dailyData.rahuKaal),data.rahuKaal),
+          gulika:pick(compact(dailyData.gulika_kaal||dailyData.gulika),data.gulika),
+          yamagand:pick(compact(dailyData.yamaganda||dailyData.yama_ganda),data.yamagand),
+          choghadiya:pick(compact(dailyData.choghadiya),data.choghadiya)
+        };
+      }
+      if(festivalCalendar){
+        const root=festivalCalendar.output||festivalCalendar.data||festivalCalendar;
+        const list=root.festivals||root.items||root.calendar||[];
+        const todays=Array.isArray(list)?list.filter(x=>(x.date||x.gregorian_date||'').slice(0,10)===ymd):[];
+        if(todays.length)traditional.festival=todays.map(x=>x.name_hi||x.name||x.title).filter(Boolean).join(' • ');
+      }
       if(hinduData||samvatData){
         traditional={
           ...traditional,
