@@ -821,6 +821,68 @@
       </div>
     </div>
 
+    <!-- Online Appointment Request -->
+    <section id="online-appointment" class="appointment-section" aria-labelledby="appointment-title">
+      <div class="appointment-heading">
+        <span class="appointment-kicker">ONLINE SEVA BOOKING</span>
+        <h3 id="appointment-title">ऑनलाइन अपॉइंटमेंट अनुरोध</h3>
+        <p>अपनी आवश्यक सेवा चुनकर विवरण भेजें। आपका अनुरोध WhatsApp पर खुलेगा; भेजने के बाद समय की पुष्टि आपसे सीधे की जाएगी।</p>
+      </div>
+      <form id="appointmentForm" class="appointment-form">
+        <div class="appointment-fields">
+          <label>पूरा नाम<input name="name" type="text" autocomplete="name" placeholder="अपना नाम लिखें" required maxlength="80"></label>
+          <label>मोबाइल नंबर<input name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="10 अंकों का मोबाइल नंबर" pattern="[0-9+() -]{10,18}" required></label>
+          <label>कौन-सी सेवा चाहिए?
+            <select name="service" required>
+              <option value="">सेवा चुनें</option>
+              <option>भागवत कथा आयोजन</option><option>श्रीराम कथा आयोजन</option>
+              <option>ज्योतिष परामर्श</option><option>वास्तु परामर्श</option><option>व्यक्तिगत आध्यात्मिक मार्गदर्शन</option>
+            </select>
+          </label>
+          <label>पसंदीदा तारीख<input name="date" type="date" required></label>
+          <label>समय की पसंद
+            <select name="time"><option value="कोई भी सुविधाजनक समय">कोई भी सुविधाजनक समय</option><option>प्रातः</option><option>दोपहर</option><option>सायंकाल</option></select>
+          </label>
+          <label>स्थान / शहर<input name="location" type="text" placeholder="कार्यक्रम या परामर्श का स्थान" maxlength="120" required></label>
+        </div>
+        <label class="appointment-notes">अतिरिक्त जानकारी (वैकल्पिक)<textarea name="notes" rows="3" placeholder="अपनी आवश्यकता या कोई विशेष जानकारी लिखें" maxlength="600"></textarea></label>
+        <button class="appointment-submit" type="submit"><i class="fa-brands fa-whatsapp"></i> WhatsApp पर अनुरोध भेजें</button>
+        <small class="appointment-note">ध्यान दें: WhatsApp में संदेश खुलेगा। अनुरोध भेजने के लिए वहाँ Send दबाएँ। यह अभी अपॉइंटमेंट की अंतिम पुष्टि नहीं है।</small>
+      </form>
+    </section>
+    <style>
+      .appointment-section{max-width:980px;margin:42px auto;padding:clamp(20px,4vw,38px);border:1px solid #d6bd88;border-radius:20px;background:linear-gradient(145deg,#fffdf7,#f4eddd);box-shadow:0 14px 38px rgba(65,49,23,.10);color:#29332e}
+      .appointment-heading{text-align:center;margin-bottom:24px}.appointment-kicker{font-size:.75rem;letter-spacing:.16em;font-weight:800;color:#9a742f}.appointment-heading h3{margin:8px 0;color:#28483f;font-size:clamp(1.4rem,3vw,2rem)}.appointment-heading p{max-width:680px;margin:0 auto;color:#515b54;line-height:1.7}
+      .appointment-form{max-width:800px;margin:auto}.appointment-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.appointment-form label{display:flex;flex-direction:column;gap:7px;font-weight:650;color:#34443b;font-size:.95rem}.appointment-form input,.appointment-form select,.appointment-form textarea{width:100%;box-sizing:border-box;border:1px solid #d6c8a8;border-radius:10px;background:#fffefa;color:#26332d;padding:12px 13px;font:inherit;min-height:46px}.appointment-form input:focus,.appointment-form select:focus,.appointment-form textarea:focus{outline:2px solid #b99858;outline-offset:1px}.appointment-notes{margin-top:16px}.appointment-submit{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;margin-top:20px;padding:14px 18px;border:0;border-radius:12px;background:#315b4c;color:white;font-size:1rem;font-weight:750;cursor:pointer}.appointment-submit:hover{background:#244638}.appointment-note{display:block;margin-top:12px;text-align:center;color:#5c625c;line-height:1.6}
+      @media(max-width:600px){.appointment-fields{grid-template-columns:1fr}.appointment-section{margin:28px 12px;padding:20px 15px}}
+    </style>
+    <script>
+      (function(){
+        const form=document.getElementById('appointmentForm');
+        if(!form)return;
+        const dateField=form.elements.date;
+        const today=new Date();dateField.min=new Date(today.getTime()-today.getTimezoneOffset()*60000).toISOString().slice(0,10);
+        form.addEventListener('submit',function(event){
+          event.preventDefault();
+          if(!form.reportValidity())return;
+          const d=new FormData(form);
+          const lines=[
+            'नमस्कार, मुझे वेबसाइट के माध्यम से अपॉइंटमेंट का अनुरोध भेजना है।',
+            '',
+            'नाम: '+d.get('name'),
+            'मोबाइल: '+d.get('phone'),
+            'सेवा: '+d.get('service'),
+            'पसंदीदा तारीख: '+d.get('date'),
+            'समय: '+d.get('time'),
+            'स्थान: '+d.get('location'),
+            'अतिरिक्त जानकारी: '+(d.get('notes')||'नहीं')
+          ];
+          const url='https://wa.me/917465040426?text='+encodeURIComponent(lines.join('\n'));
+          window.open(url,'_blank','noopener');
+        });
+      })();
+    </script>
+
     <!-- Knowledge categories -->
     <section id="knowledge-categories" class="category-hub" aria-label="सामग्री की श्रेणियाँ">
       <div class="category-hub-heading"><span>आपका डिजिटल ज्ञान-संग्रह</span><h2>अपनी रुचि की श्रेणी चुनें</h2><p>हर विषय का अलग विभाग — खोलें और उसी श्रेणी की सामग्री देखें।</p></div>
