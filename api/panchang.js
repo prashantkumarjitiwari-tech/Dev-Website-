@@ -13,7 +13,7 @@ function pick(obj, keys) {
     if (obj[key] != null) {
       const v=obj[key];
       if (typeof v==='string'||typeof v==='number') return String(v);
-      if (typeof v==='object') return v.name_hi||v.nameHi||v.hindi||v.name||v.label_hi||v.label||v.value||null;
+      if (typeof v==='object') { const named=v.name_hi||v.nameHi||v.hindi||v.name||v.label_hi||v.label||v.value; if(named) return String(named); const start=v.start||v.start_time||v.startTime||v.from; const end=v.end||v.end_time||v.endTime||v.to; if(start&&end) return String(start)+' – '+String(end); }
     }
   }
   for (const value of Object.values(obj)) if (value && typeof value==='object') {
