@@ -107,13 +107,13 @@ async function getExtra(path, key){
   return j;
 }
 module.exports = async (req,res) => {
-  res.setHeader('Cache-Control','s-maxage=43200, stale-while-revalidate=86400');
+  res.setHeader('Cache-Control','s-maxage=1800, stale-while-revalidate=3600');
   if(req.method!=='GET') return res.status(405).json({error:'Method not allowed'});
   const key=process.env.NAVAMSHA_API_KEY;
   if(!key) return res.status(503).json({error:'पंचांग सेवा अभी सेटअप नहीं हुई है।'});
   try {
     const date=todayIST();
-    const body={...date,hours:12,minutes:0,latitude:LAT,longitude:LON,timezone:TZ,lang:'hi'};
+    const body={...date,hours:7,minutes:0,seconds:0,latitude:LAT,longitude:LON,timezone:TZ,settings:{ayanamsha:'lahiri',observation_point:'geocentric',language:'en'}};
     const headers={'X-API-Key':key,'Content-Type':'application/json'};
     const routes=['full','sun-times','inauspicious-periods','moon-times','abhijit-muhurat','brahma-muhurta','amrit-kaal','choghadiya','hora'];
     const settled=await Promise.all(routes.map(async route=>{
@@ -224,7 +224,7 @@ module.exports = async (req,res) => {
       if(planets)traditional.grahas=grahaList(planets);
       if(optional.some(x=>x.status==='rejected'))console.warn('Some extended Panchang fields unavailable');
     }
-    return res.status(200).json({date,data,traditional,extendedAvailable:Boolean(extraKey),astroAvailable});
+    return res.status(200).json({date,location:{name:'श्रीधाम वृंदावन',latitude:LAT,longitude:LON,timezone:'Asia/Kolkata',ayanamsha:'Lahiri'},data,traditional,details:result,extendedAvailable:Boolean(extraKey),astroAvailable,updatedAt:new Date().toISOString()});
   } catch(error) {
     console.error('Panchang API:',error.message);
     return res.status(502).json({error:'पंचांग डेटा प्राप्त नहीं हो पाया। कृपया थोड़ी देर बाद पुनः प्रयास करें।'});
