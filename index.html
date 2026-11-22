@@ -174,7 +174,10 @@
       .header-btn i { font-size:16px; }
       .drive-iframe,#drive-pdf-list .drive-pdf-item .drive-iframe { height:350px; }
     }
-  </style>
+  
+/* Panchang chart cards */
+.panchang-chart-holder{display:block!important}.panchang-chart-holder>b{display:block;margin-bottom:10px}.panchang-chart-grid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;white-space:normal!important}.panchang-chart-card{min-width:0;border-radius:12px;padding:10px 6px;text-align:center;background:#e9f8ef;color:#245c3b;border:1px solid rgba(54,145,91,.12);line-height:1.35}.panchang-chart-card:nth-child(3n+2){background:#fcebed;color:#8a3c4a}.panchang-chart-card:nth-child(3n){background:#f2edfa;color:#594579}.panchang-chart-card b{display:block;font-size:13px;margin-bottom:4px}.panchang-chart-card small{display:block;font-size:10px;overflow-wrap:anywhere}.panchang-chart-empty{grid-column:1/-1;padding:10px;color:#82786b;font-size:12px;background:#faf7f0;border-radius:9px}@media(max-width:420px){.panchang-chart-grid{gap:6px}.panchang-chart-card{padding:9px 4px}.panchang-chart-card b{font-size:12px}.panchang-chart-card small{font-size:9px}}
+</style>
 
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; scroll-behavior: smooth; }
@@ -1076,8 +1079,10 @@
       <details class="panchang-topic">
         <summary><span class="panchang-topic-icon">◷</span><span class="panchang-topic-copy"><b>चौघड़िया एवं होरा चार्ट</b><small>दिन और रात्रि के समय-खंड</small></span><i class="fa-solid fa-chevron-down panchang-chevron"></i></summary>
         <div class="panchang-topic-body"><div class="panchang-detail-grid">
-          <div class="panchang-detail-item panchang-detail-wide"><b>दिन एवं रात्रि चौघड़िया</b><span id="panchang-choghadiya">—</span></div>
-          <div class="panchang-detail-item panchang-detail-wide"><b>दिन एवं रात्रि होरा</b><span id="panchang-hora">—</span></div>
+          <div class="panchang-detail-item panchang-detail-wide panchang-chart-holder"><b>चौघड़िया — दिन</b><span id="panchang-choghadiya-day" class="panchang-chart-grid">गणना प्राप्त की जा रही है…</span></div>
+          <div class="panchang-detail-item panchang-detail-wide panchang-chart-holder"><b>चौघड़िया — रात्रि</b><span id="panchang-choghadiya-night" class="panchang-chart-grid">—</span></div>
+          <div class="panchang-detail-item panchang-detail-wide panchang-chart-holder"><b>होरा — दिन</b><span id="panchang-hora-day" class="panchang-chart-grid">—</span></div>
+          <div class="panchang-detail-item panchang-detail-wide panchang-chart-holder"><b>होरा — रात्रि</b><span id="panchang-hora-night" class="panchang-chart-grid">—</span></div>
         </div></div>
       </details>
 
@@ -3828,6 +3833,7 @@ async function shareDailyPanchang(){
   finally{button.disabled=false;button.innerHTML=original;}
 }
 </script>
+<script src="/dashboard.js" defer></script>
 </body>
           </html>
           
