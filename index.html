@@ -645,6 +645,33 @@
 .library-category details[open]>.subject-grid{padding:12px;background:#fffaf0;border-radius:0 0 12px 12px}
 .library-category details>summary{cursor:pointer}
 @media(max-width:600px){.library-category[open]>summary{padding:14px!important}.library-category[open]>.library-category-body{padding:12px}.library-category details[open]>.stotra-text,.library-category details[open]>.aarti-lyrics{padding:13px!important}}
+
+/* Open/active reading panels: softly darkened for clear focus */
+.library-category[open] {
+  background: #eee7d8 !important;
+  border-color: #b58a43 !important;
+}
+.library-category[open] > summary {
+  background: linear-gradient(135deg,#8b6a35,#b18a4b) !important;
+  color: #fff !important;
+}
+.library-category details[open] {
+  background: #e7dfd0 !important;
+  border-color: #a98957 !important;
+}
+.library-category details[open] > summary {
+  background: #d8cbb4 !important;
+  color: #382b1b !important;
+}
+.library-category .stotra-text,
+.library-category .aarti-lyrics,
+.library-category details[open] .stotra-text,
+.library-category details[open] .aarti-lyrics {
+  background: #e3dccf !important;
+  color: #29251f !important;
+  border: 1px solid #c4b69d !important;
+  border-radius: 10px;
+}
 </style>
 </head>
 <body>
