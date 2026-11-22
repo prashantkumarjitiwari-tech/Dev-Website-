@@ -219,6 +219,7 @@ module.exports = async (req,res) => {
     // Extended Hindu calendar and nine-graha positions use a separate provider.
     // Its key is optional so the existing daily Panchang remains available.
     const extraKey=process.env.GOPIXEL_API_KEY;
+    let extraAvailable=false;
     if(extraKey){
       const ymd=date.year+'-'+String(date.month).padStart(2,'0')+'-'+String(date.date).padStart(2,'0');
       const optional=await Promise.allSettled([
@@ -229,7 +230,7 @@ module.exports = async (req,res) => {
       const hindu=optional[0].status==='fulfilled'?optional[0].value:null;
       const samvat=optional[1].status==='fulfilled'?optional[1].value:null;
       const planets=optional[2].status==='fulfilled'?optional[2].value:null;
-      const extraAvailable=optional.some(x=>x.status==='fulfilled');
+      extraAvailable=optional.some(x=>x.status==='fulfilled');
       const hinduData=hindu?.output||hindu?.data||hindu;
       const samvatData=samvat?.output||samvat?.data||samvat;
       const pick=(...values)=>values.find(v=>v!=null&&v!=='')||null;
@@ -249,7 +250,7 @@ module.exports = async (req,res) => {
       if(optional.some(x=>x.status==='rejected'))console.warn('Some extended Panchang fields unavailable');
     }
     if(data.tithi)data.tithi=hindiName(data.tithi);if(data.nakshatra)data.nakshatra=hindiName(data.nakshatra);if(data.yoga)data.yoga=hindiName(data.yoga);if(data.karana)data.karana=hindiName(data.karana);if(data.vara)data.vara=hindiName(data.vara);if(traditional.lunarMonth)traditional.lunarMonth=hindiName(traditional.lunarMonth);if(traditional.ayana)traditional.ayana=hindiName(traditional.ayana);if(traditional.ritu)traditional.ritu=hindiName(traditional.ritu);if(traditional.paksha)traditional.paksha=hindiName(traditional.paksha);
-    return res.status(200).json({date,location:{name:'श्रीधाम वृंदावन',latitude:LAT,longitude:LON,timezone:'Asia/Kolkata',ayanamsha:'Lahiri'},data,traditional,details:result,providers:{navamsha:Boolean(result.full),astroLogics:astroAvailable,goPixel:extraAvailable},updatedAt:new Date().toISOString()});
+    return res.status(200).json({date,location:{name:'श्रीधाम वृंदावन',latitude:LAT,longitude:LON,timezone:'Asia/Kolkata',ayanamsha:'Lahiri'},data,traditional,details:result,astroAvailable,extendedAvailable:extraAvailable,providers:{navamsha:Boolean(result.full),astroLogics:astroAvailable,goPixel:extraAvailable},updatedAt:new Date().toISOString()});
   } catch(error) {
     console.error('Panchang API:',error.message);
     return res.status(502).json({error:'पंचांग डेटा प्राप्त नहीं हो पाया। कृपया थोड़ी देर बाद पुनः प्रयास करें।'});
