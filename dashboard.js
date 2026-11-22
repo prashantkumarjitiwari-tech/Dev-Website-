@@ -24,6 +24,21 @@
   if (oldMore) oldMore.insertAdjacentElement('afterend', area);
   else root.appendChild(area);
 
+  const methodBar = document.createElement('div');
+  methodBar.className = 'panchang-complete-item';
+  methodBar.style.marginBottom = '12px';
+  const methodLabel = document.createElement('b');
+  methodLabel.textContent = 'स्वतंत्र गणना तुलना — अयनांश चुनें';
+  const methodSelect = document.createElement('select');
+  methodSelect.id = 'panchang-ayanamsha-select';
+  methodSelect.setAttribute('aria-label','अयनांश चुनें');
+  methodSelect.style.cssText = 'width:100%;padding:10px;border:1px solid rgba(168,121,40,.35);border-radius:9px;background:#fff;color:#493b2b';
+  [['lahiri','लाहिड़ी'],['kp','के.पी. (अस्थायी)'],['raman','रमन (अनुमानित)']].forEach(([value,label])=>{const option=document.createElement('option');option.value=value;option.textContent=label;methodSelect.appendChild(option);});
+  try { methodSelect.value = localStorage.getItem('panchang-ayanamsha') || 'lahiri'; } catch (_) {}
+  methodSelect.addEventListener('change',()=>{try{localStorage.setItem('panchang-ayanamsha',methodSelect.value);}catch(_){} load();});
+  methodBar.append(methodLabel,methodSelect);
+  area.appendChild(methodBar);
+
   const labels = {
     tithi:'तिथि',tithiEnd:'तिथि समाप्ति',paksha:'पक्ष',nakshatra:'नक्षत्र',nakshatraEnd:'नक्षत्र समाप्ति',pada:'चरण',yoga:'योग',karana:'करण',
     weekday:'वार',vara:'वार',sunrise:'सूर्योदय',sunset:'सूर्यास्त',moonrise:'चन्द्रोदय',moonset:'चन्द्रास्त',
@@ -88,7 +103,29 @@
       const payload=await response.json();
       if(!response.ok)throw new Error(payload.error||'पंचांग उपलब्ध नहीं है');
       const d=payload.data||{},t=payload.traditional||{},details=payload.details||{};
+      let independent = null;
+      try {
+        const selectedAyanamsha = methodSelect.value || 'lahiri';
+        const engineResponse = await fetch('/api/panchang-engine?date='+encodeURIComponent(day)+'&time=07:00:00&timezone=5.5&ayanamsha='+encodeURIComponent(selectedAyanamsha),{headers:{Accept:'application/json'},cache:'no-store'});
+        const enginePayload = await engineResponse.json();
+        if (engineResponse.ok) independent = enginePayload;
+      } catch (engineError) { console.warn('Independent Panchang engine unavailable:',engineError); }
       area.replaceChildren();
+      if (independent) {
+        const endLabel = value => value ? new Intl.DateTimeFormat('hi-IN',{timeZone:'Asia/Kolkata',hour:'2-digit',minute:'2-digit',hour12:true}).format(new Date(value)) : 'उपलब्ध नहीं';
+        section('स्वतंत्र गणना — प्रायोगिक तुलना',[
+          ['गणना अयनांश',independent.ayanamsha?.system],
+          ['तिथि',independent.limbs?.tithi],
+          ['तिथि समाप्ति',endLabel(independent.endsAt?.tithi)],
+          ['नक्षत्र',independent.limbs?.nakshatra+' • चरण '+independent.limbs?.nakshatraPada],
+          ['नक्षत्र समाप्ति',endLabel(independent.endsAt?.nakshatra)],
+          ['योग',independent.limbs?.yoga],
+          ['योग समाप्ति',endLabel(independent.endsAt?.yoga)],
+          ['करण',independent.limbs?.karana],
+          ['करण समाप्ति',endLabel(independent.endsAt?.karana)]
+        ]);
+        const accuracy=document.createElement('p');accuracy.className='panchang-complete-note';accuracy.textContent=independent.accuracyNotice||'यह प्रारंभिक स्वतंत्र गणना है।';area.appendChild(accuracy);
+      }
       section('पंचांग के पाँच अंग',[
         ['तिथि / पक्ष',d.tithi],['तिथि समाप्ति',d.tithiEnd],['नक्षत्र / चरण',d.nakshatra],['नक्षत्र समाप्ति',d.nakshatraEnd],['योग',d.yoga],['करण',d.karana],['वार',d.vara]
       ]);
@@ -122,10 +159,10 @@
         if(entries.length)section(title,entries);
       }
       const note=document.createElement('p');note.className='panchang-complete-note';
-      note.textContent='गणना स्थान: श्रीधाम वृंदावन • लाहिड़ी अयनांश • भारतीय मानक समय (IST) • तिथि बदलने पर नया दैनिक डेटा स्वतः प्राप्त होगा।';
+      note.textContent='गणना स्थान: श्रीधाम वृंदावन • भारतीय मानक समय (IST) • स्वतंत्र गणना तुलना प्रायोगिक है • तिथि बदलने पर नया दैनिक डेटा स्वतः प्राप्त होगा।';
       area.appendChild(note);
       const status=document.getElementById('panchang-status');
-      if(status){const p=payload.providers||{};const sources=[p.navamsha?'Navamsha ✓':'Navamsha अनुपलब्ध',p.astroLogics?'AstroLogics ✓':'AstroLogics अनुपलब्ध',p.goPixel?'GoPixel ✓':'GoPixel अनुपलब्ध'];status.textContent='आज का पंचांग • '+sources.join(' • ')+' • प्राप्ति: '+new Intl.DateTimeFormat('hi-IN',{timeStyle:'short',timeZone:'Asia/Kolkata'}).format(new Date());}
+      if(status){const p=payload.providers||{};const sources=[p.navamsha?'Navamsha ✓':'Navamsha अनुपलब्ध',p.astroLogics?'AstroLogics ✓':'AstroLogics अनुपलब्ध',p.goPixel?'GoPixel ✓':'GoPixel अनुपलब्ध','स्वतंत्र गणना '+(independent?'✓':'अनुपलब्ध')];status.textContent='आज का पंचांग • '+sources.join(' • ')+' • प्राप्ति: '+new Intl.DateTimeFormat('hi-IN',{timeStyle:'short',timeZone:'Asia/Kolkata'}).format(new Date());}
       lastDay=day;
     }catch(error){
       const status=document.getElementById('panchang-status');
