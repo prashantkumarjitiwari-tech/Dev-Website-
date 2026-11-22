@@ -60,6 +60,22 @@ function compact(value, depth=0) {
   return '';
 }
 const signs={Aries:'मेष',Taurus:'वृषभ',Gemini:'मिथुन',Cancer:'कर्क',Leo:'सिंह',Virgo:'कन्या',Libra:'तुला',Scorpio:'वृश्चिक',Sagittarius:'धनु',Capricorn:'मकर',Aquarius:'कुम्भ',Pisces:'मीन'};
+const hindiNames={
+  pratipada:'प्रतिपदा',dwitiya:'द्वितीया',tritiya:'तृतीया',chaturthi:'चतुर्थी',panchami:'पंचमी',shashthi:'षष्ठी',saptami:'सप्तमी',ashtami:'अष्टमी',navami:'नवमी',dashami:'दशमी',ekadashi:'एकादशी',dwadashi:'द्वादशी',trayodashi:'त्रयोदशी',chaturdashi:'चतुर्दशी',purnima:'पूर्णिमा',amavasya:'अमावस्या',
+  ashwini:'अश्विनी',bharani:'भरणी',krittika:'कृत्तिका',rohini:'रोहिणी',mrigashira:'मृगशिरा',ardra:'आर्द्रा',punarvasu:'पुनर्वसु',pushya:'पुष्य',ashlesha:'आश्लेषा',magha:'मघा',purva_phalguni:'पूर्वा फाल्गुनी',uttara_phalguni:'उत्तरा फाल्गुनी',hasta:'हस्त',chitra:'चित्रा',swati:'स्वाती',vishakha:'विशाखा',anuradha:'अनुराधा',jyeshtha:'ज्येष्ठा',mula:'मूल',purva_ashadha:'पूर्वाषाढ़ा',uttara_ashadha:'उत्तराषाढ़ा',shravana:'श्रवण',dhanishta:'धनिष्ठा',shatabhisha:'शतभिषा',purva_bhadrapada:'पूर्वाभाद्रपद',uttara_bhadrapada:'उत्तराभाद्रपद',revati:'रेवती',
+  vishkambha:'विष्कुम्भ',priti:'प्रीति',ayushman:'आयुष्मान',saubhagya:'सौभाग्य',shobhana:'शोभन',atiganda:'अतिगण्ड',sukarma:'सुकर्मा',dhriti:'धृति',shula:'शूल',ganda:'गण्ड',vriddhi:'वृद्धि',dhruva:'ध्रुव',vyaghata:'व्याघात',harshana:'हर्षण',vajra:'वज्र',siddhi:'सिद्धि',vyatipata:'व्यतीपात',variyan:'वरीयान',parigha:'परिघ',shiva:'शिव',siddha:'सिद्ध',sadhya:'साध्य',shubha:'शुभ',shukla_yoga:'शुक्ल',brahma:'ब्रह्म',indra:'इन्द्र',vaidhriti:'वैधृति',
+  bava:'बव',balava:'बालव',kaulava:'कौलव',taitila:'तैतिल',garaja:'गर',vanija:'वणिज',vishti:'विष्टि',shakuni:'शकुनि',chatushpada:'चतुष्पद',naga:'नाग',kimstughna:'किंस्तुघ्न',
+  shukla:'शुक्ल पक्ष',krishna:'कृष्ण पक्ष',sunday:'रविवार',monday:'सोमवार',tuesday:'मंगलवार',wednesday:'बुधवार',thursday:'गुरुवार',friday:'शुक्रवार',saturday:'शनिवार',
+  chaitra:'चैत्र',vaishakha:'वैशाख',jyeshtha_month:'ज्येष्ठ',ashadha:'आषाढ़',shravana_month:'श्रावण',bhadrapada:'भाद्रपद',ashwin:'आश्विन',kartika:'कार्तिक',margashirsha:'मार्गशीर्ष',pausha:'पौष',magha_month:'माघ',phalguna:'फाल्गुन'
+};
+function hindiName(value){
+  if(value==null)return value;
+  let out=String(value);
+  for(const [key,val] of Object.entries(hindiNames).sort((a,b)=>b[0].length-a[0].length)){
+    out=out.replace(new RegExp('(^|[^a-z])'+key+'(?=$|[^a-z])','gi'),(m,prefix)=>prefix+val);
+  }
+  return out;
+}
 function grahaList(payload){
   const root=payload?.data||payload?.output||payload;
   let list=root?.grahas||root?.planets||root?.positions||root?.planet_positions||root?.planetPositions;
@@ -163,7 +179,7 @@ module.exports = async (req,res) => {
       const planets=calls[3].status==='fulfilled'?calls[3].value:null;
       const festivals=calls[4].status==='fulfilled'?calls[4].value:null;
       if(p){
-        const limb=v=>v?.label||v?.name||'';
+        const limb=v=>hindiName(v?.label_hi||v?.name_hi||v?.label||v?.name||'');
         data={
           ...data,
           tithi:p.tithi?((p.tithi.paksha==='shukla'?'शुक्ल पक्ष • ':p.tithi.paksha==='krishna'?'कृष्ण पक्ष • ':'')+limb(p.tithi)+(p.tithi.ends_at?' • समाप्ति '+clock(p.tithi.ends_at):'')):data.tithi,
@@ -229,6 +245,7 @@ module.exports = async (req,res) => {
       if(planets){const gp=grahaList(planets);if(gp.length)traditional.grahas=gp;}
       if(optional.some(x=>x.status==='rejected'))console.warn('Some extended Panchang fields unavailable');
     }
+    if(data.tithi)data.tithi=hindiName(data.tithi);if(data.nakshatra)data.nakshatra=hindiName(data.nakshatra);if(data.yoga)data.yoga=hindiName(data.yoga);if(data.karana)data.karana=hindiName(data.karana);if(data.vara)data.vara=hindiName(data.vara);if(traditional.lunarMonth)traditional.lunarMonth=hindiName(traditional.lunarMonth);if(traditional.ayana)traditional.ayana=hindiName(traditional.ayana);if(traditional.ritu)traditional.ritu=hindiName(traditional.ritu);if(traditional.paksha)traditional.paksha=hindiName(traditional.paksha);
     return res.status(200).json({date,location:{name:'श्रीधाम वृंदावन',latitude:LAT,longitude:LON,timezone:'Asia/Kolkata',ayanamsha:'Lahiri'},data,traditional,details:result,providers:{navamsha:Boolean(result.full),astroLogics:astroAvailable,goPixel:Boolean(extraKey&&traditional.grahas?.length)},updatedAt:new Date().toISOString()});
   } catch(error) {
     console.error('Panchang API:',error.message);
