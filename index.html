@@ -3648,42 +3648,47 @@ async function shareDailyPanchang(){
     ['चन्द्रास्त','panchang-moonset'],['राहुकाल','panchang-rahu'],['गुलिक काल','panchang-gulika'],['यमगण्ड','panchang-yamagand']
   ];
   const date=read('panchang-date');
-  const lines=['🪔 आज का पंचांग',date,'श्रीधाम वृंदावन','',...items.map(([label,id])=>label+' : '+read(id)),'','संपूर्ण दैनिक पंचांग देखें: '+location.href];
-  const shareText=lines.join('\n');
-  button.disabled=true;button.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> तैयार हो रहा है…';
+  button.disabled=true;button.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> तस्वीर तैयार हो रही है…';
   try{
-    const canvas=document.createElement('canvas');canvas.width=1080;canvas.height=1500;
+    const canvas=document.createElement('canvas');canvas.width=1080;canvas.height=1900;
     const ctx=canvas.getContext('2d');
-    const grad=ctx.createLinearGradient(0,0,1080,1500);grad.addColorStop(0,'#fffdf8');grad.addColorStop(1,'#f1e4cc');
-    ctx.fillStyle=grad;ctx.fillRect(0,0,1080,1500);
-    ctx.strokeStyle='#a87928';ctx.lineWidth=5;ctx.strokeRect(28,28,1024,1444);
-    ctx.textAlign='center';ctx.fillStyle='#76521d';ctx.font='bold 58px sans-serif';ctx.fillText('🪔 आज का पंचांग',540,125);
-    ctx.fillStyle='#756b5d';ctx.font='30px sans-serif';ctx.fillText(date,540,180);
-    ctx.fillStyle='#493b2b';ctx.font='28px sans-serif';ctx.fillText('श्रीधाम वृंदावन',540,235);
-    const cols=2,cellW=470,cellH=155,startX=55,startY=300;
+    const grad=ctx.createLinearGradient(0,0,1080,1900);grad.addColorStop(0,'#fffdf8');grad.addColorStop(1,'#f1e4cc');
+    ctx.fillStyle=grad;ctx.fillRect(0,0,1080,1900);
+    ctx.strokeStyle='#a87928';ctx.lineWidth=6;ctx.strokeRect(28,28,1024,1844);
+    const photo=new Image();photo.src='/assets/profile.jpg';
+    await new Promise((resolve,reject)=>{photo.onload=resolve;photo.onerror=reject;});
+    ctx.save();ctx.beginPath();ctx.arc(540,190,112,0,Math.PI*2);ctx.clip();ctx.drawImage(photo,428,78,224,224);ctx.restore();
+    ctx.strokeStyle='#a87928';ctx.lineWidth=7;ctx.beginPath();ctx.arc(540,190,116,0,Math.PI*2);ctx.stroke();
+    ctx.textAlign='center';ctx.fillStyle='#76521d';ctx.font='bold 42px sans-serif';ctx.fillText('परम पूज्य आचार्य',540,365);
+    ctx.font='bold 54px sans-serif';ctx.fillText('श्री देव तिवारी जी महाराज',540,435);
+    ctx.fillStyle='#756b5d';ctx.font='30px sans-serif';ctx.fillText(date,540,495);
+    ctx.fillStyle='#493b2b';ctx.font='28px sans-serif';ctx.fillText('श्रीधाम वृंदावन • आज का दैनिक पंचांग',540,550);
+    const cols=2,cellW=470,cellH=155,startX=55,startY=610;
     items.forEach(([label,id],i)=>{
       const col=i%cols,row=Math.floor(i/cols),x=startX+col*500,y=startY+row*cellH;
-      ctx.fillStyle='rgba(255,255,255,.86)';ctx.strokeStyle='rgba(168,121,40,.35)';ctx.lineWidth=2;
-      ctx.beginPath();ctx.roundRect(x,y,cellW,125,18);ctx.fill();ctx.stroke();
-      ctx.textAlign='left';ctx.fillStyle='#806b4d';ctx.font='26px sans-serif';ctx.fillText(label,x+22,y+42);
-      ctx.fillStyle='#493b2b';ctx.font='bold 29px sans-serif';
-      let value=read(id);if(value.length>23)value=value.slice(0,22)+'…';
-      ctx.fillText(value,x+22,y+88);
+      ctx.fillStyle='rgba(255,255,255,.9)';ctx.strokeStyle='rgba(168,121,40,.4)';ctx.lineWidth=2;
+      ctx.beginPath();ctx.roundRect(x,y,cellW,128,18);ctx.fill();ctx.stroke();
+      ctx.textAlign='left';ctx.fillStyle='#806b4d';ctx.font='27px sans-serif';ctx.fillText(label,x+22,y+43);
+      ctx.fillStyle='#493b2b';ctx.font='bold 30px sans-serif';
+      let value=read(id);if(value.length>24)value=value.slice(0,23)+'…';
+      ctx.fillText(value,x+22,y+91);
     });
-    ctx.textAlign='center';ctx.fillStyle='#76521d';ctx.font='26px sans-serif';
-    ctx.fillText('दैनिक पंचांग • '+location.hostname,540,1395);
+    ctx.textAlign='center';ctx.fillStyle='#76521d';ctx.font='bold 30px sans-serif';
+    ctx.fillText('पंचांग पढ़ें • साझा करें • सनातन ज्ञान से जुड़ें',540,1600);
+    ctx.fillStyle='#756b5d';ctx.font='24px sans-serif';ctx.fillText(location.hostname,540,1660);
+    ctx.fillText('यह पंचांग श्रीधाम वृंदावन के स्थानीय समयानुसार',540,1720);
+    ctx.fillText('दैनिक गणना के आधार पर प्रस्तुत है।',540,1760);
     const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/png'));
-    if(blob&&navigator.share&&navigator.canShare){
-      const file=new File([blob],'aaj-ka-panchang.png',{type:'image/png'});
-      if(navigator.canShare({files:[file]})){await navigator.share({title:'आज का पंचांग',text:'आज का पंचांग — श्रीधाम वृंदावन',files:[file]});return;}
+    if(!blob)throw new Error('Image creation failed');
+    const file=new File([blob],'aaj-ka-panchang-dev-tiwari-ji.png',{type:'image/png'});
+    if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
+      await navigator.share({title:'आज का पंचांग — आचार्य देव तिवारी जी महाराज',text:'आज का पंचांग • आचार्य देव तिवारी जी महाराज',files:[file]});
+      return;
     }
-    if(navigator.share){await navigator.share({title:'आज का पंचांग',text:shareText,url:location.href});return;}
-    if(blob){
-      const file=new File([blob],'aaj-ka-panchang.png',{type:'image/png'});
-      const a=document.createElement('a');a.href=URL.createObjectURL(file);a.download=file.name;a.click();URL.revokeObjectURL(a.href);
-    }
+    const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=file.name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1500);
+    const shareText='आज का पंचांग — आचार्य देव तिवारी जी महाराज\n'+date+'\n'+items.map(([label,id])=>label+' : '+read(id)).join('\n')+'\n\nऔर पढ़ें: '+location.href;
     if(navigator.clipboard?.writeText)await navigator.clipboard.writeText(shareText);
-    alert('पंचांग की तस्वीर डाउनलोड हो गई है। अब इसे WhatsApp Status पर लगा सकते हैं। शेयर टेक्स्ट भी कॉपी कर दिया गया है।');
+    alert('आपकी फोटो और नाम सहित साफ पंचांग तस्वीर डाउनलोड हो गई है। अब इसे WhatsApp Status पर लगाएँ या शेयर करें।');
   }catch(error){if(error.name!=='AbortError'){console.error('Panchang share:',error);alert('शेयर नहीं हो पाया। कृपया दोबारा प्रयास करें।');}}
   finally{button.disabled=false;button.innerHTML=original;}
 }
