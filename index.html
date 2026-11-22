@@ -197,10 +197,7 @@
     .language-menu-label i{color:#e8b85b}
     .site-language-select{display:block;width:100%;height:40px;padding:0 12px;border:1px solid rgba(232,184,91,.38);border-radius:10px;background:#111d2d;color:#f8e8c5;font:500 13px 'Poppins',sans-serif;outline:none;appearance:auto}
     .site-language-select:focus{border-color:#e8b85b;box-shadow:0 0 0 3px rgba(232,184,91,.12)}
-    #google_translate_element{position:fixed!important;left:-10000px!important;top:0!important;width:1px!important;height:1px!important;overflow:hidden!important;opacity:0!important;pointer-events:none!important}
-    .goog-te-banner-frame,.skiptranslate iframe{display:none!important}
-    body{top:0!important}
-    .goog-te-gadget{font-size:0!important}
+
     .goog-tooltip,.goog-tooltip:hover{display:none!important}
     .goog-text-highlight{background:transparent!important;box-shadow:none!important}
 
@@ -854,7 +851,6 @@
               <option value="te">తెలుగు</option>
               <option value="sa">संस्कृतम्</option>
             </select>
-            <div id="google_translate_element" aria-hidden="true"></div>
           </li>
           <li><a href="javascript:void(0)" onclick="shareWebsite()"><i class="fa-solid fa-share-nodes" style="color:#ec4899;"></i> शेयर करें</a></li>
         </ul>
@@ -2965,32 +2961,63 @@
   <!-- AOS Animation Script -->
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 
-  <script>
-    function googleTranslateElementInit() {
-      new google.translate.TranslateElement({
-        pageLanguage: 'hi',
-        includedLanguages: 'hi,en,bn,gu,mr,pa,ta,te,sa',
-        autoDisplay: false
-      }, 'google_translate_element');
-    }
-    function changeSiteLanguage(language) {
-      if (!language) return;
-      var attempts = 0;
-      var timer = setInterval(function() {
-        var combo = document.querySelector('#google_translate_element select.goog-te-combo');
-        attempts++;
-        if (combo) {
-          combo.value = language;
-          combo.dispatchEvent(new Event('change', { bubbles: true }));
-          clearInterval(timer);
-        } else if (attempts >= 30) {
-          clearInterval(timer);
-          alert('भाषा सेवा अभी लोड नहीं हुई। कृपया थोड़ी देर बाद पुनः प्रयास करें।');
+  <script id="site-language-engine">
+    (function () {
+      const dictionaries = {
+        en: {
+          "परिचय":"About","हमारी सेवाएं":"Our Services","ज्योतिष एवं स्तोत्र":"Astrology & Stotras","कथा-सागर":"Katha Collection","सभी श्रेणियाँ":"All Categories","फोटो गैलरी":"Photo Gallery","संपर्क करें":"Contact","भाषा / Language":"Language","भाषा चुनें":"Choose language","शेयर करें":"Share",
+          "हमारी सेवाएँ":"Our Services","सेवाएं":"Services","ऑनलाइन अपॉइंटमेंट":"Online Appointment","अपॉइंटमेंट बुक करें":"Request an Appointment","नाम":"Name","मोबाइल नंबर":"Mobile Number","सेवा चुनें":"Select a Service","तिथि":"Date","समय":"Time","स्थान":"Location","अतिरिक्त जानकारी":"Additional Information","भेजें":"Submit","कॉल करें":"Call","WhatsApp करें":"WhatsApp","ज्ञान-संग्रह":"Knowledge Library","दैनिक सुविचार":"Thought of the Day","जुड़े रहें • ज्ञान साझा करें":"Stay Connected • Share Knowledge","वेबसाइट साझा करें":"Share Website","सुझाव":"Feedback","अपनी प्रतिक्रिया भेजें":"Send your feedback"
+        },
+        bn: {
+          "परिचय":"পরিচিতি","हमारी सेवाएं":"আমাদের পরিষেবা","ज्योतिष एवं स्तोत्र":"জ্যোতিষ ও স্তোত্র","कथा-सागर":"কথা-সাগর","सभी श्रेणियाँ":"সব বিভাগ","फोटो गैलरी":"ছবির গ্যালারি","संपर्क करें":"যোগাযোগ","भाषा / Language":"ভাষা","भाषा चुनें":"ভাষা নির্বাচন করুন","शेयर करें":"শেয়ার করুন","सेवाएं":"পরিষেবা","ऑनलाइन अपॉइंटमेंट":"অনলাইন অ্যাপয়েন্টমেন্ট","नाम":"নাম","मोबाइल नंबर":"মোবাইল নম্বর","सेवा चुनें":"পরিষেবা নির্বাচন করুন","तिथि":"তারিখ","समय":"সময়","स्थान":"স্থান","भेजें":"পাঠান","कॉल करें":"কল করুন"
+        },
+        gu: {
+          "परिचय":"પરિચય","हमारी सेवाएं":"અમારી સેવાઓ","ज्योतिष एवं स्तोत्र":"જ્યોતિષ અને સ્તોત્ર","कथा-सागर":"કથા-સાગર","सभी श्रेणियाँ":"તમામ શ્રેણીઓ","फोटो गैलरी":"ફોટો ગેલેરી","संपर्क करें":"સંપર્ક કરો","भाषा / Language":"ભાષા","भाषा चुनें":"ભાષા પસંદ કરો","शेयर करें":"શેર કરો","सेवाएं":"સેવાઓ","ऑनलाइन अपॉइंटमेंट":"ઓનલાઇન એપોઇન્ટમેન્ટ","नाम":"નામ","मोबाइल नंबर":"મોબાઇલ નંબર","सेवा चुनें":"સેવા પસંદ કરો","तिथि":"તારીખ","समय":"સમય","स्थान":"સ્થળ","भेजें":"મોકલો","कॉल करें":"કૉલ કરો"
+        },
+        mr: {
+          "परिचय":"परिचय","हमारी सेवाएं":"आमच्या सेवा","ज्योतिष एवं स्तोत्र":"ज्योतिष आणि स्तोत्रे","कथा-सागर":"कथा-सागर","सभी श्रेणियाँ":"सर्व विभाग","फोटो गैलरी":"फोटो गॅलरी","संपर्क करें":"संपर्क करा","भाषा / Language":"भाषा","भाषा चुनें":"भाषा निवडा","शेयर करें":"शेअर करा","सेवाएं":"सेवा","ऑनलाइन अपॉइंटमेंट":"ऑनलाइन अपॉइंटमेंट","नाम":"नाव","मोबाइल नंबर":"मोबाइल क्रमांक","सेवा चुनें":"सेवा निवडा","तिथि":"तारीख","समय":"वेळ","स्थान":"ठिकाण","भेजें":"पाठवा","कॉल करें":"कॉल करा"
+        },
+        pa: {
+          "परिचय":"ਜਾਣ-ਪਛਾਣ","हमारी सेवाएं":"ਸਾਡੀਆਂ ਸੇਵਾਵਾਂ","ज्योतिष एवं स्तोत्र":"ਜੋਤਿਸ਼ ਅਤੇ ਸਤੋਤਰ","कथा-सागर":"ਕਥਾ-ਸਾਗਰ","सभी श्रेणियाँ":"ਸਾਰੀਆਂ ਸ਼੍ਰੇਣੀਆਂ","फोटो गैलरी":"ਫੋਟੋ ਗੈਲਰੀ","संपर्क करें":"ਸੰਪਰਕ ਕਰੋ","भाषा / Language":"ਭਾਸ਼ਾ","भाषा चुनें":"ਭਾਸ਼ਾ ਚੁਣੋ","शेयर करें":"ਸਾਂਝਾ ਕਰੋ","सेवाएं":"ਸੇਵਾਵਾਂ","ऑनलाइन अपॉइंटमेंट":"ਆਨਲਾਈਨ ਅਪਾਇੰਟਮੈਂਟ","नाम":"ਨਾਮ","मोबाइल नंबर":"ਮੋਬਾਈਲ ਨੰਬਰ","सेवा चुनें":"ਸੇਵਾ ਚੁਣੋ","तिथि":"ਤਾਰੀਖ","समय":"ਸਮਾਂ","स्थान":"ਥਾਂ","भेजें":"ਭੇਜੋ","कॉल करें":"ਕਾਲ ਕਰੋ"
+        },
+        ta: {
+          "परिचय":"அறிமுகம்","हमारी सेवाएं":"எங்கள் சேவைகள்","ज्योतिष एवं स्तोत्र":"ஜோதிடம் மற்றும் ஸ்தோத்திரங்கள்","कथा-सागर":"கதைத் தொகுப்பு","सभी श्रेणियाँ":"அனைத்து பிரிவுகள்","फोटो गैलरी":"புகைப்படத் தொகுப்பு","संपर्क करें":"தொடர்பு கொள்ள","भाषा / Language":"மொழி","भाषा चुनें":"மொழியைத் தேர்ந்தெடுக்கவும்","शेयर करें":"பகிர்","सेवाएं":"சேவைகள்","ऑनलाइन अपॉइंटमेंट":"ஆன்லைன் சந்திப்பு","नाम":"பெயர்","मोबाइल नंबर":"கைபேசி எண்","सेवा चुनें":"சேவையைத் தேர்ந்தெடுக்கவும்","तिथि":"தேதி","समय":"நேரம்","स्थान":"இடம்","भेजें":"அனுப்பு","कॉल करें":"அழைக்க"
+        },
+        te: {
+          "परिचय":"పరిచయం","हमारी सेवाएं":"మా సేవలు","ज्योतिष एवं स्तोत्र":"జ్యోతిష్యం మరియు స్తోత్రాలు","कथा-सागर":"కథా సాగరం","सभी श्रेणियाँ":"అన్ని విభాగాలు","फोटो गैलरी":"ఫోటో గ్యాలరీ","संपर्क करें":"సంప్రదించండి","भाषा / Language":"భాష","भाषा चुनें":"భాషను ఎంచుకోండి","शेयर करें":"పంచుకోండి","सेवाएं":"సేవలు","ऑनलाइन अपॉइंटमेंट":"ఆన్‌లైన్ అపాయింట్‌మెంట్","नाम":"పేరు","मोबाइल नंबर":"మొబైల్ నంబర్","सेवा चुनें":"సేవను ఎంచుకోండి","तिथि":"తేదీ","समय":"సమయం","स्थान":"స్థలం","भेजें":"పంపండి","कॉल करें":"కాల్ చేయండి"
+        },
+        sa: {
+          "परिचय":"परिचयः","हमारी सेवाएं":"अस्माकं सेवाः","ज्योतिष एवं स्तोत्र":"ज्योतिषं स्तोत्राणि च","कथा-सागर":"कथासागरः","सभी श्रेणियाँ":"सर्वाः श्रेण्यः","फोटो गैलरी":"चित्रदीर्घा","संपर्क करें":"सम्पर्कः","भाषा / Language":"भाषा","भाषा चुनें":"भाषां चिनुत","शेयर करें":"वितरन्तु","सेवाएं":"सेवाः","नाम":"नाम","समय":"समयः","स्थान":"स्थानम्","भेजें":"प्रेषयतु","कॉल करें":"आह्वयतु"
         }
-      }, 350);
-    }
+      };
+      const originalNodes = new Map();
+      function applyLanguage(code) {
+        const dictionary = dictionaries[code] || {};
+        const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+        const nodes = [];
+        while (walker.nextNode()) nodes.push(walker.currentNode);
+        nodes.forEach(node => {
+          if (!originalNodes.has(node)) originalNodes.set(node, node.nodeValue);
+          const original = originalNodes.get(node);
+          const trimmed = original.trim();
+          if (!trimmed) return;
+          const translated = dictionary[trimmed];
+          if (translated) node.nodeValue = original.replace(trimmed, translated);
+          else node.nodeValue = original;
+        });
+        document.documentElement.lang = code || 'hi';
+        try { localStorage.setItem('devSiteLanguage', code || 'hi'); } catch (e) {}
+      }
+      window.changeSiteLanguage = applyLanguage;
+      document.addEventListener('DOMContentLoaded', function () {
+        const selector = document.getElementById('site-language');
+        let saved = 'hi';
+        try { saved = localStorage.getItem('devSiteLanguage') || 'hi'; } catch (e) {}
+        if (selector) selector.value = saved;
+        if (saved !== 'hi') applyLanguage(saved);
+      });
+    })();
   </script>
-  <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" async></script>
 
   <!-- 3 Dots Dropdown JS Logic -->
   <script>
