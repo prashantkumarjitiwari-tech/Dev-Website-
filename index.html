@@ -858,6 +858,37 @@
     .panchang-extra p{margin:0;color:#493b2b;font-size:13px;line-height:1.6;overflow-wrap:anywhere}
     @media(max-width:650px){.panchang-extra-grid{grid-template-columns:1fr}.panchang-extra p{font-size:12px}}
     @media(max-width:650px){.panchang-dashboard-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.panchang-dashboard{border-radius:16px}}
+    .panchang-hub{margin:22px auto 34px;max-width:1120px}
+    .panchang-section-intro{text-align:center;margin:0 auto 16px;max-width:720px}
+    .panchang-kicker{display:inline-block;padding:6px 12px;border-radius:999px;background:#f4ead6;color:#8a6427;font-size:11px;font-weight:800;letter-spacing:.08em}
+    .panchang-section-intro h2{margin:9px 0 5px;color:#76521d;font-size:clamp(24px,3.5vw,32px)}
+    .panchang-section-intro p{margin:0;color:#756b5d;font-size:13px;line-height:1.7}
+    .panchang-dashboard{margin:0;padding:clamp(15px,2.5vw,24px);border:1px solid rgba(168,121,40,.25);border-radius:20px;background:linear-gradient(145deg,#fffdf8,#f5ecdc);box-shadow:0 12px 32px rgba(76,55,24,.08);color:#493b2b}
+    .panchang-dashboard-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:15px}
+    .panchang-dashboard h3{margin:0;color:#76521d;font-size:18px}
+    .panchang-dashboard-date{display:block;margin-top:4px;font-size:12px;color:#756b5d}
+    .panchang-share-btn{border:0;border-radius:999px;padding:10px 15px;background:#76521d;color:#fff;font:600 13px inherit;cursor:pointer;box-shadow:0 4px 12px rgba(76,55,24,.16)}
+    .panchang-summary-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+    .panchang-summary-item{min-width:0;padding:14px;border:1px solid rgba(168,121,40,.17);border-radius:13px;background:rgba(255,255,255,.82)}
+    .panchang-summary-item span{display:block;color:#806b4d;font-size:12px;margin-bottom:6px}
+    .panchang-summary-item strong{display:block;color:#493b2b;font-size:15px;line-height:1.5;overflow-wrap:anywhere}
+    .panchang-details{margin-top:14px;border:1px solid rgba(168,121,40,.22);border-radius:14px;background:rgba(255,255,255,.62);overflow:hidden}
+    .panchang-details>summary{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 16px;cursor:pointer;list-style:none;color:#76521d;font-size:14px;font-weight:800}
+    .panchang-details>summary::-webkit-details-marker{display:none}
+    .panchang-details[open]>summary{border-bottom:1px solid rgba(168,121,40,.18);background:#fbf5e9}
+    .panchang-details>summary span{display:flex;align-items:center;gap:9px}
+    .panchang-chevron{transition:transform .2s ease}
+    .panchang-details[open] .panchang-chevron{transform:rotate(180deg)}
+    .panchang-detail-content{padding:5px 15px 16px}
+    .panchang-detail-section{padding-top:13px}
+    .panchang-detail-section h4{margin:0 0 10px;color:#76521d;font-size:14px}
+    .panchang-detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+    .panchang-detail-item{min-width:0;padding:11px 12px;border:1px solid rgba(168,121,40,.14);border-radius:11px;background:#fff}
+    .panchang-detail-item b{display:block;color:#806b4d;font-size:11px;margin-bottom:5px}
+    .panchang-detail-item span{display:block;color:#493b2b;font-size:13px;line-height:1.6;overflow-wrap:anywhere;white-space:pre-wrap}
+    .panchang-detail-wide{grid-column:1/-1}
+    .panchang-status{margin-top:12px;font-size:11px;color:#806b4d;line-height:1.6}
+    @media(max-width:650px){.panchang-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.panchang-summary-item{padding:11px}.panchang-summary-item strong{font-size:13px}.panchang-detail-grid{grid-template-columns:1fr}.panchang-detail-wide{grid-column:auto}.panchang-dashboard{border-radius:16px}.panchang-dashboard-head{align-items:flex-start}.panchang-share-btn{padding:9px 12px;font-size:12px}}
   </style>
 </head>
 <body>
@@ -889,6 +920,7 @@
       <div class="dropdown-menu" id="dropdownMenu">
         <ul>
           <li><a href="#about" onclick="closeMenu()"><i class="fa-solid fa-user-circle" style="color:#f97316;"></i> परिचय</a></li>
+          <li><a href="#panchang-section" onclick="closeMenu()"><i class="fa-solid fa-calendar-days" style="color:#d6a84b;"></i> दैनिक पंचांग</a></li>
           <li><a href="#services" onclick="closeMenu()"><i class="fa-solid fa-hand-holding-heart" style="color:#3b82f6;"></i> हमारी सेवाएं</a></li>
           <li><a href="#stotra-jyotish" onclick="closeMenu()"><i class="fa-solid fa-book-journal-whills" style="color:#8b5cf6;"></i> ज्योतिष एवं स्तोत्र</a></li>
           <li><a href="#katha-sagar" onclick="closeMenu()"><i class="fa-solid fa-book-open" style="color:#a87928;"></i> कथा-सागर</a></li>
@@ -950,49 +982,67 @@
       <p id="thought-meaning" style="color: #d1d5db; font-size: 13px; margin-top: 5px;"></p>
     </div>
 
-    <!-- Daily Panchang dashboard: directly below Suvichar and above photo gallery -->
-    <section id="daily-panchang" class="panchang-dashboard" aria-labelledby="panchang-title" data-aos="fade-up">
-      <div class="panchang-dashboard-head">
-        <div><h2 id="panchang-title">🪔 आज का पंचांग</h2><div class="panchang-dashboard-date" id="panchang-date">श्रीधाम वृंदावन • दैनिक पंचांग</div></div>
-        <div class="panchang-head-actions">
-          <span class="panchang-dashboard-date">दैनिक दर्शन</span>
-          <button type="button" class="panchang-share-btn" id="panchang-share" onclick="shareDailyPanchang()"><i class="fa-solid fa-share-nodes"></i> पंचांग शेयर करें</button>
+    <!-- Dedicated Panchang section: short daily summary with one expandable detail area -->
+    <section id="panchang-section" class="panchang-hub" aria-labelledby="panchang-title" data-aos="fade-up">
+      <div class="panchang-section-intro">
+        <span class="panchang-kicker">दैनिक वैदिक कालगणना</span>
+        <h2>🪔 आज का पंचांग</h2>
+        <p>श्रीधाम वृंदावन के लिए आज की तिथि, नक्षत्र, योग और शुभ-अशुभ समय। अधिक जानकारी नीचे खोलें।</p>
+      </div>
+      <div id="daily-panchang" class="panchang-dashboard">
+        <div class="panchang-dashboard-head">
+          <div><h3 id="panchang-title">आज का संक्षिप्त पंचांग</h3><div class="panchang-dashboard-date" id="panchang-date">श्रीधाम वृंदावन • दैनिक पंचांग</div></div>
+          <button type="button" class="panchang-share-btn" id="panchang-share" onclick="shareDailyPanchang()"><i class="fa-solid fa-share-nodes"></i> शेयर करें</button>
         </div>
-      </div>
-      <div class="panchang-dashboard-grid">
-        <div class="panchang-metric"><span>तिथि / पक्ष</span><strong id="panchang-tithi">लोड हो रहा है…</strong></div>
-        <div class="panchang-metric"><span>नक्षत्र / चरण</span><strong id="panchang-nakshatra">लोड हो रहा है…</strong></div>
-        <div class="panchang-metric"><span>योग</span><strong id="panchang-yoga">लोड हो रहा है…</strong></div>
-        <div class="panchang-metric"><span>करण</span><strong id="panchang-karana">लोड हो रहा है…</strong></div>
-        <div class="panchang-metric"><span>वार</span><strong id="panchang-vara">—</strong></div>
-        <div class="panchang-metric"><span>सूर्योदय</span><strong id="panchang-sunrise">—</strong></div>
-        <div class="panchang-metric"><span>सूर्यास्त</span><strong id="panchang-sunset">—</strong></div>
-        <div class="panchang-metric"><span>चन्द्रोदय</span><strong id="panchang-moonrise">—</strong></div>
-        <div class="panchang-metric"><span>चन्द्रास्त</span><strong id="panchang-moonset">—</strong></div>
-        <div class="panchang-metric"><span>राहुकाल</span><strong id="panchang-rahu">—</strong></div>
-        <div class="panchang-metric"><span>गुलिक काल</span><strong id="panchang-gulika">—</strong></div>
-        <div class="panchang-metric"><span>यमगण्ड</span><strong id="panchang-yamagand">—</strong></div>
-      </div>
-      <div class="panchang-extra-grid panchang-traditional-grid" aria-label="पारंपरिक पंचांग विवरण">
-        <div class="panchang-extra"><b>विक्रम संवत</b><p id="panchang-samvat">—</p></div>
-        <div class="panchang-extra"><b>संवत्सर</b><p id="panchang-samvatsara">—</p></div>
-        <div class="panchang-extra"><b>अयन</b><p id="panchang-ayana">—</p></div>
-        <div class="panchang-extra"><b>ऋतु</b><p id="panchang-ritu">—</p></div>
-        <div class="panchang-extra"><b>चन्द्र मास</b><p id="panchang-month">—</p></div>
-        <div class="panchang-extra"><b>पक्ष</b><p id="panchang-paksha">—</p></div>
-        <div class="panchang-extra"><b>पर्व / व्रत</b><p id="panchang-festival">—</p></div>
-        <div class="panchang-extra panchang-extra-wide"><b>ग्रहों की राशि स्थिति</b><p id="panchang-grahas">—</p></div>
-      </div>
-      <details class="panchang-more"><summary>मुहूर्त, चौघड़िया और होरा का विस्तृत विवरण देखें</summary>
-        <div class="panchang-extra-grid">
-          <div class="panchang-extra"><b>अभिजित मुहूर्त</b><p id="panchang-abhijit">—</p></div>
-          <div class="panchang-extra"><b>ब्रह्म मुहूर्त</b><p id="panchang-brahma">—</p></div>
-          <div class="panchang-extra"><b>अमृत काल</b><p id="panchang-amrit">—</p></div>
-          <div class="panchang-extra"><b>चौघड़िया</b><p id="panchang-choghadiya">—</p></div>
-          <div class="panchang-extra"><b>होरा</b><p id="panchang-hora">—</p></div>
+        <div class="panchang-summary-grid">
+          <div class="panchang-summary-item"><span>तिथि / पक्ष</span><strong id="panchang-tithi">लोड हो रहा है…</strong></div>
+          <div class="panchang-summary-item"><span>नक्षत्र</span><strong id="panchang-nakshatra">लोड हो रहा है…</strong></div>
+          <div class="panchang-summary-item"><span>योग</span><strong id="panchang-yoga">लोड हो रहा है…</strong></div>
+          <div class="panchang-summary-item"><span>करण</span><strong id="panchang-karana">लोड हो रहा है…</strong></div>
+          <div class="panchang-summary-item"><span>सूर्योदय</span><strong id="panchang-sunrise">—</strong></div>
+          <div class="panchang-summary-item"><span>सूर्यास्त</span><strong id="panchang-sunset">—</strong></div>
         </div>
-      </details>
-      <div class="panchang-status" id="panchang-status" role="status" aria-live="polite">दैनिक पंचांग प्राप्त किया जा रहा है…</div>
+        <details class="panchang-details" id="panchang-details">
+          <summary><span><i class="fa-solid fa-book-open"></i> सम्पूर्ण पंचांग एवं विस्तृत विश्लेषण</span><i class="fa-solid fa-chevron-down panchang-chevron"></i></summary>
+          <div class="panchang-detail-content">
+            <div class="panchang-detail-section">
+              <h4>पंचांग के अन्य विवरण</h4>
+              <div class="panchang-detail-grid">
+                <div class="panchang-detail-item"><b>वार</b><span id="panchang-vara">—</span></div>
+                <div class="panchang-detail-item"><b>चन्द्रोदय</b><span id="panchang-moonrise">—</span></div>
+                <div class="panchang-detail-item"><b>चन्द्रास्त</b><span id="panchang-moonset">—</span></div>
+                <div class="panchang-detail-item"><b>राहुकाल</b><span id="panchang-rahu">—</span></div>
+                <div class="panchang-detail-item"><b>गुलिक काल</b><span id="panchang-gulika">—</span></div>
+                <div class="panchang-detail-item"><b>यमगण्ड</b><span id="panchang-yamagand">—</span></div>
+              </div>
+            </div>
+            <div class="panchang-detail-section">
+              <h4>मुहूर्त, चौघड़िया एवं होरा</h4>
+              <div class="panchang-detail-grid">
+                <div class="panchang-detail-item"><b>अभिजित मुहूर्त</b><span id="panchang-abhijit">—</span></div>
+                <div class="panchang-detail-item"><b>ब्रह्म मुहूर्त</b><span id="panchang-brahma">—</span></div>
+                <div class="panchang-detail-item"><b>अमृत काल</b><span id="panchang-amrit">—</span></div>
+                <div class="panchang-detail-item panchang-detail-wide"><b>दिन एवं रात्रि चौघड़िया</b><span id="panchang-choghadiya">—</span></div>
+                <div class="panchang-detail-item panchang-detail-wide"><b>दिन एवं रात्रि होरा</b><span id="panchang-hora">—</span></div>
+              </div>
+            </div>
+            <div class="panchang-detail-section">
+              <h4>विक्रमादित्य कालगणना एवं पर्व</h4>
+              <div class="panchang-detail-grid">
+                <div class="panchang-detail-item"><b>विक्रम संवत</b><span id="panchang-samvat">—</span></div>
+                <div class="panchang-detail-item"><b>संवत्सर</b><span id="panchang-samvatsara">—</span></div>
+                <div class="panchang-detail-item"><b>अयन</b><span id="panchang-ayana">—</span></div>
+                <div class="panchang-detail-item"><b>ऋतु</b><span id="panchang-ritu">—</span></div>
+                <div class="panchang-detail-item"><b>चन्द्र मास</b><span id="panchang-month">—</span></div>
+                <div class="panchang-detail-item"><b>पक्ष</b><span id="panchang-paksha">—</span></div>
+                <div class="panchang-detail-item panchang-detail-wide"><b>आज के पर्व / व्रत</b><span id="panchang-festival">—</span></div>
+                <div class="panchang-detail-item panchang-detail-wide"><b>नवग्रहों की राशि स्थिति</b><span id="panchang-grahas">—</span></div>
+              </div>
+            </div>
+          </div>
+        </details>
+        <div class="panchang-status" id="panchang-status" role="status" aria-live="polite">दैनिक पंचांग प्राप्त किया जा रहा है…</div>
+      </div>
     </section>
 
     <!-- Facebook-style photo gallery, immediately below daily thought -->
