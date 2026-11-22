@@ -36,8 +36,14 @@ module.exports = async function handler(req, res) {
     });
     const data = await upstream.json();
     if (!upstream.ok) {
-      console.error('OpenAI API error:', upstream.status, data && data.error && data.error.message);
-      return res.status(502).json({ error: 'अभी AI सेवा उत्तर नहीं दे पा रही है। कृपया बाद में प्रयास करें।' });
+      const upstreamMessage = String(data && data.error && data.error.message || '');
+      console.error('OpenAI API error:', upstream.status, upstreamMessage);
+      const code = upstream.status === 401 ? 'AI_AUTH_ERROR'
+        : upstream.status === 429 ? 'AI_QUOTA_ERROR'
+        : upstream.status === 403 ? 'AI_ACCESS_ERROR'
+        : upstream.status === 400 ? 'AI_MODEL_ERROR'
+        : 'AI_SERVER_ERROR';
+      return res.status(502).json({ error: 'AI सेवा से उत्तर प्राप्त नहीं हुआ।', code });
     }
     const reply = (typeof data.output_text === 'string' ? data.output_text : (Array.isArray(data.output) ? data.output.flatMap(item => Array.isArray(item.content) ? item.content : []).filter(part => part && part.type === 'output_text' && typeof part.text === 'string').map(part => part.text).join('\\n') : '')).trim();
     if (!reply) return res.status(502).json({ error: 'अभी उत्तर उपलब्ध नहीं है। कृपया पुनः प्रयास करें।' });
