@@ -890,36 +890,41 @@
     .panchang-status{margin-top:12px;font-size:11px;color:#806b4d;line-height:1.6}
     @media(max-width:650px){.panchang-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.panchang-summary-item{padding:11px}.panchang-summary-item strong{font-size:13px}.panchang-detail-grid{grid-template-columns:1fr}.panchang-detail-wide{grid-column:auto}.panchang-dashboard{border-radius:16px}.panchang-dashboard-head{align-items:flex-start}.panchang-share-btn{padding:9px 12px;font-size:12px}}
   
-    /* Compact Panchang hub: one summary, topic-wise expandable details */
-    .panchang-hub{max-width:900px;margin:26px auto 38px;padding:0 14px}
-    .panchang-dashboard{padding:clamp(14px,2.5vw,24px);margin:0}
-    .panchang-basic-grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:9px}
-    .panchang-basic-grid .panchang-summary-item{padding:12px 10px;text-align:center}
-    .panchang-basic-grid .panchang-summary-item strong{font-size:14px}
-    .panchang-sunline{display:flex;justify-content:center;align-items:center;gap:12px;flex-wrap:wrap;margin:12px 0 22px;padding:10px 12px;border-radius:12px;background:#f4ead8;color:#76521d;font-size:13px}
-    .panchang-sunline i{color:#b88636}.panchang-sunline b{margin-left:4px;color:#493b2b}
-    .panchang-sun-separator{color:#b9a27d}
-    .panchang-accordion-heading{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:4px 2px 10px;color:#76521d}
-    .panchang-accordion-heading span{font-weight:800;font-size:17px}
-    .panchang-accordion-heading small{font-size:11px;color:#8b806f}
+    /* Reader-first Panchang presentation */
+    .panchang-hub{max-width:860px;margin:24px auto 36px;padding:0 12px}
+    .panchang-section-intro{margin-bottom:12px}
+    .panchang-section-intro p{max-width:560px;margin:0 auto}
+    .panchang-dashboard{padding:clamp(13px,2.4vw,22px);border-radius:20px;background:#fffdf9}
+    .panchang-dashboard-head{align-items:center;margin-bottom:14px}
+    .panchang-dashboard-head h3{font-size:19px;color:#573b70}
+    .panchang-basic-grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+    .panchang-basic-grid .panchang-summary-item{padding:11px 8px;text-align:center;border-radius:12px;background:#f8f2fb;border:1px solid #eee3f5}
+    .panchang-basic-grid .panchang-summary-item span{font-size:11px;color:#756080}
+    .panchang-basic-grid .panchang-summary-item strong{font-size:13px;color:#34243e}
+    .panchang-sunline{display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap;margin:10px 0 20px;padding:11px;border-radius:12px;background:#fff6df;color:#654b21;font-size:13px}
+    .panchang-sunline b{margin-left:4px;color:#30223a}
+    .panchang-accordion-heading{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:5px 2px 10px;color:#56386d}
+    .panchang-accordion-heading span{font-weight:800;font-size:18px}
+    .panchang-accordion-heading small{font-size:11px;color:#83778a}
     .panchang-accordion-list{display:grid;gap:9px}
-    .panchang-topic{border:1px solid rgba(168,121,40,.22);border-radius:13px;background:rgba(255,255,255,.78);overflow:hidden}
-    .panchang-topic>summary{display:flex;align-items:center;gap:12px;padding:13px 15px;cursor:pointer;list-style:none;color:#76521d}
+    .panchang-topic{border:1px solid #eadff0;border-radius:13px;background:#fff;overflow:hidden;box-shadow:0 2px 8px rgba(65,38,82,.035)}
+    .panchang-topic>summary{display:flex;align-items:center;gap:11px;padding:13px 14px;cursor:pointer;list-style:none;color:#4f3564}
     .panchang-topic>summary::-webkit-details-marker{display:none}
-    .panchang-topic[open]>summary{background:#fbf4e7;border-bottom:1px solid rgba(168,121,40,.16)}
-    .panchang-topic-icon{width:35px;height:35px;flex:0 0 35px;display:grid;place-items:center;border-radius:10px;background:#f2e5cb;color:#8a6425;font-size:18px}
-    .panchang-topic-copy{display:flex;flex:1;min-width:0;flex-direction:column;gap:2px}
-    .panchang-topic-copy b{font-size:13px}.panchang-topic-copy small{font-size:11px;color:#887d6c}
-    .panchang-topic .panchang-chevron{font-size:12px;color:#98702d}
-    .panchang-topic-body{padding:13px}
-    .panchang-topic-body .panchang-detail-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
-    .panchang-topic-body .panchang-detail-item{padding:11px;border-radius:10px;background:#fffdf9;border:1px solid rgba(168,121,40,.14)}
-    .panchang-topic-body .panchang-detail-item b{font-size:11px}
-    .panchang-topic-body .panchang-detail-item span{font-size:13px}
-    .panchang-topic-body .panchang-detail-wide{grid-column:1/-1}
-    .panchang-status{margin-top:14px}
-    @media(max-width:700px){.panchang-basic-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.panchang-basic-grid .panchang-summary-item:last-child{grid-column:1/-1}.panchang-topic-body .panchang-detail-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.panchang-accordion-heading{align-items:flex-start;flex-direction:column;gap:1px}.panchang-dashboard-head{align-items:flex-start}}
-    @media(max-width:380px){.panchang-topic>summary{padding:11px}.panchang-topic-body{padding:9px}.panchang-topic-body .panchang-detail-grid{grid-template-columns:1fr}}
+    .panchang-topic[open]>summary{background:#f8f1fb;border-bottom:1px solid #eee3f3}
+    .panchang-topic-icon{width:34px;height:34px;flex:0 0 34px;display:grid;place-items:center;border-radius:10px;background:#f0e5f6;color:#694b80;font-size:17px}
+    .panchang-topic-copy{display:flex;flex:1;min-width:0;flex-direction:column;gap:3px}
+    .panchang-topic-copy b{font-size:13px;color:#493258}.panchang-topic-copy small{font-size:11px;color:#83778a}
+    .panchang-topic .panchang-chevron{font-size:12px;color:#80618e}
+    .panchang-topic-body{padding:8px 15px 12px}
+    .panchang-topic-body .panchang-detail-grid{display:block}
+    .panchang-topic-body .panchang-detail-item{display:grid;grid-template-columns:minmax(105px,34%) minmax(0,1fr);align-items:start;gap:12px;padding:10px 2px;border:0;border-bottom:1px solid #f0ebf2;border-radius:0;background:transparent}
+    .panchang-topic-body .panchang-detail-item:last-child{border-bottom:0}
+    .panchang-topic-body .panchang-detail-item b{margin:0;color:#81758a;font-size:12px;font-weight:500}
+    .panchang-topic-body .panchang-detail-item span{color:#30243a;font-size:13px;font-weight:600;line-height:1.65;white-space:pre-wrap;overflow-wrap:anywhere}
+    .panchang-topic-body .panchang-detail-wide{grid-column:auto}
+    .panchang-status{margin-top:12px;padding-top:10px;border-top:1px solid #f0e8f4;color:#82758b;font-size:11px}
+    @media(max-width:700px){.panchang-basic-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.panchang-topic-body .panchang-detail-item{grid-template-columns:37% minmax(0,1fr)}.panchang-dashboard-head{align-items:flex-start}.panchang-accordion-heading{align-items:flex-start;flex-direction:column;gap:2px}}
+    @media(max-width:380px){.panchang-topic-body{padding:7px 11px 10px}.panchang-topic-body .panchang-detail-item{grid-template-columns:34% minmax(0,1fr);gap:8px}.panchang-topic>summary{padding:11px}}
 </style>
 </head>
 <body>
@@ -3761,6 +3766,13 @@ document.addEventListener('toggle',function(event){
       if(status)status.textContent=result.astroAvailable?'आज का पंचांग • AstroLogics गणना से अपडेट':'आज का पंचांग • वैकल्पिक गणना सेवा उपलब्ध नहीं, प्राथमिक डेटा दिखाया जा रहा है';
     }catch(error){if(status)status.textContent='पंचांग डेटा अभी नहीं मिल पाया। कृपया थोड़ी देर बाद पुनः प्रयास करें।';console.error('Panchang load:',error);}
   }
+  const topics=()=>document.querySelectorAll('#panchang-accordion-list .panchang-topic');
+  document.addEventListener('toggle',event=>{
+    const opened=event.target;
+    if(opened.matches&&opened.matches('#panchang-accordion-list .panchang-topic')&&opened.open){
+      topics().forEach(item=>{if(item!==opened)item.open=false;});
+    }
+  },true);
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',load,{once:true});else load();
 })();
 </script>
