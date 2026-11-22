@@ -123,6 +123,51 @@ function localIsoFromJd(jd, offset) {
   return local.toISOString().replace('Z', sign + oh + ':' + om);
 }
 
+
+const RASHIS = ['मेष','वृषभ','मिथुन','कर्क','सिंह','कन्या','तुला','वृश्चिक','धनु','मकर','कुम्भ','मीन'];
+function orbitalPosition(name, d) {
+  const el = {
+    mercury:[48.3313+3.24587e-5*d,7.0047+5e-8*d,29.1241+1.01444e-5*d,0.387098,0.205635+5.59e-10*d,168.6562+4.0923344368*d],
+    venus:[76.6799+2.4659e-5*d,3.3946+2.75e-8*d,54.8910+1.38374e-5*d,0.723330,0.006773-1.302e-9*d,48.0052+1.6021302244*d],
+    mars:[49.5574+2.11081e-5*d,1.8497-1.78e-8*d,286.5016+2.92961e-5*d,1.523688,0.093405+2.516e-9*d,18.6021+0.5240207766*d],
+    jupiter:[100.4542+2.76854e-5*d,1.3030-1.557e-7*d,273.8777+1.64505e-5*d,5.20256,0.048498+4.469e-9*d,19.8950+0.0830853001*d],
+    saturn:[113.6634+2.3898e-5*d,2.4886-1.081e-7*d,339.3939+2.97661e-5*d,9.55475,0.055546-9.499e-9*d,316.9670+0.0334442282*d]
+  }[name];
+  const [N,i,w,a,e,M0]=el, M=norm(M0);
+  let E=M+e/DEG*sin(M)*(1+e*cos(M));
+  for(let k=0;k<6;k++) E-= (E-e/DEG*sin(E)-M)/(1-e*cos(E));
+  const xv=a*(cos(E)-e), yv=a*Math.sqrt(1-e*e)*sin(E);
+  const v=Math.atan2(yv,xv)/DEG, r=Math.hypot(xv,yv);
+  const xh=r*(cos(N)*cos(v+w)-sin(N)*sin(v+w)*cos(i));
+  const yh=r*(sin(N)*cos(v+w)+cos(N)*sin(v+w)*cos(i));
+  const zh=r*sin(v+w)*sin(i);
+  return {x:xh,y:yh,z:zh};
+}
+function planetaryLongitudes(jd, ay) {
+  const d=jd-2451543.5;
+  const sunLon=solarLongitude(jd);
+  const sunR=1.00014*(1.00014); // scale is immaterial to longitude; refined Earth radius below
+  const earthAngle=(sunLon+180)*DEG;
+  const earth={x:Math.cos(earthAngle),y:Math.sin(earthAngle),z:0};
+  const planets=[];
+  for(const name of ['mercury','venus','mars','jupiter','saturn']){
+    const p=orbitalPosition(name,d);
+    const lon=norm(Math.atan2(p.y+Math.sin(sunLon*DEG),p.x+Math.cos(sunLon*DEG))/DEG-ay);
+    const sid=norm(lon);
+    planets.push({name,longitude:Number(sid.toFixed(4)),rashi:RASHIS[Math.floor(sid/30)],degrees:Number((sid%30).toFixed(4)),calculation:'approximate'});
+  }
+  const node=norm(125.04452-1934.136261*centuries(jd)+0.0020708*Math.pow(centuries(jd),2));
+  const rahu=norm(node-ay), ketu=norm(rahu+180);
+  planets.push({name:'राहु',longitude:Number(rahu.toFixed(4)),rashi:RASHIS[Math.floor(rahu/30)],degrees:Number((rahu%30).toFixed(4)),calculation:'mean lunar node'});
+  planets.push({name:'केतु',longitude:Number(ketu.toFixed(4)),rashi:RASHIS[Math.floor(ketu/30)],degrees:Number((ketu%30).toFixed(4)),calculation:'opposite mean node'});
+  const sunSid=norm(sunLon-ay), moonSid=norm(lunarLongitude(jd)-ay);
+  planets.unshift(
+    {name:'सूर्य',longitude:Number(sunSid.toFixed(4)),rashi:RASHIS[Math.floor(sunSid/30)],degrees:Number((sunSid%30).toFixed(4)),calculation:'approximate'},
+    {name:'चन्द्र',longitude:Number(moonSid.toFixed(4)),rashi:RASHIS[Math.floor(moonSid/30)],degrees:Number((moonSid%30).toFixed(4)),calculation:'approximate'}
+  );
+  return planets;
+}
+
 function calculate(input={}) {
   const dateText = input.date || new Date().toISOString().slice(0,10);
   const timeText = input.time || '12:00:00';
@@ -140,7 +185,7 @@ function calculate(input={}) {
   const utc = new Date(check.getTime() - offset*3600000);
   const jd = julianDay(utc), ay = ayanamsha(jd, system);
   const sunTropical = solarLongitude(jd), moonTropical = lunarLongitude(jd);
-  const limbs = describeLimbs(jd, system);
+  const limbs = describeLimbs(jd, system);\n  const grahas = planetaryLongitudes(jd, ay);
   const endsAt = {};
   for (const key of ['tithi','nakshatra','yoga','karana']) {
     const boundary = nextBoundary(jd, key, system);
@@ -148,7 +193,7 @@ function calculate(input={}) {
   }
   return {
     engine: 'independent-meeus-lite',
-    engineVersion: '0.2.0',
+    engineVersion: '0.3.0',
     julianDay: Number(jd.toFixed(6)),
     utc: utc.toISOString(),
     ayanamsha: { system, degrees: Number(ay.toFixed(6)), status: 'approximate' },
@@ -162,4 +207,4 @@ function calculate(input={}) {
   };
 }
 
-module.exports = { calculate, julianDay, solarLongitude, lunarLongitude, ayanamsha, limbIndices, nextBoundary };
+module.exports = { calculate, julianDay, solarLongitude, lunarLongitude, ayanamsha, limbIndices, nextBoundary, planetaryLongitudes };
