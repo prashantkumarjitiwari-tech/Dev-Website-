@@ -2982,12 +2982,14 @@
       menu.classList.remove('active');
     }
 
-    // Close menu when clicked outside
-    window.onclick = function(event) {
-      if (!event.target.matches('#menuBtn') && !event.target.matches('.menu-dots-btn') && !event.target.matches('.fa-ellipsis-vertical')) {
-        closeMenu();
-      }
-    }
+    // Close only when tapping outside the menu; keep it open while using language selector.
+    document.addEventListener('click', function(event) {
+      const menu = document.getElementById('dropdownMenu');
+      const button = document.getElementById('menuBtn');
+      if (!menu || !button) return;
+      if (menu.contains(event.target) || button.contains(event.target)) return;
+      menu.classList.remove('active');
+    }, true);
 
 
     const storyForm = document.getElementById('story-submit-form');
