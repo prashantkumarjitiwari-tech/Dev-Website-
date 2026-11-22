@@ -205,26 +205,31 @@ module.exports = async (req,res) => {
       const ymd=date.year+'-'+String(date.month).padStart(2,'0')+'-'+String(date.date).padStart(2,'0');
       const optional=await Promise.allSettled([
         getExtra('/tool?name=hindu&y='+date.year+'&m='+date.month+'&d='+date.date+'&lat='+LAT+'&lon='+LON,extraKey),
+        getExtra('/tool?name=samvat&y='+date.year+'&m='+date.month+'&d='+date.date+'&lat='+LAT+'&lon='+LON,extraKey),
         getExtra('/graha?date='+ymd+'&hour=12&lang=hi',extraKey)
       ]);
       const hindu=optional[0].status==='fulfilled'?optional[0].value:null;
-      const planets=optional[1].status==='fulfilled'?optional[1].value:null;
-      if(hindu){
-        const h=hindu.output||hindu.data||hindu;
+      const samvat=optional[1].status==='fulfilled'?optional[1].value:null;
+      const planets=optional[2].status==='fulfilled'?optional[2].value:null;
+      const hinduData=hindu?.output||hindu?.data||hindu;
+      const samvatData=samvat?.output||samvat?.data||samvat;
+      const pick=(...values)=>values.find(v=>v!=null&&v!=='')||null;
+      if(hinduData||samvatData){
         traditional={
-          vikramSamvat:deepFind(h,['vikram_samvat','vikramSamvat','vikram','samvat_vikram','vs']),
-          samvatsara:deepFind(h,['samvatsara','samvatsar','year_name','samvatsara_name']),
-          ayana:deepFind(h,['ayana','ayan']),
-          ritu:deepFind(h,['ritu','season']),
-          lunarMonth:deepFind(h,['lunar_month','lunarMonth','masa','month_name','maas']),
-          paksha:deepFind(h,['paksha','fortnight']),
-          festival:deepFind(h,['festival','festivals','parva'])
+          ...traditional,
+          vikramSamvat:pick(deepFind(samvatData,['vikram_samvat','vikramSamvat','vikram','samvat_vikram','vs']),deepFind(hinduData,['vikram_samvat','vikramSamvat','vikram','samvat_vikram','vs'])),
+          samvatsara:pick(deepFind(samvatData,['samvatsara','samvatsar','year_name','samvatsara_name']),deepFind(hinduData,['samvatsara','samvatsar','year_name','samvatsara_name'])),
+          ayana:pick(deepFind(samvatData,['ayana','ayan']),deepFind(hinduData,['ayana','ayan']),traditional.ayana),
+          ritu:pick(deepFind(samvatData,['ritu','season']),deepFind(hinduData,['ritu','season']),traditional.ritu),
+          lunarMonth:pick(deepFind(samvatData,['lunar_month','lunarMonth','masa','month_name','maas']),deepFind(hinduData,['lunar_month','lunarMonth','masa','month_name','maas'])),
+          paksha:pick(deepFind(samvatData,['paksha','fortnight']),deepFind(hinduData,['paksha','fortnight'])),
+          festival:pick(deepFind(hinduData,['festival','festivals','parva']),traditional.festival)
         };
       }
-      if(planets)traditional.grahas=grahaList(planets);
+      if(planets){const gp=grahaList(planets);if(gp.length)traditional.grahas=gp;}
       if(optional.some(x=>x.status==='rejected'))console.warn('Some extended Panchang fields unavailable');
     }
-    return res.status(200).json({date,location:{name:'श्रीधाम वृंदावन',latitude:LAT,longitude:LON,timezone:'Asia/Kolkata',ayanamsha:'Lahiri'},data,traditional,details:result,extendedAvailable:Boolean(extraKey),astroAvailable,updatedAt:new Date().toISOString()});
+    return res.status(200).json({date,location:{name:'श्रीधाम वृंदावन',latitude:LAT,longitude:LON,timezone:'Asia/Kolkata',ayanamsha:'Lahiri'},data,traditional,details:result,providers:{navamsha:Boolean(result.full),astroLogics:astroAvailable,goPixel:Boolean(extraKey&&traditional.grahas?.length)},updatedAt:new Date().toISOString()});
   } catch(error) {
     console.error('Panchang API:',error.message);
     return res.status(502).json({error:'पंचांग डेटा प्राप्त नहीं हो पाया। कृपया थोड़ी देर बाद पुनः प्रयास करें।'});
