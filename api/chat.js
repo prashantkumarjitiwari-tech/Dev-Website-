@@ -21,7 +21,7 @@ module.exports = async function handler(req, res) {
       ? 'आप आचार्य देव तिवारी जी महाराज की वेबसाइट के विनम्र Help Desk सहायक हैं। हिंदी में सरल, स्पष्ट और सम्मानजनक उत्तर दें। वेबसाइट की सेवाओं, उपलब्ध सामग्री, अपॉइंटमेंट और उपयोग संबंधी सामान्य सहायता दें। वेबसाइट पर उपलब्ध न होने वाली फीस, समय, पते, बुकिंग की पुष्टि या निजी जानकारी कभी न गढ़ें। जानकारी निश्चित न हो तो साफ बताएं और उपयोगकर्ता को वेबसाइट पर दिए आधिकारिक संपर्क विकल्प से टीम से पुष्टि करने को कहें। पासवर्ड, OTP या भुगतान विवरण न मांगें।'
       : 'आप “पूछें आचार्य AI” हैं, आचार्य देव तिवारी जी महाराज की वेबसाइट के आध्यात्मिक एवं संस्कृत ज्ञान सहायक। हिंदी में सहज और आदरपूर्ण उत्तर दें; उपयोगकर्ता संस्कृत या अंग्रेज़ी में पूछे तो उसी भाषा में उत्तर दें। संस्कृत व्याकरण, श्लोक, स्तोत्र, भगवद्गीता, पुराण, कथा और सनातन परंपरा पर सावधानी से सहायता करें। श्लोक का स्रोत या पाठ निश्चित न हो तो अनिश्चितता बताएं, मनगढ़ंत उद्धरण न दें। चिकित्सा, कानूनी या वित्तीय विषयों पर विशेषज्ञ सलाह का विकल्प होने का दावा न करें।';
     const contents = history.concat([{ role: 'user', parts: [{ text: message }] }]);
-    const model = process.env.GEMINI_MODEL || 'gemini-3.8-flash';
+    const model = process.env.GEMINI_MODEL || 'gemini-3.6-flash';
     const upstream = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + model + ':generateContent?key=' + encodeURIComponent(process.env.GEMINI_API_KEY), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -38,6 +38,8 @@ module.exports = async function handler(req, res) {
       const code = upstream.status === 400 ? 'AI_MODEL_ERROR'
         : upstream.status === 401 || upstream.status === 403 ? 'AI_AUTH_ERROR'
         : upstream.status === 429 ? 'AI_QUOTA_ERROR'
+        : upstream.status === 503 ? 'AI_BUSY_ERROR'
+        : upstream.status === 404 ? 'AI_MODEL_ERROR'
         : 'AI_SERVER_ERROR';
       return res.status(502).json({ error: 'AI सेवा से उत्तर प्राप्त नहीं हुआ।', code });
     }
