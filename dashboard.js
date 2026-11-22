@@ -150,14 +150,16 @@
       const wrap=(text,max)=>{const words=String(text).split(/\\s+/),lines=[];let line='';for(const word of words){const next=line?line+' '+word:word;if(ctx.measureText(next).width>max&&line){lines.push(line);line=word;}else line=next;}if(line)lines.push(line);return lines;};
       let height=500;
       rows.forEach(r=>{if(r.heading)height+=64;else height+=Math.max(1,wrap(r.value,850).length)*36+62;});
-      canvas.width=width;canvas.height=height+110;
+      canvas.width=width;canvas.height=height+150;ctx.font='26px "Noto Sans Devanagari",sans-serif';
       const g=ctx.createLinearGradient(0,0,0,canvas.height);g.addColorStop(0,'#fffdf8');g.addColorStop(1,'#f2e6d1');ctx.fillStyle=g;ctx.fillRect(0,0,width,canvas.height);
       ctx.strokeStyle='#a87928';ctx.lineWidth=5;ctx.strokeRect(22,22,width-44,canvas.height-44);
       ctx.textAlign='center';ctx.fillStyle='#76521d';ctx.font='bold 42px "Noto Sans Devanagari",sans-serif';
       ctx.fillText('आज का सम्पूर्ण दैनिक पंचांग',width/2,105);
       ctx.font='25px "Noto Sans Devanagari",sans-serif';ctx.fillStyle='#756b5d';
       ctx.fillText('श्रीधाम वृंदावन • लाहिड़ी अयनांश • भारतीय मानक समय',width/2,151);
-      ctx.textAlign='left';let y=210;
+      const dateText=document.getElementById('panchang-date')?.textContent?.trim()||'';
+      ctx.font='bold 23px "Noto Sans Devanagari",sans-serif';ctx.fillText(dateText,width/2,190);
+      ctx.textAlign='left';let y=235;
       for(const row of rows){
         if(row.heading){y+=14;ctx.fillStyle='#76521d';ctx.font='bold 29px "Noto Sans Devanagari",sans-serif';ctx.fillText(row.heading,pad,y);y+=42;continue;}
         const lines=wrap(row.value,850);const boxH=Math.max(72,lines.length*36+30);
