@@ -1,5 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://dev-tiwari-website-v3.vercel.app/</loc></url>
-  <url><loc>https://dev-tiwari-website-v3.vercel.app/#drive-pdf-library</loc></url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://dev-tiwari-website-v3.vercel.app/</loc>
+    <image:image>
+      <image:loc>https://dev-tiwari-website-v3.vercel.app/assets/profile.jpg</image:loc>
+      <image:title>आचार्य देव तिवारी जी महाराज</image:title>
+      <image:caption>आचार्य देव तिवारी जी महाराज श्रीमद्भागवत कथा एवं सत्संग प्रवचन करते हुए</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://dev-tiwari-website-v3.vercel.app/assets/gallery1.jpg</image:loc>
+      <image:title>आचार्य देव तिवारी जी महाराज की आध्यात्मिक यात्रा</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://dev-tiwari-website-v3.vercel.app/assets/gallery2.jpg</image:loc>
+      <image:title>कथा एवं सत्संग की झलक</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://dev-tiwari-website-v3.vercel.app/assets/gallery3.jpg</image:loc>
+      <image:title>आचार्य देव तिवारी जी महाराज की विशेष स्मृति</image:title>
+    </image:image>
+  </url>
 </urlset>
