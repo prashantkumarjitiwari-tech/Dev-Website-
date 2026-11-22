@@ -180,7 +180,7 @@ module.exports = async (req,res) => {
     return res.status(200).json({
       date,
       location:{name:'श्रीधाम वृंदावन',latitude:LAT,longitude:LON,timezone:'Asia/Kolkata',ayanamsha:'Lahiri'},
-      data,traditional:{},details:{choghadiya:daily.choghadiya,hora:daily.hora,periods:daily.periods,astronomy:calculated.positions},
+      data,traditional:{},details:{choghadiya:daily.choghadiya,hora:daily.hora,periods:daily.periods,astronomy:calculated.positions,grahas:calculated.grahas},
       astroAvailable:false,extendedAvailable:false,
       providers:{navamsha:false,astroLogics:false,goPixel:false,independent:true},
       fallback:false,engine:calculated.engine,engineVersion:calculated.engineVersion,
