@@ -153,7 +153,7 @@ module.exports = async (req,res) => {
       const calls=await Promise.allSettled([
         getAstro('/panchang'+q,astroKey),
         getAstro('/panchang/choghadiya'+q,astroKey),
-        getAstro('/panchang/hora'+q,astroKey),
+        getAstro('/panchang/hora?date='+ymd+'&lat='+LAT+'&lon='+LON,astroKey),
         postAstro('/planets/positions',astroKey,{date:ymd,time:'12:00',place:{latitude:LAT,longitude:LON},options:{ayanamsa:'lahiri',node:'true',lang:'hi'}}),
         getAstro('/calendar/festivals?year='+date.year+'&lat='+LAT+'&lon='+LON,astroKey)
       ]);
