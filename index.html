@@ -3752,6 +3752,27 @@ document.addEventListener('toggle',function(event){
   }
   function set(key,value){const el=document.getElementById(key);if(el)el.textContent=hindi(value);}
   function time(value){if(!value)return '—';const parts=String(value).replace('T',' ').split(' ');const clock=parts.find(part=>part.includes(':'));return clock?clock.slice(0,5):hindi(value);}
+  function safeClock(v){if(!v)return '—';const d=new Date(v);return Number.isNaN(d.getTime())?String(v):new Intl.DateTimeFormat('hi-IN',{timeZone:'Asia/Kolkata',hour:'2-digit',minute:'2-digit',hour12:true}).format(d);}
+  function renderCards(id,items,labelKey){
+    const root=document.getElementById(id);if(!root)return;
+    root.replaceChildren();
+    if(!Array.isArray(items)||!items.length){root.textContent='इस गणना का डेटा उपलब्ध नहीं है';return;}
+    items.forEach((item,index)=>{
+      const card=document.createElement('span');card.className='panchang-time-card';
+      const name=document.createElement('b');name.textContent=hindi(item[labelKey]||item.name||item.lord||('खंड '+(index+1)));
+      const range=document.createElement('small');range.textContent=safeClock(item.start)+' – '+safeClock(item.end);
+      card.append(name,range);root.append(card);
+    });
+  }
+  function renderCharts(result){
+    const d=result.data||{},det=result.details||{};
+    const ch=det.choghadiya||d.choghadiya||[];
+    renderCards('panchang-choghadiya-day',ch.filter(x=>x.part==='day'),'name');
+    renderCards('panchang-choghadiya-night',ch.filter(x=>x.part==='night'),'name');
+    const hora=det.hora||d.hora||[];
+    renderCards('panchang-hora-day',hora.filter(x=>x.part==='day'),'lord');
+    renderCards('panchang-hora-night',hora.filter(x=>x.part==='night'),'lord');
+  }
   async function load(){
     const status=document.getElementById('panchang-status');
     try{
@@ -3767,6 +3788,7 @@ document.addEventListener('toggle',function(event){
       set('panchang-festival',t.festival);
       const grahas=d.grahas||result.details?.grahas||t.grahas||[];
       set('panchang-grahas',grahas.map(g=>g.name+' — '+g.rashi+(g.degrees!==undefined?' '+g.degrees+'°':'')).join(' • '));
+      renderCharts(result);
       const endText=(label,value)=>value?label+' समाप्ति: '+time(value):'';
       const ends=result.details?.astronomyEndsAt||result.endsAt||{};
       if(d.tithiEnd)set('panchang-detail-tithi',d.tithi+' ('+endText('तिथि',d.tithiEnd)+')');
