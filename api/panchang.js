@@ -49,6 +49,8 @@ function compact(value, depth=0) {
   if (typeof value === 'string' || typeof value === 'number') return String(value);
   if (Array.isArray(value)) return value.map(v=>compact(v,depth+1)).filter(Boolean).join('  •  ');
   if (typeof value === 'object') {
+    if (value.start && value.end) return clock(value.start)+' – '+clock(value.end);
+    if (value.start_time && value.end_time) return clock(value.start_time)+' – '+clock(value.end_time);
     const out=[];
     for (const [k,v] of Object.entries(value)) {
       if (['statusCode','utc_datetime','weekday_basis','number','degrees_remaining','lord'].includes(k)) continue;
