@@ -1,13 +1,15 @@
 'use strict';
 
-// Independent Panchang astronomy core (Meeus-style low-precision series).
-// This is a foundational engine, not a certified ephemeris. Validate against
-// a high-precision ephemeris and published almanacs before using for rituals.
+// Independent Panchang calculation core. Meeus-style low-precision Sun/Moon series.
+// Not a certified ephemeris: compare against a high-precision source and named almanacs
+// before using the output as the final authority for religious observances.
 
 const DEG = Math.PI / 180;
 const norm = x => ((x % 360) + 360) % 360;
 const sin = x => Math.sin(x * DEG);
 const cos = x => Math.cos(x * DEG);
+const NAK_SPAN = 360 / 27;
+const YOGA_SPAN = 360 / 27;
 
 function julianDay(date) {
   let y = date.getUTCFullYear(), m = date.getUTCMonth() + 1;
@@ -16,7 +18,6 @@ function julianDay(date) {
   const a = Math.floor(y / 100), b = 2 - a + Math.floor(a / 4);
   return Math.floor(365.25 * (y + 4716)) + Math.floor(30.6001 * (m + 1)) + day + b - 1524.5;
 }
-
 function centuries(jd) { return (jd - 2451545.0) / 36525; }
 
 function solarLongitude(jd) {
@@ -52,11 +53,9 @@ function lunarLongitude(jd) {
 
 function ayanamsha(jd, system='lahiri') {
   const T = (jd - 2451545.0) / 36525;
-  // Approximate epoch-based offsets. Replace with validated constants/series
-  // before claiming publication-grade Lahiri/KP/Raman results.
   const lahiri = 23.85675 + 1.3969713*T + 0.0003086*T*T;
   if (system === 'raman') return lahiri - 1.46;
-  if (system === 'kp') return lahiri + 0.0; // KP commonly uses a Lahiri-derived value; edition settings may differ.
+  if (system === 'kp') return lahiri; // Provisional only; true KP settings require validation.
   return lahiri;
 }
 
@@ -64,53 +63,103 @@ const TITHI_NAMES = ['प्रतिपदा','द्वितीया','त�
 const NAKSHATRAS = ['अश्विनी','भरणी','कृत्तिका','रोहिणी','मृगशिरा','आर्द्रा','पुनर्वसु','पुष्य','आश्लेषा','मघा','पूर्वा फाल्गुनी','उत्तरा फाल्गुनी','हस्त','चित्रा','स्वाती','विशाखा','अनुराधा','ज्येष्ठा','मूल','पूर्वाषाढ़ा','उत्तराषाढ़ा','श्रवण','धनिष्ठा','शतभिषा','पूर्वाभाद्रपद','उत्तराभाद्रपद','रेवती'];
 const YOGAS = ['विष्कुम्भ','प्रीति','आयुष्मान','सौभाग्य','शोभन','अतिगण्ड','सुकर्मा','धृति','शूल','गण्ड','वृद्धि','ध्रुव','व्याघात','हर्षण','वज्र','सिद्धि','व्यतीपात','वरीयान','परिघ','शिव','सिद्ध','साध्य','शुभ','शुक्ल','ब्रह्म','इन्द्र','वैधृति'];
 const KARANAS = ['बव','बालव','कौलव','तैतिल','गर','वणिज','विष्टि'];
-function limbNames(sunSid, moonSid) {
-  const elongation = norm(moonSid - sunSid);
-  const tithiNo = Math.floor(elongation / 12);
-  const paksha = tithiNo < 15 ? 'शुक्ल पक्ष' : 'कृष्ण पक्ष';
-  const tithiIndex = tithiNo % 15;
-  const nakIndex = Math.floor(norm(moonSid) / (360/27));
-  const yogaIndex = Math.floor(norm(sunSid + moonSid) / (360/27));
-  const karanaNo = Math.floor(elongation / 6);
-  let karana;
-  if (karanaNo === 0) karana = 'किंस्तुघ्न';
-  else if (karanaNo >= 57) karana = ['शकुनि','चतुष्पद','नाग'][karanaNo-57] || 'नाग';
-  else karana = KARANAS[(karanaNo-1)%7];
+
+function anglesAt(jd, system) {
+  const ay = ayanamsha(jd, system);
+  const sun = norm(solarLongitude(jd) - ay);
+  const moon = norm(lunarLongitude(jd) - ay);
+  return { sun, moon, elongation: norm(moon - sun) };
+}
+function limbIndices(jd, system) {
+  const p = anglesAt(jd, system);
   return {
-    tithi: paksha + ' • ' + (tithiNo === 29 ? 'अमावस्या' : (tithiNo === 14 ? 'पूर्णिमा' : TITHI_NAMES[tithiIndex])),
-    tithiNumber: tithiNo + 1,
-    nakshatra: NAKSHATRAS[nakIndex],
-    nakshatraPada: Math.floor((norm(moonSid) % (360/27)) / (360/108)) + 1,
-    yoga: YOGAS[yogaIndex],
-    karana
+    tithi: Math.floor(p.elongation / 12),
+    nakshatra: Math.floor(p.moon / NAK_SPAN),
+    yoga: Math.floor(norm(p.sun + p.moon) / YOGA_SPAN),
+    karana: Math.floor(p.elongation / 6)
   };
+}
+function karanaName(n) {
+  if (n === 0) return 'किंस्तुघ्न';
+  if (n >= 57) return ['शकुनि','चतुष्पद','नाग'][n-57] || 'नाग';
+  return KARANAS[(n-1)%7];
+}
+function describeLimbs(jd, system) {
+  const p = anglesAt(jd, system), ix = limbIndices(jd, system);
+  const tithiIndex = ix.tithi % 15;
+  return {
+    tithi: (ix.tithi < 15 ? 'शुक्ल पक्ष' : 'कृष्ण पक्ष') + ' • ' +
+      (ix.tithi === 29 ? 'अमावस्या' : (ix.tithi === 14 ? 'पूर्णिमा' : TITHI_NAMES[tithiIndex])),
+    tithiNumber: ix.tithi + 1,
+    nakshatra: NAKSHATRAS[ix.nakshatra],
+    nakshatraPada: Math.floor((p.moon % NAK_SPAN) / (360/108)) + 1,
+    yoga: YOGAS[ix.yoga],
+    karana: karanaName(ix.karana)
+  };
+}
+
+// Locate the next boundary of each anga, then bisect it to about one second.
+// The hourly scan is safe for the expected angular speeds of these four limbs.
+function nextBoundary(jd, key, system) {
+  const startIndex = limbIndices(jd, system)[key];
+  let lo = jd, hi = jd, found = false;
+  for (let i = 0; i < 96; i++) {
+    hi = jd + (i + 1) / 24;
+    if (limbIndices(hi, system)[key] !== startIndex) { lo = jd + i / 24; found = true; break; }
+  }
+  if (!found) return null;
+  for (let i = 0; i < 42; i++) {
+    const mid = (lo + hi) / 2;
+    if (limbIndices(mid, system)[key] === startIndex) lo = mid;
+    else hi = mid;
+  }
+  return (lo + hi) / 2;
+}
+function localIsoFromJd(jd, offset) {
+  const local = new Date((jd - 2440587.5) * 86400000 + offset * 3600000);
+  const sign = offset < 0 ? '-' : '+';
+  const abs = Math.abs(offset), oh = String(Math.floor(abs)).padStart(2,'0');
+  const om = String(Math.round((abs - Math.floor(abs))*60)).padStart(2,'0');
+  return local.toISOString().replace('Z', sign + oh + ':' + om);
 }
 
 function calculate(input={}) {
   const dateText = input.date || new Date().toISOString().slice(0,10);
   const timeText = input.time || '12:00:00';
   if (!/^\d{4}-\d{2}-\d{2}$/.test(dateText)) throw new Error('date must be YYYY-MM-DD');
+  if (!/^\d{2}:\d{2}(?::\d{2})?$/.test(timeText)) throw new Error('time must be HH:MM or HH:MM:SS');
   const [y,m,d] = dateText.split('-').map(Number);
   const [hh,mm,ss=0] = timeText.split(':').map(Number);
-  const offset = Number.isFinite(Number(input.timezone)) ? Number(input.timezone) : 5.5;
-  const utc = new Date(Date.UTC(y,m-1,d,hh,mm,ss) - offset*3600000);
-  if (Number.isNaN(utc.getTime())) throw new Error('Invalid date/time');
-  const jd = julianDay(utc), ay = ayanamsha(jd, input.ayanamsha || 'lahiri');
+  if (m < 1 || m > 12 || d < 1 || d > 31 || hh > 23 || mm > 59 || ss > 59) throw new Error('Invalid date/time');
+  const offset = input.timezone === undefined ? 5.5 : Number(input.timezone);
+  if (!Number.isFinite(offset) || offset < -12 || offset > 14) throw new Error('timezone must be a UTC offset from -12 to +14');
+  const check = new Date(Date.UTC(y,m-1,d,hh,mm,ss));
+  if (check.getUTCFullYear() !== y || check.getUTCMonth()+1 !== m || check.getUTCDate() !== d) throw new Error('Invalid calendar date');
+  const system = String(input.ayanamsha || 'lahiri').toLowerCase();
+  if (!['lahiri','kp','raman'].includes(system)) throw new Error('ayanamsha must be lahiri, kp, or raman');
+  const utc = new Date(check.getTime() - offset*3600000);
+  const jd = julianDay(utc), ay = ayanamsha(jd, system);
   const sunTropical = solarLongitude(jd), moonTropical = lunarLongitude(jd);
-  const sunSidereal = norm(sunTropical - ay), moonSidereal = norm(moonTropical - ay);
+  const limbs = describeLimbs(jd, system);
+  const endsAt = {};
+  for (const key of ['tithi','nakshatra','yoga','karana']) {
+    const boundary = nextBoundary(jd, key, system);
+    endsAt[key] = boundary === null ? null : localIsoFromJd(boundary, offset);
+  }
   return {
     engine: 'independent-meeus-lite',
-    engineVersion: '0.1.0',
+    engineVersion: '0.2.0',
     julianDay: Number(jd.toFixed(6)),
     utc: utc.toISOString(),
-    ayanamsha: { system: input.ayanamsha || 'lahiri', degrees: Number(ay.toFixed(6)), status: 'approximate' },
+    ayanamsha: { system, degrees: Number(ay.toFixed(6)), status: 'approximate' },
     positions: {
-      sun: { tropicalLongitude: Number(sunTropical.toFixed(6)), siderealLongitude: Number(sunSidereal.toFixed(6)) },
-      moon: { tropicalLongitude: Number(moonTropical.toFixed(6)), siderealLongitude: Number(moonSidereal.toFixed(6)) }
+      sun: { tropicalLongitude: Number(sunTropical.toFixed(6)), siderealLongitude: Number(norm(sunTropical-ay).toFixed(6)) },
+      moon: { tropicalLongitude: Number(moonTropical.toFixed(6)), siderealLongitude: Number(norm(moonTropical-ay).toFixed(6)) }
     },
-    limbs: limbNames(sunSidereal, moonSidereal),
-    accuracyNotice: 'प्रारंभिक स्वतंत्र गणना: सूर्य/चन्द्रमा के निम्न-परिशुद्धता सूत्र। अयनांश व पंचांग परिणामों का उच्च-परिशुद्धता ephemeris तथा प्रमाणित पंचांग से मिलान बाकी है; इसे अभी धार्मिक निर्णय का अंतिम आधार न मानें।'
+    limbs,
+    endsAt,
+    accuracyNotice: 'प्रारंभिक स्वतंत्र गणना: सूर्य/चन्द्रमा के निम्न-परिशुद्धता सूत्र और अनुमानित अयनांश। अंगों के समाप्ति समय संख्यात्मक रूप से निकाले गए हैं, पर उच्च-परिशुद्धता ephemeris तथा प्रमाणित काशी/ऋषिकेश पंचांग से मिलान बाकी है; अभी इसे धार्मिक निर्णय का अंतिम आधार न मानें।'
   };
 }
 
-module.exports = { calculate, julianDay, solarLongitude, lunarLongitude, ayanamsha };
+module.exports = { calculate, julianDay, solarLongitude, lunarLongitude, ayanamsha, limbIndices, nextBoundary };
