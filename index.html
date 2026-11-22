@@ -2955,7 +2955,28 @@
       .appointment-heading{text-align:center;margin-bottom:24px}.appointment-kicker{font-size:.75rem;letter-spacing:.16em;font-weight:800;color:#9a742f}.appointment-heading h3{margin:8px 0;color:#28483f;font-size:clamp(1.4rem,3vw,2rem)}.appointment-heading p{max-width:680px;margin:0 auto;color:#515b54;line-height:1.7}
       .appointment-form{max-width:800px;margin:auto}.appointment-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.appointment-form label{display:flex;flex-direction:column;gap:7px;font-weight:650;color:#34443b;font-size:.95rem}.appointment-form input,.appointment-form select,.appointment-form textarea{width:100%;box-sizing:border-box;border:1px solid #d6c8a8;border-radius:10px;background:#fffefa;color:#26332d;padding:12px 13px;font:inherit;min-height:46px}.appointment-form input:focus,.appointment-form select:focus,.appointment-form textarea:focus{outline:2px solid #b99858;outline-offset:1px}.appointment-notes{margin-top:16px}.appointment-submit{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;margin-top:20px;padding:14px 18px;border:0;border-radius:12px;background:#315b4c;color:white;font-size:1rem;font-weight:750;cursor:pointer}.appointment-submit:hover{background:#244638}.appointment-note{display:block;margin-top:12px;text-align:center;color:#5c625c;line-height:1.6}
       @media(max-width:600px){.appointment-fields{grid-template-columns:1fr}.appointment-section{margin:28px 12px;padding:20px 15px}}
-    </style>
+    
+/* Acharya AI + Help Desk floating assistant */
+#acharya-ai-widget{position:fixed;right:20px;bottom:20px;z-index:99999;font-family:inherit}
+#acharya-ai-launch{border:0;border-radius:999px;padding:13px 19px;background:linear-gradient(135deg,#b88635,#e6c477);color:#241707;font-weight:800;box-shadow:0 8px 28px #0003;cursor:pointer;display:flex;align-items:center;gap:9px}
+#acharya-ai-panel{position:absolute;right:0;bottom:66px;width:min(370px,calc(100vw - 28px));height:min(540px,calc(100dvh - 120px));background:#fffdf8;color:#302719;border:1px solid #d9c18f;border-radius:18px;box-shadow:0 18px 55px #0004;display:none;overflow:hidden}
+#acharya-ai-panel.open{display:flex;flex-direction:column}
+.acharya-ai-head{background:linear-gradient(135deg,#573b1c,#9b7135);color:#fff;padding:15px 16px;display:flex;justify-content:space-between;align-items:center}
+.acharya-ai-head strong{display:block;font-size:16px}.acharya-ai-head small{opacity:.85}
+#acharya-ai-close{background:transparent;border:0;color:#fff;font-size:24px;cursor:pointer}
+.acharya-ai-tabs{display:flex;gap:8px;padding:10px 12px;background:#f7f0e2}
+.acharya-ai-tabs button{flex:1;border:1px solid #d8c49b;background:#fffaf0;border-radius:20px;padding:8px;font-weight:700;color:#62451f;cursor:pointer}
+.acharya-ai-tabs button.active{background:#765323;color:white;border-color:#765323}
+#acharya-ai-messages{padding:14px;overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:10px}
+.acharya-ai-msg{max-width:88%;padding:10px 12px;border-radius:13px;line-height:1.5;font-size:14px;white-space:pre-wrap;overflow-wrap:anywhere}
+.acharya-ai-msg.bot{background:#f3ead8;align-self:flex-start}.acharya-ai-msg.user{background:#765323;color:#fff;align-self:flex-end}
+.acharya-ai-compose{display:flex;gap:8px;padding:11px;border-top:1px solid #eadfc9}
+#acharya-ai-input{min-width:0;flex:1;border:1px solid #d8c49b;border-radius:22px;padding:11px 13px;font:inherit;font-size:14px;background:white;color:#302719}
+#acharya-ai-send{border:0;border-radius:22px;background:#765323;color:#fff;padding:0 16px;font-weight:700;cursor:pointer}
+#acharya-ai-send:disabled{opacity:.55;cursor:wait}
+@media(max-width:480px){#acharya-ai-widget{right:12px;bottom:12px}#acharya-ai-launch{padding:12px 15px}}
+
+</style>
     <script>
       (function(){
         const form=document.getElementById('appointmentForm');
@@ -3497,6 +3518,37 @@ document.addEventListener('toggle',function(event){
   }
 },true);
 </script>
+
+<!-- Unified AI and Help Desk -->
+<div id="acharya-ai-widget">
+  <section id="acharya-ai-panel" aria-label="पूछें आचार्य AI">
+    <header class="acharya-ai-head"><div><strong>🙏 पूछें आचार्य AI</strong><small>ज्ञान-सहायता एवं Help Desk</small></div><button id="acharya-ai-close" type="button" aria-label="बंद करें">×</button></header>
+    <nav class="acharya-ai-tabs" aria-label="सहायता का प्रकार">
+      <button type="button" class="active" data-mode="knowledge">आचार्य AI</button>
+      <button type="button" data-mode="helpdesk">Help Desk</button>
+    </nav>
+    <div id="acharya-ai-messages" aria-live="polite"><div class="acharya-ai-msg bot">नमस्कार 🙏 मैं आपकी सहायता के लिए यहाँ हूँ। संस्कृत, श्लोक, सनातन धर्म, वेबसाइट की सेवाओं या किसी सहायता-संबंधी प्रश्न के लिए पूछें।</div></div>
+    <form class="acharya-ai-compose" id="acharya-ai-form"><input id="acharya-ai-input" type="text" maxlength="2000" placeholder="अपना प्रश्न लिखें…" autocomplete="off" required><button id="acharya-ai-send" type="submit">भेजें</button></form>
+  </section>
+  <button id="acharya-ai-launch" type="button" aria-expanded="false"><span>✦</span> पूछें आचार्य AI</button>
+</div>
+<script id="acharya-ai-widget-script">
+(function(){
+ const panel=document.getElementById('acharya-ai-panel'),launch=document.getElementById('acharya-ai-launch'),close=document.getElementById('acharya-ai-close'),form=document.getElementById('acharya-ai-form'),input=document.getElementById('acharya-ai-input'),messages=document.getElementById('acharya-ai-messages'),send=document.getElementById('acharya-ai-send');
+ if(!panel||!launch||!form)return;
+ let mode='knowledge',history=[];
+ function add(text,who){const el=document.createElement('div');el.className='acharya-ai-msg '+who;el.textContent=text;messages.appendChild(el);messages.scrollTop=messages.scrollHeight;return el;}
+ launch.addEventListener('click',()=>{const open=panel.classList.toggle('open');launch.setAttribute('aria-expanded',String(open));if(open)input.focus();});
+ close.addEventListener('click',()=>{panel.classList.remove('open');launch.setAttribute('aria-expanded','false');});
+ document.querySelectorAll('#acharya-ai-widget [data-mode]').forEach(btn=>btn.addEventListener('click',()=>{mode=btn.dataset.mode;history=[];document.querySelectorAll('#acharya-ai-widget [data-mode]').forEach(b=>b.classList.toggle('active',b===btn));messages.innerHTML='';add(mode==='helpdesk'?'नमस्कार! वेबसाइट, सेवाओं, अपॉइंटमेंट या किसी तकनीकी समस्या में क्या सहायता चाहिए? 🙏':'नमस्कार 🙏 संस्कृत, श्लोक, स्तोत्र, कथा और सनातन ज्ञान से जुड़ा प्रश्न पूछें।','bot');}));
+ form.addEventListener('submit',async e=>{e.preventDefault();const question=input.value.trim();if(!question)return;add(question,'user');input.value='';send.disabled=true;send.textContent='…';const wait=add('कृपया प्रतीक्षा करें…','bot');
+ try{const response=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({mode,message:question,history:history.slice(-8)})});const data=await response.json();if(!response.ok)throw new Error(data.error||'अभी उत्तर प्राप्त नहीं हो सका।');wait.textContent=data.reply;history.push({role:'user',content:question},{role:'assistant',content:data.reply});history=history.slice(-8);}
+ catch(err){wait.textContent=err.message==='AI_SETUP_REQUIRED'?'AI सेवा अभी सक्रिय नहीं हुई है। वेबसाइट संचालक को सर्वर पर API कुंजी जोड़नी होगी।':'क्षमा करें, अभी सेवा से संपर्क नहीं हो पाया। कृपया थोड़ी देर बाद पुनः प्रयास करें।';}
+ finally{send.disabled=false;send.textContent='भेजें';}
+ });
+})();
+</script>
+
 </body>
           </html>
           
