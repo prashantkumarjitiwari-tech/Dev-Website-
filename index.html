@@ -945,16 +945,16 @@
         <span class="panchang-dashboard-date">दैनिक दर्शन</span>
       </div>
       <div class="panchang-dashboard-grid">
-        <div class="panchang-metric"><span>तिथि</span><strong>जानकारी शीघ्र उपलब्ध होगी</strong></div>
-        <div class="panchang-metric"><span>नक्षत्र</span><strong>जानकारी शीघ्र उपलब्ध होगी</strong></div>
-        <div class="panchang-metric"><span>योग</span><strong>जानकारी शीघ्र उपलब्ध होगी</strong></div>
-        <div class="panchang-metric"><span>करण</span><strong>जानकारी शीघ्र उपलब्ध होगी</strong></div>
-        <div class="panchang-metric"><span>सूर्योदय</span><strong>—</strong></div>
-        <div class="panchang-metric"><span>सूर्यास्त</span><strong>—</strong></div>
-        <div class="panchang-metric"><span>राहुकाल</span><strong>—</strong></div>
-        <div class="panchang-metric"><span>व्रत / त्योहार</span><strong>—</strong></div>
+        <div class="panchang-metric"><span>तिथि</span><strong id="panchang-tithi">लोड हो रहा है…</strong></div>
+        <div class="panchang-metric"><span>नक्षत्र</span><strong id="panchang-nakshatra">लोड हो रहा है…</strong></div>
+        <div class="panchang-metric"><span>योग</span><strong id="panchang-yoga">लोड हो रहा है…</strong></div>
+        <div class="panchang-metric"><span>करण</span><strong id="panchang-karana">लोड हो रहा है…</strong></div>
+        <div class="panchang-metric"><span>सूर्योदय</span><strong id="panchang-sunrise">—</strong></div>
+        <div class="panchang-metric"><span>सूर्यास्त</span><strong id="panchang-sunset">—</strong></div>
+        <div class="panchang-metric"><span>राहुकाल</span><strong id="panchang-rahu">—</strong></div>
+        <div class="panchang-metric"><span>वार</span><strong id="panchang-vara">—</strong></div>
       </div>
-      <div class="panchang-status">दैनिक पंचांग सेवा का लाइव डेटा कनेक्शन अभी बाकी है।</div>
+      <div class="panchang-status" id="panchang-status" role="status" aria-live="polite">दैनिक पंचांग प्राप्त किया जा रहा है…</div>
     </section>
 
     <!-- Facebook-style photo gallery, immediately below daily thought -->
@@ -3551,6 +3551,43 @@ document.addEventListener('toggle',function(event){
  catch(err){wait.textContent=err.message==='AI_SETUP_REQUIRED'?'AI सेवा की API कुंजी सर्वर पर उपलब्ध नहीं है। Vercel में GEMINI_API_KEY जाँचनी होगी।':(err.message==='AI_AUTH_ERROR'?'AI कनेक्शन में API Key की अनुमति/वैधता की समस्या है।':err.message==='AI_QUOTA_ERROR'?'AI खाते की API billing या usage limit की जाँच आवश्यक है।':err.message==='AI_ACCESS_ERROR'?'इस API Key को चुने गए AI मॉडल की अनुमति नहीं मिली है।':err.message==='AI_MODEL_ERROR'?'AI मॉडल या अनुरोध सेटिंग में समस्या है।':err.message==='AI_BUSY_ERROR'?'Gemini सेवा पर अभी अधिक लोड है। कृपया 30 सेकंड बाद पुनः प्रयास करें।':(err.message==='AI_SERVER_ERROR'?'AI सर्वर से अस्थायी समस्या आई है। कुछ देर बाद पुनः प्रयास करें।':'कनेक्शन नहीं हो पाया। इंटरनेट जाँचकर पुनः प्रयास करें।'));}
  finally{send.disabled=false;send.textContent='भेजें';}
  });
+})();
+</script>
+
+
+<script id="daily-panchang-live-script">
+(function(){
+  const ids={tithi:'panchang-tithi',nakshatra:'panchang-nakshatra',yoga:'panchang-yoga',karana:'panchang-karana',sunrise:'panchang-sunrise',sunset:'panchang-sunset',rahuKaal:'panchang-rahu',vara:'panchang-vara'};
+  const names={
+    Ashwini:'अश्विनी',Bharani:'भरणी',Krittika:'कृत्तिका',Rohini:'रोहिणी',Mrigashira:'मृगशिरा',Ardra:'आर्द्रा',Punarvasu:'पुनर्वसु',Pushya:'पुष्य',Ashlesha:'आश्लेषा',Magha:'मघा',PurvaPhalguni:'पूर्वा फाल्गुनी',UttaraPhalguni:'उत्तरा फाल्गुनी',Hasta:'हस्त',Chitra:'चित्रा',Swati:'स्वाती',Vishakha:'विशाखा',Anuradha:'अनुराधा',Jyeshtha:'ज्येष्ठा',Mula:'मूल',PurvaAshadha:'पूर्वाषाढ़ा',UttaraAshadha:'उत्तराषाढ़ा',Shravana:'श्रवण',Dhanishta:'धनिष्ठा',Shatabhisha:'शतभिषा',PurvaBhadrapada:'पूर्वाभाद्रपद',UttaraBhadrapada:'उत्तराभाद्रपद',Revati:'रेवती',
+    Pratipada:'प्रतिपदा',Dwitiya:'द्वितीया',Tritiya:'तृतीया',Chaturthi:'चतुर्थी',Panchami:'पंचमी',Shashthi:'षष्ठी',Saptami:'सप्तमी',Ashtami:'अष्टमी',Navami:'नवमी',Dashami:'दशमी',Ekadashi:'एकादशी',Dwadashi:'द्वादशी',Trayodashi:'त्रयोदशी',Chaturdashi:'चतुर्दशी',Purnima:'पूर्णिमा',Amavasya:'अमावस्या',
+    Sunday:'रविवार',Monday:'सोमवार',Tuesday:'मंगलवार',Wednesday:'बुधवार',Thursday:'गुरुवार',Friday:'शुक्रवार',Saturday:'शनिवार',
+    Shukla:'शुक्ल पक्ष',Krishna:'कृष्ण पक्ष',
+    Vishkambha:'विष्कुम्भ',Priti:'प्रीति',Ayushman:'आयुष्मान',Saubhagya:'सौभाग्य',Shobhana:'शोभन',Atiganda:'अतिगण्ड',Sukarma:'सुकर्मा',Dhriti:'धृति',Shula:'शूल',Ganda:'गण्ड',Vriddhi:'वृद्धि',Dhruva:'ध्रुव',Vyaghata:'व्याघात',Harshana:'हर्षण',Vajra:'वज्र',Siddhi:'सिद्धि',Vyatipata:'व्यतीपात',Variyan:'वरीयान',Parigha:'परिघ',Shiva:'शिव',Siddha:'सिद्ध',Sadhya:'साध्य',Shubha:'शुभ',ShuklaYoga:'शुक्ल',Brahma:'ब्रह्म',Indra:'इन्द्र',Vaidhriti:'वैधृति',
+    Bava:'बव',Balava:'बालव',Kaulava:'कौलव',Taitila:'तैतिल',Garaja:'गर',Vanija:'वणिज',Vishti:'विष्टि',Shakuni:'शकुनि',Chatushpada:'चतुष्पद',Naga:'नाग',Kimstughna:'किंस्तुघ्न'
+  };
+  function hindi(value){
+    if(value==null||value==='') return '—';
+    let text=String(value).trim();
+    Object.keys(names).sort((a,b)=>b.length-a.length).forEach(k=>{text=text.replace(new RegExp('\\b'+k+'\\b','gi'),names[k]);});
+    return text;
+  }
+  function set(key,value){const el=document.getElementById(ids[key]);if(el)el.textContent=hindi(value);}
+  function time(value){if(!value)return '—';let v=String(value);const m=v.match(/T?(\\d{1,2}):(\\d{2})(?::(\\d{2}))?/);return m?m[1].padStart(2,'0')+':'+m[2]:hindi(v);}
+  async function load(){
+    const status=document.getElementById('panchang-status');
+    try{
+      const response=await fetch('/api/panchang',{headers:{'Accept':'application/json'},cache:'no-store'});
+      const result=await response.json();
+      if(!response.ok)throw new Error(result.error||'पंचांग उपलब्ध नहीं है');
+      const d=result.data||{};
+      Object.keys(ids).forEach(k=>{if(k==='sunrise'||k==='sunset')set(k,time(d[k]));else set(k,d[k]);});
+      const dateEl=document.getElementById('panchang-date');
+      if(dateEl&&result.date){const dt=new Date(Date.UTC(result.date.year,result.date.month-1,result.date.date));dateEl.textContent='श्रीधाम वृंदावन • '+new Intl.DateTimeFormat('hi-IN',{day:'numeric',month:'long',year:'numeric',timeZone:'UTC'}).format(dt);}
+      if(status)status.textContent='आज का पंचांग • Navamsha दैनिक गणना से अपडेट';
+    }catch(error){if(status)status.textContent='पंचांग डेटा अभी नहीं मिल पाया। कृपया थोड़ी देर बाद पुनः प्रयास करें।';console.error('Panchang load:',error);}
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',load,{once:true});else load();
 })();
 </script>
 
