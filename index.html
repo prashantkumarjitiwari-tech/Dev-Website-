@@ -3756,9 +3756,9 @@ document.addEventListener('toggle',function(event){
   function renderCards(id,items,labelKey){
     const root=document.getElementById(id);if(!root)return;
     root.replaceChildren();
-    if(!Array.isArray(items)||!items.length){root.textContent='इस गणना का डेटा उपलब्ध नहीं है';return;}
+    if(!Array.isArray(items)||!items.length){const empty=document.createElement('span');empty.className='panchang-chart-empty';empty.textContent='इस गणना का डेटा उपलब्ध नहीं है';root.append(empty);return;}
     items.forEach((item,index)=>{
-      const card=document.createElement('span');card.className='panchang-time-card';
+      const card=document.createElement('span');card.className='panchang-chart-card';
       const name=document.createElement('b');name.textContent=hindi(item[labelKey]||item.name||item.lord||('खंड '+(index+1)));
       const range=document.createElement('small');range.textContent=safeClock(item.start)+' – '+safeClock(item.end);
       card.append(name,range);root.append(card);
