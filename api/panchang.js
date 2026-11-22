@@ -145,7 +145,7 @@ module.exports = async (req,res) => {
     };
 
     // AstroLogics is the primary cross-check provider for the five limbs and periods.
-    let astroAvailable=false, astroFestival='';
+    let traditional={}, astroAvailable=false, astroFestival='';
     const astroKey=process.env.ASTROLOGICS_API_KEY;
     if(astroKey){
       const ymd=date.year+'-'+String(date.month).padStart(2,'0')+'-'+String(date.date).padStart(2,'0');
@@ -200,7 +200,6 @@ module.exports = async (req,res) => {
 
     // Extended Hindu calendar and nine-graha positions use a separate provider.
     // Its key is optional so the existing daily Panchang remains available.
-    let traditional={};
     const extraKey=process.env.GOPIXEL_API_KEY;
     if(extraKey){
       const ymd=date.year+'-'+String(date.month).padStart(2,'0')+'-'+String(date.date).padStart(2,'0');
