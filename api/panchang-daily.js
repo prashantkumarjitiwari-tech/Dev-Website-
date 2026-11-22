@@ -65,7 +65,7 @@ function calculate(date) {
     hora.push({part:night?'night':'day',lord:order[index],start,end:addMinutes(start,duration)});
     index=(index+1)%7;
   }
-  const dayNames=choghadiya[dow], nightNames=choghadiya[(dow+1)%7];
+  const dayNames=[...choghadiya[dow],choghadiya[dow][0]], nightNames=[...choghadiya[(dow+1)%7],choghadiya[(dow+1)%7][0]];
   const makeCh=(start,total,names,part)=>names.map((name,i)=>({name,part,start:addMinutes(start,i*total/8),end:addMinutes(start,(i+1)*total/8)}));
   const ch=[...makeCh(sunrise,dayMs/60000,dayNames,'day'),...makeCh(sunset,nightMs/60000,nightNames,'night')];
   return {weekday:weekdayNames[dow],sunrise,sunset,periods,hora,choghadiya:ch};
