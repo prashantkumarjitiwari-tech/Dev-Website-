@@ -14,7 +14,7 @@
     #daily-panchang .p-times{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:10px}
     #daily-panchang .p-times .p-item{background:#f4eddf}
     #daily-panchang .p-status{font-size:12px;color:#756b5d;margin-top:13px}
-    #daily-panchang .p-refresh{border:1px solid #c7a568;background:#fffaf0;color:#76521d;border-radius:20px;padding:8px 12px;font:600 11px inherit;cursor:pointer}
+    #daily-panchang .p-refresh{border:1px solid #c7a568;background:#fffaf0;color:#76521d;border-radius:20px;padding:8px 12px;font-family:inherit;font-size:11px;font-weight:600;cursor:pointer}
     #daily-panchang .p-refresh:disabled{opacity:.6}
     #ai-acharya{position:fixed;right:18px;bottom:18px;z-index:1100;font-family:inherit}
     #ai-acharya .ai-toggle{border:0;border-radius:28px;padding:13px 18px;background:linear-gradient(135deg,#315d53,#21473f);color:#fff;box-shadow:0 8px 24px rgba(30,67,58,.25);font-weight:700;cursor:pointer}
@@ -28,7 +28,7 @@
     #ai-acharya .ai-msg.bot{align-self:flex-start;background:#fff;border:1px solid #e8ddc8;color:#403525}
     #ai-acharya .ai-msg.user{align-self:flex-end;background:#e8efea;color:#24483d}
     #ai-acharya .ai-form{display:flex;gap:8px;padding:11px;border-top:1px solid #eadfc9;background:#fffdf8}
-    #ai-acharya .ai-form input{flex:1;min-width:0;border:1px solid #d8c8a7;border-radius:20px;padding:11px 13px;font:13px inherit}
+    #ai-acharya .ai-form input{flex:1;min-width:0;border:1px solid #d8c8a7;border-radius:20px;padding:11px 13px;font-family:inherit;font-size:13px}
     #ai-acharya .ai-form button{border:0;border-radius:20px;padding:0 15px;background:#315d53;color:#fff;font-weight:700}
     @media(max-width:700px){#daily-panchang{width:calc(100% - 20px);margin:12px auto 20px;padding:17px 13px;border-radius:17px}#daily-panchang .p-grid{grid-template-columns:repeat(2,minmax(0,1fr))}#daily-panchang .p-times{grid-template-columns:1fr 1fr}#daily-panchang .p-head{align-items:flex-start}#daily-panchang .p-badge{font-size:9px;padding:7px 9px}#ai-acharya{right:12px;bottom:12px}#ai-acharya .ai-toggle{padding:12px 15px;font-size:12px}}
   `;
