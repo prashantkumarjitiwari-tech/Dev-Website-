@@ -1,4 +1,5 @@
 const API = 'https://api.navamsha.in/api/v1/panchang';
+const ASTRO_API = 'https://api.astrologics.in/v1';
 const EXTRA_API = 'https://api.gopixel.in/api/v1';
 const LAT = 27.565;
 const LON = 77.659;
@@ -71,6 +72,16 @@ function grahaList(payload){
     return name&&hindiSign?{name,sign:hindiSign}:null;
   }).filter(Boolean);
 }
+async function getAstro(path, key){
+  const r=await fetch(ASTRO_API+path,{headers:{'Authorization':'Bearer '+key,'Accept':'application/json'}});
+  const j=await r.json();
+  if(!r.ok)throw new Error(j.message||j.error||'AstroLogics provider error');
+  return j.data||j;
+}
+function astroWindow(value){
+  if(!value||!value.start||!value.end)return '';
+  return value.start+' – '+value.end;
+}
 async function getExtra(path, key){
   const r=await fetch(EXTRA_API+path,{headers:{'x-api-key':key,'Accept':'application/json'}});
   const j=await r.json();
@@ -101,7 +112,7 @@ module.exports = async (req,res) => {
     const result=Object.fromEntries(settled.map(x=>[x.route,x.data]));
     if(!result.full) throw new Error('Full Panchang endpoint unavailable');
     const full=result.full, sun=result['sun-times']||{}, bad=result['inauspicious-periods']||{}, moon=result['moon-times']||{};
-    const data={
+    let data={
       tithi:element(full,'tithi'), vara:element(full,'weekday')||element(full,'vara'),
       nakshatra:element(full,'nakshatra'), yoga:element(full,'yoga'), karana:element(full,'karana'),
       sunrise:timeValue(sun,['sunrise','sunrise_time','sunriseTime']),
@@ -114,6 +125,45 @@ module.exports = async (req,res) => {
       abhijit:compact(result['abhijit-muhurat']),brahma:compact(result['brahma-muhurta']),
       amrit:compact(result['amrit-kaal']),choghadiya:compact(result.choghadiya),hora:compact(result.hora)
     };
+
+    // AstroLogics provides an additional independently calculated Panchang.
+    // Its values take priority for the five limbs and daily periods when configured.
+    let astroAvailable=false;
+    const astroKey=process.env.ASTROLOGICS_API_KEY;
+    if(astroKey){
+      try{
+        const ymd=date.year+'-'+String(date.month).padStart(2,'0')+'-'+String(date.date).padStart(2,'0');
+        const q='?date='+ymd+'&lat='+LAT+'&lon='+LON+'&lang=hi';
+        const calls=await Promise.allSettled([
+          getAstro('/panchang'+q,astroKey),
+          getAstro('/panchang/choghadiya'+q,astroKey),
+          getAstro('/panchang/hora'+q,astroKey)
+        ]);
+        const p=calls[0].status==='fulfilled'?calls[0].value:null;
+        const ch=calls[1].status==='fulfilled'?calls[1].value:null;
+        const hr=calls[2].status==='fulfilled'?calls[2].value:null;
+        if(p){
+          const limb=(v)=>v?.label||v?.name||'';
+          data={
+            ...data,
+            tithi:p.tithi?((p.tithi.paksha==='shukla'?'शुक्ल पक्ष • ':p.tithi.paksha==='krishna'?'कृष्ण पक्ष • ':'')+limb(p.tithi)):data.tithi,
+            nakshatra:p.nakshatra?limb(p.nakshatra)+(p.nakshatra.ends_at?' • समाप्ति '+p.nakshatra.ends_at:''):data.nakshatra,
+            yoga:p.yoga?limb(p.yoga):data.yoga,
+            karana:p.karana?limb(p.karana):data.karana,
+            vara:p.vara?limb(p.vara):data.vara,
+            sunrise:p.sunrise||data.sunrise,
+            sunset:p.sunset||data.sunset,
+            rahuKaal:astroWindow(p.rahu_kaal)||data.rahuKaal,
+            gulika:astroWindow(p.gulika_kaal)||data.gulika,
+            yamagand:astroWindow(p.yamaganda)||data.yamagand,
+            abhijit:astroWindow(p.abhijit)||data.abhijit
+          };
+          astroAvailable=true;
+        }
+        if(ch?.periods)data.choghadiya=ch.periods.map(x=>(x.part==='night'?'रात्रि ':'दिन ')+(x.label||x.name)+' '+(x.start||'').slice(11,16)+'–'+(x.end||'').slice(11,16)).join(' • ');
+        if(hr)data.hora=compact(hr);
+      }catch(error){console.warn('AstroLogics Panchang unavailable:',error.message);}
+    }
 
     // Extended Hindu calendar and nine-graha positions use a separate provider.
     // Its key is optional so the existing daily Panchang remains available.
@@ -142,7 +192,7 @@ module.exports = async (req,res) => {
       if(planets)traditional.grahas=grahaList(planets);
       if(optional.some(x=>x.status==='rejected'))console.warn('Some extended Panchang fields unavailable');
     }
-    return res.status(200).json({date,data,traditional,extendedAvailable:Boolean(extraKey)});
+    return res.status(200).json({date,data,traditional,extendedAvailable:Boolean(extraKey),astroAvailable});
   } catch(error) {
     console.error('Panchang API:',error.message);
     return res.status(502).json({error:'पंचांग डेटा प्राप्त नहीं हो पाया। कृपया थोड़ी देर बाद पुनः प्रयास करें।'});
