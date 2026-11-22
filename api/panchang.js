@@ -4,6 +4,32 @@ const EXTRA_API = 'https://api.gopixel.in/api/v1';
 const LAT = 27.565;
 const LON = 77.659;
 const TZ = 5.5;
+const independentEngine = require('./panchang-astronomy');
+
+function independentFallback(reason) {
+  const date = todayIST();
+  const calculated = independentEngine.calculate({
+    date: date.year+'-'+String(date.month).padStart(2,'0')+'-'+String(date.date).padStart(2,'0'),
+    time: '12:00:00', timezone: TZ, ayanamsha: 'lahiri'
+  });
+  return {
+    date,
+    location: {name:'श्रीधाम वृंदावन',latitude:LAT,longitude:LON,timezone:'Asia/Kolkata',ayanamsha:'Lahiri'},
+    data: {
+      tithi:calculated.limbs.tithi, tithiEnd:calculated.endsAt.tithi,
+      nakshatra:calculated.limbs.nakshatra, nakshatraEnd:calculated.endsAt.nakshatra,
+      yoga:calculated.limbs.yoga, karana:calculated.limbs.karana,
+      sunrise:null,sunset:null,moonrise:null,moonset:null,
+      rahuKaal:null,gulika:null,yamagand:null,abhijit:null,brahma:null,amrit:null,
+      choghadiya:null,hora:null
+    },
+    traditional:{},details:{},astroAvailable:false,extendedAvailable:false,
+    providers:{navamsha:false,astroLogics:false,goPixel:false,independent:true},
+    fallback:true, fallbackReason:reason,
+    accuracyNotice:calculated.accuracyNotice,
+    updatedAt:new Date().toISOString()
+  };
+}
 
 function todayIST() {
   const parts = new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Kolkata',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date());
@@ -129,7 +155,7 @@ module.exports = async (req,res) => {
   res.setHeader('Cache-Control','s-maxage=1800, stale-while-revalidate=3600');
   if(req.method!=='GET') return res.status(405).json({error:'Method not allowed'});
   const key=process.env.NAVAMSHA_API_KEY;
-  if(!key) return res.status(503).json({error:'पंचांग सेवा अभी सेटअप नहीं हुई है।'});
+  if(!key) return res.status(200).json(independentFallback('मुख्य पंचांग प्रदाता की API key उपलब्ध नहीं है।'));
   try {
     const date=todayIST();
     const body={...date,hours:7,minutes:0,seconds:0,latitude:LAT,longitude:LON,timezone:TZ,settings:{ayanamsha:'lahiri',observation_point:'geocentric',language:'en'}};
@@ -288,6 +314,11 @@ module.exports = async (req,res) => {
     return res.status(200).json({date,location:{name:'श्रीधाम वृंदावन',latitude:LAT,longitude:LON,timezone:'Asia/Kolkata',ayanamsha:'Lahiri'},data,traditional,details:result,astroAvailable,extendedAvailable:extraAvailable,providers:{navamsha:Boolean(result.full),astroLogics:astroAvailable,goPixel:extraAvailable},updatedAt:new Date().toISOString()});
   } catch(error) {
     console.error('Panchang API:',error.message);
-    return res.status(502).json({error:'पंचांग डेटा प्राप्त नहीं हो पाया। कृपया थोड़ी देर बाद पुनः प्रयास करें।'});
+    try {
+      return res.status(200).json(independentFallback(error.message||'मुख्य पंचांग प्रदाता से डेटा प्राप्त नहीं हुआ।'));
+    } catch(fallbackError) {
+      console.error('Independent Panchang fallback:',fallbackError.message);
+      return res.status(502).json({error:'मुख्य और वैकल्पिक दोनों पंचांग गणनाएँ उपलब्ध नहीं हो पाईं।'});
+    }
   }
 };
