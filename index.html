@@ -777,6 +777,21 @@
     }
   </style>
 
+
+  <style id="facebook-photo-gallery-styles">
+    .facebook-photo-section{width:min(1120px,calc(100% - 28px));margin:10px auto 34px;padding:clamp(16px,3vw,26px);border:1px solid rgba(168,121,40,.24);border-radius:20px;background:#fffdf8;box-shadow:0 12px 32px rgba(65,49,23,.10);color:#33291f}
+    .facebook-photo-heading{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid rgba(168,121,40,.18)}
+    .facebook-photo-heading span:first-child{font-size:11px;font-weight:800;letter-spacing:.12em;color:#98702e;text-transform:uppercase}
+    .facebook-photo-heading h2{margin:4px 0;color:#28483f;font-size:clamp(20px,3vw,27px)}
+    .facebook-photo-heading p{margin:0;color:#71675a;font-size:13px}
+    .facebook-photo-badge{white-space:nowrap;padding:8px 12px;border-radius:20px;background:#f3ecdf;color:#75531f;font-size:12px;font-weight:700}
+    .facebook-photo-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-auto-rows:150px;gap:7px;overflow:hidden;border-radius:14px}
+    .facebook-photo-grid .gallery-img{display:block;width:100%;height:100%;min-height:0;object-fit:cover;border-radius:0!important;cursor:pointer;transition:transform .25s ease}
+    .facebook-photo-grid .gallery-img:first-child{grid-column:span 2;grid-row:span 2}
+    .facebook-photo-grid .gallery-img:hover{transform:scale(1.025)}
+    @media(max-width:700px){.facebook-photo-section{width:calc(100% - 20px);margin:8px auto 26px;padding:15px 12px;border-radius:17px}.facebook-photo-heading{margin-bottom:12px}.facebook-photo-heading p{font-size:11px}.facebook-photo-badge{font-size:10px;padding:7px 9px}.facebook-photo-grid{grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:116px;gap:5px}.facebook-photo-grid .gallery-img:first-child{grid-column:span 2;grid-row:span 2}}
+    @media(max-width:380px){.facebook-photo-grid{grid-auto-rows:100px}}
+  </style>
 </head>
 <body>
 
@@ -853,6 +868,21 @@
       <p id="thought-meaning" style="color: #d1d5db; font-size: 13px; margin-top: 5px;"></p>
     </div>
 
+    <!-- Facebook-style photo gallery, immediately below daily thought -->
+    <section id="gallery" class="facebook-photo-section" aria-labelledby="gallery-title" data-aos="fade-up">
+      <div class="facebook-photo-heading">
+        <div><span>तस्वीरें • स्मृतियाँ</span><h2 id="gallery-title">फोटो गैलरी</h2><p>कथा, सत्संग और आध्यात्मिक यात्रा की झलकियाँ</p></div>
+        <span class="facebook-photo-badge"><i class="fa-solid fa-images"></i> Photos</span>
+      </div>
+      <div class="facebook-photo-grid">
+        <img src="assets/profile.jpg" class="gallery-img" alt="आचार्य देव तिवारी जी महाराज">
+        <img src="assets/profile1.jpg" class="gallery-img" alt="आचार्य देव तिवारी जी महाराज की तस्वीर">
+        <img src="assets/gallery1.jpg" class="gallery-img" alt="आध्यात्मिक यात्रा की झलक">
+        <img src="assets/gallery2.jpg" class="gallery-img" alt="कथा एवं सत्संग की झलक">
+        <img src="assets/gallery3.jpg" class="gallery-img" alt="विशेष स्मृति">
+      </div>
+    </section>
+
     <!-- About Section -->
     <div id="about" class="card" data-aos="fade-up">
       <h2>परिचय</h2>
@@ -874,7 +904,6 @@
         <button type="button" class="category-tile" onclick="openLibraryCategory('category-bhajan')"><i class="fa-solid fa-music"></i><strong>भजन एवं कीर्तन</strong><small>भक्ति-संगीत और कीर्तन संग्रह</small><span>विभाग खोलें <i class="fa-solid fa-arrow-right"></i></span></button>
         <button type="button" class="category-tile" onclick="openLibraryCategory('category-dhyan')"><i class="fa-solid fa-spa"></i><strong>ध्यान एवं साधना</strong><small>ध्यान, जप और साधना संबंधी सामग्री</small><span>विभाग खोलें <i class="fa-solid fa-arrow-right"></i></span></button>
         <button type="button" class="category-tile" onclick="openLibraryCategory('category-study')"><i class="fa-solid fa-book-open-reader"></i><strong>अध्ययन कक्ष</strong><small>पाठ्य-सामग्री, नोट्स और स्वाध्याय</small><span>विभाग खोलें <i class="fa-solid fa-arrow-right"></i></span></button>
-        <button type="button" class="category-tile" onclick="openLibraryCategory('category-gallery')"><i class="fa-solid fa-images"></i><strong>फोटो गैलरी</strong><small>आध्यात्मिक यात्रा और स्मृतियाँ</small><span>विभाग खोलें <i class="fa-solid fa-arrow-right"></i></span></button>
       </div>
     </section>
     <style id="category-library-styles">
@@ -2776,17 +2805,8 @@
       <div class="library-category-body"><div class="category-empty"><i class="fa-solid fa-book-open-reader"></i><h3>अध्ययन एवं स्वाध्याय</h3><p>विद्यार्थियों और जिज्ञासुओं के लिए संस्कृत, भारतीय दर्शन, साहित्य और शास्त्रों का क्रमबद्ध अध्ययन-कक्ष।</p><div class="subject-grid"><article><h5>संस्कृत व्याकरण</h5><p>वर्ण-विचार, सन्धि, समास, कारक, प्रत्यय, धातुरूप, शब्दरूप और वाक्य-रचना।</p></article><article><h5>संस्कृत साहित्य</h5><p>काव्य, नाटक, गद्य, महाकाव्य, प्रमुख कवि और साहित्यिक आलोचना।</p></article><article><h5>भारतीय दर्शन</h5><p>न्याय, वैशेषिक, सांख्य, योग, मीमांसा और वेदान्त — षड्दर्शन का परिचय।</p></article><article><h5>वेद एवं वेदाङ्ग</h5><p>शिक्षा, कल्प, व्याकरण, निरुक्त, छन्द और ज्योतिष का परिचय।</p></article><article><h5>शास्त्र-अध्ययन</h5><p>धर्मशास्त्र, पुराण, इतिहास, उपनिषद् और भगवद्गीता के चयनित विषय।</p></article><article><h5>अभ्यास एवं परीक्षा</h5><p>विषयवार प्रश्नोत्तर, वस्तुनिष्ठ प्रश्न, लघु-उत्तरीय अभ्यास और पुनरावृत्ति।</p></article></div></div></div>
     </details>
         <details class="library-category" id="category-gallery"><summary><i class="fa-solid fa-images"></i> फोटो गैलरी</summary><div class="library-category-body">
-    <!-- Photo Gallery -->
-    <h3 class="section-title" id="gallery" data-aos="fade-up">फोटो गैलरी</h3>
-    <div class="gallery-grid" data-aos="fade-up">
-      <img src="assets/profile.jpg" class="gallery-img" alt="Gallery Profile">
-      <img src="assets/profile1.jpg" class="gallery-img" alt="Gallery Profile 1">
-      <img src="assets/gallery1.jpg" class="gallery-img" alt="Gallery 1">
-      <img src="assets/gallery2.jpg" class="gallery-img" alt="Gallery 2">
-      <img src="assets/gallery3.jpg" class="gallery-img" alt="Gallery 3">
-    </div>
-
-    </div></details>
+    <div class="library-category-body"><p class="category-empty">फोटो गैलरी पेज के ऊपर उपलब्ध है। <a href="#gallery">फोटो गैलरी देखें</a></p></div>
+    </details>
     <!-- Services and appointment: after knowledge and gallery -->
     <!-- Services Section -->
     <h3 class="section-title" id="services" data-aos="fade-up">हमारी प्रमुख सेवाएं</h3>
