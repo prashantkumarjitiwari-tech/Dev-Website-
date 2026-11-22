@@ -175,12 +175,12 @@ module.exports = async (req,res) => {
       yamagand:rangeText(daily.periods.yamagand),
       abhijit:rangeText(daily.periods.abhijit),
       brahma:rangeText(daily.periods.brahma),
-      amrit:null,choghadiya:daily.choghadiya,hora:daily.hora
+      amrit:null,choghadiya:daily.choghadiya,hora:daily.hora,grahas:calculated.grahas
     };
     return res.status(200).json({
       date,
       location:{name:'श्रीधाम वृंदावन',latitude:LAT,longitude:LON,timezone:'Asia/Kolkata',ayanamsha:'Lahiri'},
-      data,traditional:{},details:{choghadiya:daily.choghadiya,hora:daily.hora,periods:daily.periods,astronomy:calculated.positions,grahas:calculated.grahas,riseSet:calculated.riseSet,riseSet:calculated.riseSet},
+      data,traditional:{},details:{choghadiya:daily.choghadiya,hora:daily.hora,periods:daily.periods,astronomy:calculated.positions,grahas:calculated.grahas,riseSet:calculated.riseSet,astronomyEndsAt:calculated.endsAt},
       astroAvailable:false,extendedAvailable:false,
       providers:{navamsha:false,astroLogics:false,goPixel:false,independent:true},
       fallback:false,engine:calculated.engine,engineVersion:calculated.engineVersion,
