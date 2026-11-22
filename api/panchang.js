@@ -147,8 +147,8 @@ module.exports = async (req,res) => {
     if(!result.full) throw new Error('Full Panchang endpoint unavailable');
     const full=result.full, sun=result['sun-times']||{}, bad=result['inauspicious-periods']||{}, moon=result['moon-times']||{};
     let data={
-      tithi:element(full,'tithi'), vara:element(full,'weekday')||element(full,'vara'),
-      nakshatra:element(full,'nakshatra'), yoga:element(full,'yoga'), karana:element(full,'karana'),
+      tithi:element(full,'tithi'), tithiEnd:timeValue(full.tithi,['ends_at','end','end_time']), vara:element(full,'weekday')||element(full,'vara'),
+      nakshatra:element(full,'nakshatra'), nakshatraEnd:timeValue(full.nakshatra,['ends_at','end','end_time']), yoga:element(full,'yoga'), karana:element(full,'karana'),
       sunrise:timeValue(sun,['sunrise','sunrise_time','sunriseTime']),
       sunset:timeValue(sun,['sunset','sunset_time','sunsetTime']),
       moonrise:timeValue(moon,['moonrise','moonrise_time','moonriseTime']),
@@ -182,8 +182,10 @@ module.exports = async (req,res) => {
         const limb=v=>hindiName(v?.label_hi||v?.name_hi||v?.label||v?.name||'');
         data={
           ...data,
-          tithi:p.tithi?((p.tithi.paksha==='shukla'?'शुक्ल पक्ष • ':p.tithi.paksha==='krishna'?'कृष्ण पक्ष • ':'')+limb(p.tithi)+(p.tithi.ends_at?' • समाप्ति '+clock(p.tithi.ends_at):'')):data.tithi,
-          nakshatra:p.nakshatra?limb(p.nakshatra)+(p.nakshatra.ends_at?' • समाप्ति '+clock(p.nakshatra.ends_at):''):data.nakshatra,
+          tithi:p.tithi?((p.tithi.paksha==='shukla'?'शुक्ल पक्ष • ':p.tithi.paksha==='krishna'?'कृष्ण पक्ष • ':'')+limb(p.tithi)):data.tithi,
+          tithiEnd:p.tithi?.ends_at||data.tithiEnd,
+          nakshatra:p.nakshatra?limb(p.nakshatra):data.nakshatra,
+          nakshatraEnd:p.nakshatra?.ends_at||data.nakshatraEnd,
           yoga:p.yoga?limb(p.yoga):data.yoga,
           karana:p.karana?limb(p.karana):data.karana,
           vara:p.vara?limb(p.vara):data.vara,
