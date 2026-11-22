@@ -137,12 +137,12 @@
     const button=document.getElementById('panchang-share');
     const original=button?button.innerHTML:'';
     const rows=[];
-    root.querySelectorAll('.panchang-metric,.panchang-extra,.panchang-complete-item').forEach(el=>{
+    root.querySelectorAll('.panchang-complete h3,.panchang-metric,.panchang-extra,.panchang-complete-item').forEach(el=>{
+      if(el.matches('h3')){rows.push({heading:el.textContent.trim()});return;}
       const label=el.querySelector('span,b')?.textContent?.trim()||'';
       const value=el.querySelector('strong,p')?.textContent?.trim()||el.querySelector('span')?.textContent?.trim()||'';
       if(label&&value&&value!=='—')rows.push({label,value});
     });
-    root.querySelectorAll('.panchang-complete h3').forEach(h=>rows.push({heading:h.textContent.trim()}));
     if(!rows.length){alert('पंचांग अभी लोड हो रहा है। थोड़ी देर बाद फिर प्रयास करें।');return;}
     if(button){button.disabled=true;button.textContent='तस्वीर तैयार हो रही है…';}
     try{
