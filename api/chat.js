@@ -28,7 +28,7 @@ module.exports = async function handler(req, res) {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        model: process.env.OPENAI_MODEL || 'gpt-5.5',
+        model: process.env.OPENAI_MODEL || 'gpt-6.1-sol',
         instructions,
         input,
         max_output_tokens: 700
@@ -39,7 +39,7 @@ module.exports = async function handler(req, res) {
       console.error('OpenAI API error:', upstream.status, data && data.error && data.error.message);
       return res.status(502).json({ error: 'अभी AI सेवा उत्तर नहीं दे पा रही है। कृपया बाद में प्रयास करें।' });
     }
-    const reply = typeof data.output_text === 'string' ? data.output_text.trim() : '';
+    const reply = (typeof data.output_text === 'string' ? data.output_text : (Array.isArray(data.output) ? data.output.flatMap(item => Array.isArray(item.content) ? item.content : []).filter(part => part && part.type === 'output_text' && typeof part.text === 'string').map(part => part.text).join('\\n') : '')).trim();
     if (!reply) return res.status(502).json({ error: 'अभी उत्तर उपलब्ध नहीं है। कृपया पुनः प्रयास करें।' });
     return res.status(200).json({ reply });
   } catch (error) {
