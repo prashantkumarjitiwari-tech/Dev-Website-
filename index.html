@@ -3630,7 +3630,7 @@ document.addEventListener('toggle',function(event){
     return text;
   }
   function set(key,value){const el=document.getElementById(key);if(el)el.textContent=hindi(value);}
-  function time(value){if(!value)return '—';let v=String(value);const m=v.match(/T?(\\d{1,2}):(\\d{2})(?::(\\d{2}))?/);return m?m[1].padStart(2,'0')+':'+m[2]:hindi(v);}
+  function time(value){if(!value)return '—';const parts=String(value).replace('T',' ').split(' ');const clock=parts.find(part=>part.includes(':'));return clock?clock.slice(0,5):hindi(value);}
   async function load(){
     const status=document.getElementById('panchang-status');
     try{
