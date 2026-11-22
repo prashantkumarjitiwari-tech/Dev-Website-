@@ -766,7 +766,7 @@
       </div>
     </section>
     <style id="category-library-styles">
-      .category-hub{margin:42px auto 30px;padding:26px 22px;border:1px solid rgba(168,121,40,.23);border-radius:22px;background:linear-gradient(145deg,#fffefa,#f4ead8);box-shadow:0 12px 32px rgba(76,55,24,.08)}
+      .subject-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin:18px 0}.subject-grid article{padding:15px 16px;border:1px solid rgba(168,121,40,.22);border-radius:14px;background:linear-gradient(145deg,#fffefa,#f7efdf);box-shadow:0 5px 16px rgba(76,55,24,.05)}.subject-grid h5{margin:0 0 7px;color:#79551f;font-size:15px}.subject-grid p{margin:0;color:#514735;font-size:13px;line-height:1.7}.aarti-note{padding:12px 15px;border-radius:12px;background:#f7efdf;color:#654719}\n      .category-hub{margin:42px auto 30px;padding:26px 22px;border:1px solid rgba(168,121,40,.23);border-radius:22px;background:linear-gradient(145deg,#fffefa,#f4ead8);box-shadow:0 12px 32px rgba(76,55,24,.08)}
       .category-hub-heading{text-align:center;margin-bottom:20px}.category-hub-heading>span{font-size:11px;font-weight:800;color:#9a702e;letter-spacing:.7px}.category-hub-heading h2{font-size:25px;color:#654719;margin:5px 0}.category-hub-heading p{font-size:13px;color:#625543}
       .category-hub-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:13px}
       .category-tile{display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:8px;min-height:160px;padding:18px 16px;border:1px solid rgba(168,121,40,.22);border-radius:15px;background:linear-gradient(145deg,#fff,#f7efdf);color:#493b2b;cursor:pointer;transition:transform .2s,box-shadow .2s}
@@ -788,7 +788,7 @@
         <div class="katha-subcategory-content">
           <h4>वैदिक साहित्य</h4>
           <p>संहिता, ब्राह्मण, आरण्यक, उपनिषद् तथा वैदिक परंपरा से संबंधित अध्ययन-सामग्री, प्रसंग और व्याख्याएँ इस विभाग में व्यवस्थित की जाएँगी।</p>
-          <p class="katha-empty-note">इस विभाग में सामग्री क्रमशः जोड़ी जाएगी।</p>
+          <div class="subject-grid"><article><h5>चार वेद</h5><p>ऋग्वेद, यजुर्वेद, सामवेद और अथर्ववेद — संहिता का परिचय, प्रमुख सूक्त और विषय-विभाजन।</p></article><article><h5>ब्राह्मण एवं आरण्यक</h5><p>यज्ञीय परंपरा, कर्मकाण्डीय व्याख्याएँ, प्रतीक और वन-चिंतन की परंपरा।</p></article><article><h5>उपनिषद् दर्शन</h5><p>ईश, केन, कठ, प्रश्न, मुण्डक, माण्डूक्य, तैत्तिरीय, ऐतरेय, छान्दोग्य और बृहदारण्यक उपनिषद् के प्रमुख विचार।</p></article><article><h5>वैदिक विषय-चर्चा</h5><p>वेदाङ्ग, ऋषि-परंपरा, सूक्तों का अर्थ, शान्ति-पाठ और वैदिक जीवन-मूल्य।</p></article></div>
         </div>
       </details>
       <details class="katha-subcategory">
@@ -796,7 +796,7 @@
         <div class="katha-subcategory-content">
           <h4>लौकिक साहित्य</h4>
           <p>महाकाव्य, खण्डकाव्य, नाटक, गद्य, काव्यशास्त्र तथा संस्कृत के अन्य लौकिक साहित्य से संबंधित रचनाएँ और परिचय यहाँ संकलित होंगे।</p>
-          <p class="katha-empty-note">इस विभाग में सामग्री क्रमशः जोड़ी जाएगी।</p>
+          <div class="subject-grid"><article><h5>महाकाव्य एवं खण्डकाव्य</h5><p>रामायण, महाभारत तथा रघुवंश, कुमारसम्भव, मेघदूत और नैषधीयचरित जैसी काव्य-परंपराएँ।</p></article><article><h5>संस्कृत नाटक</h5><p>अभिज्ञानशाकुन्तलम्, मृच्छकटिकम्, स्वप्नवासवदत्तम्, उत्तररामचरितम् और मुद्राराक्षसम्।</p></article><article><h5>गद्य साहित्य</h5><p>कादम्बरी, दशकुमारचरित, गद्यकाव्य और संस्कृत कथात्मक साहित्य की विशेषताएँ।</p></article><article><h5>काव्यशास्त्र एवं अलंकार</h5><p>रस, ध्वनि, रीति, वक्रोक्ति, औचित्य, अलंकार, छन्द और नाट्यशास्त्र का परिचय।</p></article></div>
         </div>
       </details>
       <details class="katha-subcategory" open>
@@ -870,8 +870,7 @@
           <i class="fa-solid fa-fire-flame-curved"></i>
           <h3>वैदिक कर्मकाण्ड एवं संस्कार</h3>
           <p>इस विभाग में षोडश संस्कार, नित्य-नैमित्तिक कर्म, संध्योपासना, पूजन-पद्धति, हवन-विधान, देव-प्रतिष्ठा तथा विभिन्न धार्मिक अनुष्ठानों से संबंधित प्रामाणिक अध्ययन-सामग्री व्यवस्थित की जाएगी।</p>
-          <p><strong>प्रमुख अध्ययन-विषय:</strong> संकल्प एवं आचमन • गणेश-पूजन • कलश-स्थापन • नवग्रह-पूजन • हवन-विधि • विवाह एवं अन्य संस्कार।</p>
-          <a href="https://wa.me/917465040426?text=Namaste%2C%20website%20ke%20Karmkand%20section%20me%20pramanik%20samagri%20jodni%20hai." target="_blank" rel="noopener noreferrer">कर्मकाण्ड सामग्री भेजें</a>
+          <div class="subject-grid"><article><h5>नित्यकर्म</h5><p>आचमन, प्राणायाम, संकल्प, संध्योपासना, गायत्री-जप और तर्पण का परिचय।</p></article><article><h5>षोडश संस्कार</h5><p>गर्भाधान से अन्त्येष्टि तक संस्कारों का उद्देश्य, अवसर और परंपरागत स्वरूप।</p></article><article><h5>पूजन-पद्धति</h5><p>आवाहन, आसन, पाद्य, अर्घ्य, स्नान, वस्त्र, गन्ध, पुष्प, नैवेद्य और आरती के उपचार।</p></article><article><h5>हवन एवं यज्ञ</h5><p>अग्नि-स्थापन, समिधा, आहुति, स्वाहा-मन्त्र, पूर्णाहुति और यज्ञ का भावार्थ।</p></article><article><h5>विशेष अनुष्ठान</h5><p>नवग्रह-पूजन, रुद्राभिषेक, सत्यनारायण-व्रत, गृहप्रवेश और देव-प्रतिष्ठा का परिचय।</p></article><article><h5>विधि एवं सावधानी</h5><p>विभिन्न गृह्यसूत्रों और परंपराओं में विधि-भेद हो सकते हैं; स्थानीय कुलाचार तथा योग्य आचार्य के निर्देश का सम्मान करें।</p></article></div>
         </div>
       </div>
     </details>
@@ -882,8 +881,7 @@
           <i class="fa-solid fa-sun"></i>
           <h3>ज्योतिष शास्त्र अध्ययन विभाग</h3>
           <p>ज्योतिष के सिद्धान्त, गणित और फलित पक्ष से संबंधित विषयों का क्रमबद्ध अध्ययन-संग्रह। जन्मकुण्डली को समझने, पंचांग-पठन और ग्रह-गोचर के शास्त्रीय आधार को जानने हेतु सामग्री यहाँ संकलित होगी।</p>
-          <p><strong>प्रमुख अध्ययन-विषय:</strong> नवग्रह एवं राशियाँ • बारह भाव • नक्षत्र • तिथि, वार, योग एवं करण • लग्न एवं कुण्डली • दशा-पद्धति • गोचर एवं मुहूर्त।</p>
-          <a href="https://wa.me/917465040426?text=Namaste%2C%20website%20ke%20Jyotish%20Gyan%20section%20me%20adhyayan%20samagri%20jodni%20hai." target="_blank" rel="noopener noreferrer">ज्योतिष सामग्री भेजें</a>
+          <div class="subject-grid"><article><h5>ज्योतिष के आधार</h5><p>सिद्धान्त, संहिता और होरा — ज्योतिष के प्रमुख विभाग तथा उनकी अध्ययन-पद्धति।</p></article><article><h5>गणित एवं पंचांग</h5><p>तिथि, वार, नक्षत्र, योग, करण, पक्ष, मास, अयन और पंचांग-पठन।</p></article><article><h5>ग्रह, राशि एवं नक्षत्र</h5><p>नवग्रहों के पारंपरिक कारकत्व, बारह राशियाँ, द्वादश भाव और सत्ताईस नक्षत्र।</p></article><article><h5>कुण्डली अध्ययन</h5><p>लग्न, ग्रहस्थिति, दृष्टि, युति, भावेश, वर्गकुण्डली और जन्मपत्रिका की मूल संरचना।</p></article><article><h5>दशा एवं गोचर</h5><p>विंशोत्तरी दशा का परिचय, अन्तर्दशा, ग्रह-गोचर और फल-विचार की पारंपरिक पद्धतियाँ।</p></article><article><h5>मुहूर्त एवं प्रश्न</h5><p>मुहूर्त-निर्णय के आधार, शकुन, प्रश्न-ज्योतिष और ज्योतिषीय ग्रन्थों का परिचय।</p></article><article><h5>शास्त्रीय संदर्भ</h5><p>बृहत्पाराशरहोराशास्त्र, बृहत्जातक, सारावली, फलदीपिका और मुहूर्तचिन्तामणि का परिचय।</p></article><article><h5>अध्ययन-सूचना</h5><p>ज्योतिष पारंपरिक शास्त्रीय विषय है; इसे निश्चित भविष्यवाणी या वैज्ञानिक रूप से सिद्ध परिणाम न मानें।</p></article></div>
         </div>
       </div>
     </details>
@@ -894,18 +892,17 @@
           <i class="fa-solid fa-hands-praying"></i>
           <h3>देवी-देवताओं की आरती</h3>
           <p>दैनिक पूजा, पर्व एवं विशेष अवसरों पर गाई जाने वाली आरतियों का सुव्यवस्थित संग्रह। प्रत्येक आरती के साथ शुद्ध पाठ और उपलब्ध होने पर उसका श्रव्य रूप भी जोड़ा जाएगा।</p>
-          <p><strong>प्रमुख आरतियाँ:</strong> श्री गणेश • श्री लक्ष्मी • श्री हनुमान • भगवान शिव • माँ दुर्गा • भगवान विष्णु • श्रीकृष्ण • श्रीराम • माँ सरस्वती।</p>
-          <p class="aarti-note"><i class="fa-solid fa-book-open"></i> आरतियों के शुद्ध पाठ एवं श्रव्य सामग्री यहाँ विषयवार उपलब्ध कराई जाएगी।</p>
+          <div class="subject-grid"><article><h5>श्री गणेश आरती</h5><p>जय गणेश, जय गणेश देवा — गणपति-वन्दना और पूजन के अवसर।</p></article><article><h5>माँ लक्ष्मी आरती</h5><p>ॐ जय लक्ष्मी माता — दीपावली एवं शुक्रवार की पूजा।</p></article><article><h5>भगवान शिव आरती</h5><p>ॐ जय शिव ओंकारा — शिवपूजन, सोमवार और महाशिवरात्रि।</p></article><article><h5>माँ दुर्गा आरती</h5><p>जय अम्बे गौरी — नवरात्रि और देवी-उपासना।</p></article><article><h5>श्री हनुमान आरती</h5><p>आरती कीजै हनुमान लला की — मंगलवार, शनिवार और हनुमद्-भक्ति।</p></article><article><h5>श्री विष्णु एवं श्रीकृष्ण</h5><p>ॐ जय जगदीश हरे तथा श्रीकृष्ण-आरती — विष्णु एवं कृष्ण-पूजन।</p></article><article><h5>श्रीराम आरती</h5><p>श्रीरामचन्द्र कृपालु भज मन सहित राम-स्तुति एवं आरती-पाठ।</p></article><article><h5>माँ सरस्वती आरती</h5><p>जय सरस्वती माता — वसन्त पंचमी और विद्यारम्भ के अवसर।</p></article></div><p class="aarti-note"><i class="fa-solid fa-book-open"></i> प्रत्येक आरती के साथ शुद्ध देवनागरी पाठ, अर्थ और उपलब्ध होने पर श्रव्य प्रस्तुति जोड़ी जाएगी।</p>
         </div>
       </div>
     </details>
     <details class="library-category" id="category-bhajan">
       <summary><i class="fa-solid fa-music"></i> भजन एवं कीर्तन संग्रह</summary>
-      <div class="library-category-body"><div class="category-empty"><i class="fa-solid fa-music"></i><h3>भक्ति-संगीत विभाग</h3><p>यहाँ भजन, कीर्तन और संकीर्तन की सामग्री अलग-अलग सुव्यवस्थित रूप से रखी जाएगी।</p><a href="https://wa.me/917465040426?text=Namaste%2C%20website%20ke%20Bhajan%20evam%20Kirtan%20section%20me%20samagri%20jodni%20hai." target="_blank" rel="noopener noreferrer">भजन सामग्री भेजें</a></div></div>
+      <div class="library-category-body"><div class="category-empty"><i class="fa-solid fa-music"></i><h3>भक्ति-संगीत विभाग</h3><p>भक्ति-परंपरा के पद, स्तुति, भजन और सामूहिक कीर्तन का विषयवार संग्रह।</p><div class="subject-grid"><article><h5>श्रीकृष्ण भजन</h5><p>राधा-कृष्ण पद, मुरली-माधुर्य, बाललीला, गोवर्धन और वृन्दावन-महिमा।</p></article><article><h5>श्रीराम भजन</h5><p>राम-नाम, रामचरितमानस के पद, राम-जन्म और राम-भक्ति पर आधारित भजन।</p></article><article><h5>शिव भजन</h5><p>शिव-महिमा, रुद्र-स्तुति, भोलेनाथ और शिवरात्रि के भक्ति-पद।</p></article><article><h5>देवी भजन</h5><p>दुर्गा, अम्बा, वैष्णो देवी और शक्ति-उपासना के भजन।</p></article><article><h5>संतवाणी</h5><p>कबीर, सूरदास, तुलसीदास, मीराबाई और अन्य संत-कवियों के पद।</p></article><article><h5>कीर्तन एवं संकीर्तन</h5><p>नाम-संकीर्तन, हरिनाम, सामूहिक भजन, धुन और उत्सव-कीर्तन।</p></article></div></div></div>
     </details>
     <details class="library-category" id="category-dhyan">
       <summary><i class="fa-solid fa-spa"></i> ध्यान एवं साधना</summary>
-      <div class="library-category-body"><div class="category-empty"><i class="fa-solid fa-spa"></i><h3>ध्यान-साधना विभाग</h3><p>ध्यान, जप, प्रार्थना और साधना से संबंधित मार्गदर्शिका एवं उपयोगी सामग्री इस अलग विभाग में संकलित की जाएगी।</p><a href="https://wa.me/917465040426?text=Namaste%2C%20website%20ke%20Dhyan%20evam%20Sadhana%20section%20me%20samagri%20jodni%20hai." target="_blank" rel="noopener noreferrer">ध्यान सामग्री भेजें</a></div></div>
+      <div class="library-category-body"><div class="category-empty"><i class="fa-solid fa-spa"></i><h3>ध्यान-साधना विभाग</h3><p>मन की एकाग्रता, आत्मचिन्तन, उपासना और भारतीय साधना-परंपराओं का परिचय।</p><div class="subject-grid"><article><h5>ध्यान का परिचय</h5><p>धारणा, ध्यान और समाधि की अवधारणा तथा नियमित अभ्यास की भूमिका।</p></article><article><h5>मन्त्र-जप</h5><p>जप के प्रकार, माला-जप, प्रणव-चिन्तन और मन्त्र-साधना की परंपरा।</p></article><article><h5>प्राणायाम</h5><p>श्वास-जागरूकता और योगशास्त्र में वर्णित प्राणायाम का परिचय; अभ्यास योग्य मार्गदर्शन में करें।</p></article><article><h5>योग-दर्शन</h5><p>पतञ्जलि योगसूत्र, अष्टाङ्गयोग, यम-नियम और चित्तवृत्ति-निरोध की अवधारणा।</p></article><article><h5>भक्ति एवं उपासना</h5><p>श्रवण, कीर्तन, स्मरण, अर्चन, वन्दन और आत्मनिवेदन जैसी भक्ति-पद्धतियाँ।</p></article><article><h5>दैनिक साधना</h5><p>प्रार्थना, स्वाध्याय, मौन, सत्संग और दिनचर्या में आध्यात्मिक अनुशासन।</p></article></div></div></div>
     </details>
     <details class="library-category" id="category-pdfs"><summary><i class="fa-solid fa-file-pdf"></i> ग्रंथ एवं PDF संग्रह</summary><div class="library-category-body">
     <p style="text-align:center;color:#625543;font-size:13px;margin:0 0 18px;">सभी उपलब्ध पुस्तकें, ज्योतिष-स्तोत्र ग्रंथ, ग्रंथकोश और प्रतियोगी परीक्षा सामग्री एक ही विभाग में।</p>
@@ -1028,7 +1025,7 @@
 
     <details class="library-category" id="category-study">
       <summary><i class="fa-solid fa-book-open-reader"></i> अध्ययन कक्ष</summary>
-      <div class="library-category-body"><div class="category-empty"><i class="fa-solid fa-book-open-reader"></i><h3>अध्ययन एवं स्वाध्याय</h3><p>यह विभाग नियमित अध्ययन, विषयवार नोट्स, पाठ्यक्रम, प्रश्नोत्तर और अभ्यास-सामग्री के लिए है। उपयोगी अध्ययन सामग्री यहाँ क्रमबद्ध रूप से उपलब्ध कराई जाएगी।</p><a href="https://wa.me/917465040426?text=Namaste%2C%20website%20ke%20Adhyayan%20Kaksh%20me%20study%20material%20jodni%20hai." target="_blank" rel="noopener noreferrer">अध्ययन सामग्री भेजें</a></div></div>
+      <div class="library-category-body"><div class="category-empty"><i class="fa-solid fa-book-open-reader"></i><h3>अध्ययन एवं स्वाध्याय</h3><p>विद्यार्थियों और जिज्ञासुओं के लिए संस्कृत, भारतीय दर्शन, साहित्य और शास्त्रों का क्रमबद्ध अध्ययन-कक्ष।</p><div class="subject-grid"><article><h5>संस्कृत व्याकरण</h5><p>वर्ण-विचार, सन्धि, समास, कारक, प्रत्यय, धातुरूप, शब्दरूप और वाक्य-रचना।</p></article><article><h5>संस्कृत साहित्य</h5><p>काव्य, नाटक, गद्य, महाकाव्य, प्रमुख कवि और साहित्यिक आलोचना।</p></article><article><h5>भारतीय दर्शन</h5><p>न्याय, वैशेषिक, सांख्य, योग, मीमांसा और वेदान्त — षड्दर्शन का परिचय।</p></article><article><h5>वेद एवं वेदाङ्ग</h5><p>शिक्षा, कल्प, व्याकरण, निरुक्त, छन्द और ज्योतिष का परिचय।</p></article><article><h5>शास्त्र-अध्ययन</h5><p>धर्मशास्त्र, पुराण, इतिहास, उपनिषद् और भगवद्गीता के चयनित विषय।</p></article><article><h5>अभ्यास एवं परीक्षा</h5><p>विषयवार प्रश्नोत्तर, वस्तुनिष्ठ प्रश्न, लघु-उत्तरीय अभ्यास और पुनरावृत्ति।</p></article></div></div></div>
     </details>
         <details class="library-category" id="category-gallery"><summary><i class="fa-solid fa-images"></i> फोटो गैलरी</summary><div class="library-category-body">
     <!-- Photo Gallery -->
