@@ -23,8 +23,8 @@ const profiles = {
     id: 'drik',
     label: 'दृक गणना',
     category: 'astronomical_method',
-    status: 'planned',
-    description: 'खगोलीय गणना आधारित प्रोफाइल; एपhemeris और स्थानीय क्षितिज गणना से सत्यापन होगा।'
+    status: 'partially_implemented',
+    description: 'स्विस एफेमेरिस से ग्रह-स्थिति उपलब्ध; पंचांग अंगों और स्थानीय कालों का उच्च-परिशुद्धता मिलान शेष।'
   },
   vaishnav_braj: {
     id: 'vaishnav_braj',
@@ -36,9 +36,9 @@ const profiles = {
 };
 
 const ayanamshas = {
-  lahiri: { id: 'lahiri', label: 'लाहिड़ी (चित्रपक्ष)', status: 'planned' },
-  kp: { id: 'kp', label: 'के.पी. (Krishnamurti)', status: 'planned' },
-  raman: { id: 'raman', label: 'रमन', status: 'planned' }
+  lahiri: { id: 'lahiri', label: 'लाहिड़ी (चित्रपक्ष)', status: 'available_with_swiss_ephemeris' },
+  kp: { id: 'kp', label: 'के.पी. (Krishnamurti)', status: 'available_with_swiss_ephemeris' },
+  raman: { id: 'raman', label: 'रमन', status: 'available_with_swiss_ephemeris' }
 };
 
 const observanceRules = {
@@ -72,7 +72,7 @@ module.exports = async (req, res) => {
       ayanamshas: Object.values(ayanamshas),
       observanceRules: Object.values(observanceRules)
     },
-    note: 'यह विकल्प-संरचना है। जिन प्रोफाइल का status planned/needs_validation है, उनकी गणना को प्रमाणित होने से पहले आधिकारिक परिणाम न मानें।'
+    note: 'अयनांश विकल्प ग्रह-स्थिति गणना में उपलब्ध हैं। काशी/ऋषिकेश प्रकाशन-विशिष्ट नियम तथा ब्रज/वैष्णव व्रत-निर्णय अभी पूर्णतः लागू/प्रमाणित नहीं हैं।'
   });
 };
 
