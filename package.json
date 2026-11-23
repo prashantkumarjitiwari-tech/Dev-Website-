@@ -1,0 +1,12 @@
+{
+  "name": "dev-tiwari-website-v3",
+  "version": "1.0.0",
+  "private": false,
+  "license": "AGPL-3.0-or-later",
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@kuntay/swisseph": "0.2.2"
+  }
+}
