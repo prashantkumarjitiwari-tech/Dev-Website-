@@ -59,6 +59,33 @@ function calculateBhadraAndVarjya(date,system){
   }
   return {bhadra,varjya};
 }
+const SAMVATSARA_NAMES=['प्रभव','विभव','शुक्ल','प्रमोद','प्रजापति','आङ्गिरस','श्रीमुख','भाव','युव','धाता','ईश्वर','बहुधान्य','प्रमाथी','विक्रम','वृष','चित्रभानु','स्वभानु','तारण','पार्थिव','व्यय','सर्वजित्','सर्वधारी','विरोधी','विकृति','खर','नन्दन','विजय','जय','मन्मथ','दुर्मुख','हेमलम्बी','विलम्बी','विकारी','शार्वरी','प्लव','शुभकृत्','शोभकृत्','क्रोधी','विश्वावसु','पराभव','प्लवंग','कीलक','सौम्य','साधारण','विरोधकृत्','परिधावी','प्रमादी','आनन्द','राक्षस','अनल','पिङ्गल','कालयुक्ति','सिद्धार्थी','रौद्र','दुर्मति','दुन्दुभि','रुधिरोद्गारी','रक्ताक्ष','क्रोधन','क्षय'];
+const RASHI_NAMES=['मेष','वृषभ','मिथुन','कर्क','सिंह','कन्या','तुला','वृश्चिक','धनु','मकर','कुम्भ','मीन'];
+const LUNAR_MONTHS=['चैत्र','वैशाख','ज्येष्ठ','आषाढ़','श्रावण','भाद्रपद','आश्विन','कार्तिक','मार्गशीर्ष','पौष','माघ','फाल्गुन'];
+function traditionalCalendar(date, calculated) {
+  const jd=localDateJd(date,12);
+  const sun=astronomy.solarLongitude(jd)-calculated.ayanamsha.degrees;
+  const sign=((Math.floor(((sun%360)+360)%360/30))%12);
+  const [year,month,day]=date.split('-').map(Number);
+  const tithiIndex=astronomy.limbIndices(jd,calculated.ayanamsha.system).tithi;
+  const afterChaitraNewYear=(sign===11 && tithiIndex<15) || sign<=10;
+  const vikramSamvat=year+(afterChaitraNewYear?57:56);
+  const samvatsaraIndex=((vikramSamvat-2044)%60+60)%60;
+  const ayana=(sign>=9 || sign<=2)?'उत्तरायण':'दक्षिणायन';
+  const ritu=['वसन्त','वसन्त','ग्रीष्म','ग्रीष्म','वर्षा','वर्षा','शरद्','शरद्','हेमन्त','हेमन्त','शिशिर','शिशिर'][sign];
+  // Amanta month is estimated from the sidereal solar sign; exact new-moon month
+  // adjudication and adhika/kshaya masa need a validated ephemeris.
+  const lunarMonth=LUNAR_MONTHS[(sign+1)%12]+' (अनुमानित)';
+  return {
+    vikramSamvat:String(vikramSamvat),
+    samvatsara:SAMVATSARA_NAMES[samvatsaraIndex]+' (अनुमानित)',
+    ayana, ritu, lunarMonth,
+    paksha:tithiIndex<15?'शुक्ल पक्ष':'कृष्ण पक्ष',
+    festival:'प्रकाशित पंचांग एवं व्रत-निर्णय से सत्यापन शेष',
+    status:'preliminary',
+    note:'संवत्सर, चन्द्र मास और ऋतु प्रारंभिक सौर-राशि आधारित अनुमान हैं; अधिक मास, क्षय मास और पर्व/व्रत निर्णय अभी प्रमाणित नहीं हैं।'
+  };
+}
 function formatRange(value) {
   return value && value.start && value.end
     ? formatTime(value.start) + ' – ' + formatTime(value.end)
@@ -88,7 +115,7 @@ module.exports = (req, res) => {
       latitude: LAT, longitude: LON
     });
     const day = daily.calculate(date);
-    const inauspicious = calculateBhadraAndVarjya(date, calculated.ayanamsha.system);
+    const inauspicious = calculateBhadraAndVarjya(date, calculated.ayanamsha.system);\n    const traditional = traditionalCalendar(date, calculated);
     const data = {
       vara: day.weekday,
       tithi: calculated.limbs.tithi,
@@ -121,7 +148,7 @@ module.exports = (req, res) => {
       date: { year: Number(date.slice(0, 4)), month: Number(date.slice(5, 7)), date: Number(date.slice(8, 10)) },
       location: { name: 'श्रीधाम वृंदावन', latitude: LAT, longitude: LON, timezone: TIME_ZONE, ayanamsha: calculated.ayanamsha.system },
       data,
-      traditional: {},
+      traditional,
       calculationSelection: selected,
       details: {
         periods: day.periods, durmuhurta: day.durmuhurta, bhadra: inauspicious.bhadra, varjya: inauspicious.varjya, choghadiya: day.choghadiya, hora: day.hora,
