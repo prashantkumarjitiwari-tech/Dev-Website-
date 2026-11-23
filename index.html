@@ -3612,11 +3612,54 @@
         if (selector) selector.value = saved;
         if (saved !== 'hi') applyLanguage(saved);
       }
+      let activeLanguage = 'hi';
       if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', restoreSavedLanguage, { once: true });
       } else {
         restoreSavedLanguage();
       }
+      // Keep translations active for content inserted later (Panchang, library,
+      // gallery and other dynamically rendered sections).
+      const languageObserver = new MutationObserver(function (mutations) {
+        if (activeLanguage === 'hi') return;
+        const dictionary = dictionaries[activeLanguage] || {};
+        const added = [];
+        mutations.forEach(function (mutation) {
+          mutation.addedNodes.forEach(function (node) {
+            if (node.nodeType === Node.ELEMENT_NODE || node.nodeType === Node.TEXT_NODE) added.push(node);
+          });
+        });
+        added.forEach(function (root) {
+          if (root.nodeType === Node.TEXT_NODE) {
+            if (!originalNodes.has(root)) originalNodes.set(root, root.nodeValue);
+            const original = originalNodes.get(root);
+            const trimmed = original.trim();
+            if (trimmed && dictionary[trimmed]) root.nodeValue = original.replace(trimmed, dictionary[trimmed]);
+            return;
+          }
+          const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+          while (walker.nextNode()) {
+            const node = walker.currentNode;
+            if (!originalNodes.has(node)) originalNodes.set(node, node.nodeValue);
+            const original = originalNodes.get(node);
+            const trimmed = original.trim();
+            if (trimmed && dictionary[trimmed]) node.nodeValue = original.replace(trimmed, dictionary[trimmed]);
+          }
+          if (root.querySelectorAll) {
+            root.querySelectorAll('*').forEach(function (element) {
+              translatableAttributes.forEach(function (attribute) {
+                if (!element.hasAttribute(attribute)) return;
+                let saved = originalAttributes.get(element);
+                if (!saved) { saved = {}; originalAttributes.set(element, saved); }
+                if (!(attribute in saved)) saved[attribute] = element.getAttribute(attribute);
+                const original = saved[attribute];
+                element.setAttribute(attribute, dictionary[original] || original);
+              });
+            });
+          }
+        });
+      });
+      languageObserver.observe(document.body, { childList: true, subtree: true });
     })();
   </script>
 
