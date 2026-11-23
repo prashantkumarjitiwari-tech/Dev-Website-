@@ -3950,7 +3950,10 @@ document.addEventListener('toggle',function(event){
     };
     kundali.houses.forEach((h,i)=>{
       const c=cells[i],group=make('g',{});
-      group.append(make('text',{x:c.x,y:c.y-22,class:'kundali-rashi'},h.rashi||'—'));
+      // हर भाव में केवल राशि क्रमांक (1–12) दिखेगा। लग्न राशि से क्रम निकालने पर 12 भावों में 12 अलग-अलग राशियाँ रहेंगी।
+      const lagnaSignIndex=Math.floor((((Number(kundali.lagna?.longitude)||0)%360)+360)%360/30);
+      const signNumber=((lagnaSignIndex+i)%12)+1;
+      group.append(make('text',{x:c.x,y:c.y-22,class:'kundali-rashi'},String(signNumber)));
       if(i===0){
         group.append(make('text',{x:c.x,y:c.y-9,class:'kundali-lagna'},'लग्न '+Number(kundali.lagna?.degrees||0).toFixed(2)+'°'));
       }
