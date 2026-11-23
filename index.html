@@ -177,7 +177,8 @@
   
 /* Panchang chart cards */.panchang-graha-card strong{display:block;font-size:13px;margin:3px 0 2px;font-weight:700}.panchang-graha-card small{font-size:11px!important;font-weight:600}
 .panchang-chart-holder{display:block!important}.panchang-chart-holder>b{display:block;margin-bottom:10px}.panchang-chart-grid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;white-space:normal!important}.panchang-chart-card{min-width:0;border-radius:12px;padding:10px 6px;text-align:center;background:#e9f8ef;color:#245c3b;border:1px solid rgba(54,145,91,.12);line-height:1.35}.panchang-chart-card:nth-child(3n+2){background:#fcebed;color:#8a3c4a}.panchang-chart-card:nth-child(3n){background:#f2edfa;color:#594579}.panchang-chart-card b{display:block;font-size:13px;margin-bottom:4px}.panchang-chart-card small{display:block;font-size:10px;overflow-wrap:anywhere}.panchang-chart-empty{grid-column:1/-1;padding:10px;color:#82786b;font-size:12px;background:#faf7f0;border-radius:9px}@media(max-width:420px){.panchang-chart-grid{gap:6px}.panchang-chart-card{padding:9px 4px}.panchang-chart-card b{font-size:12px}.panchang-chart-card small{font-size:9px}}
-\n.panchang-kundali-wrap{max-width:430px;margin:12px auto;background:#fffaf0;border:1px solid #d7b879;border-radius:12px;padding:8px}.panchang-kundali-wrap svg{display:block;width:100%;height:auto}.kundali-lines{fill:none;stroke:#9a6034;stroke-width:2}.kundali-house-no{font-size:12px;fill:#9a6034;font-weight:700;text-anchor:middle}.kundali-rashi{font-size:12px;fill:#30251a;font-weight:700;text-anchor:middle}.kundali-planets{font-size:10px;fill:#46321e;text-anchor:middle}.kundali-center{font-size:14px;fill:#8b5427;font-weight:700;text-anchor:middle}\n</style>
+\n.panchang-kundali-wrap{max-width:430px;margin:12px auto;background:#fffaf0;border:1px solid #d7b879;border-radius:12px;padding:8px}.panchang-kundali-wrap svg{display:block;width:100%;height:auto}.kundali-lines{fill:none;stroke:#9a6034;stroke-width:2}.kundali-house-no{font-size:12px;fill:#9a6034;font-weight:700;text-anchor:middle}.kundali-rashi{font-size:12px;fill:#30251a;font-weight:700;text-anchor:middle}.kundali-planets{font-size:10px;fill:#46321e;text-anchor:middle}.kundali-center{font-size:14px;fill:#8b5427;font-weight:700;text-anchor:middle}
+</style>
 
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; scroll-behavior: smooth; }
@@ -3913,7 +3914,8 @@ document.addEventListener('toggle',function(event){
     renderCards('panchang-bhadra',d.bhadra||det.bhadra||[],'name');
     renderCards('panchang-varjya',d.varjya||det.varjya||[],'name');
     renderCards('panchang-durmuhurta',det.durmuhurta||d.durmuhurta||[],'name');
-    renderGrahaCards(d.grahas||det.grahas||[]);\n    renderKundali(d.kundali||det.kundali);
+    renderGrahaCards(d.grahas||det.grahas||[]);
+    renderKundali(d.kundali||det.kundali);
   }
   let lastLoadedDate='';
   async function load(){
@@ -3922,7 +3924,10 @@ document.addEventListener('toggle',function(event){
       const profile=document.getElementById('panchang-profile')?.value||'kashi_vishwanath';
       const ayanamsha=document.getElementById('panchang-ayanamsha')?.value||'lahiri';
       const observance=document.getElementById('panchang-observance')?.value||'braj';
-      const now=new Date();\n      const parts=new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Kolkata',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'}).formatToParts(now);\n      const clock=Object.fromEntries(parts.map(p=>[p.type,p.value]));\n      const params=new URLSearchParams({profile,ayanamsha,observance,date:clock.year+'-'+clock.month+'-'+clock.day,time:clock.hour+':'+clock.minute+':'+clock.second});
+      const now=new Date();
+      const parts=new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Kolkata',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'}).formatToParts(now);
+      const clock=Object.fromEntries(parts.map(p=>[p.type,p.value]));
+      const params=new URLSearchParams({profile,ayanamsha,observance,date:clock.year+'-'+clock.month+'-'+clock.day,time:clock.hour+':'+clock.minute+':'+clock.second});
       const response=await fetch('/api/panchang?'+params.toString(),{headers:{'Accept':'application/json'},cache:'no-store'});
       const result=await response.json();
       if(!response.ok)throw new Error(result.error||'पंचांग उपलब्ध नहीं है');
@@ -3935,7 +3940,8 @@ document.addEventListener('toggle',function(event){
       set('panchang-festival',t.festival);
       const grahas=d.grahas||result.details?.grahas||t.grahas||[];
       set('panchang-grahas',grahas.map(g=>g.name+' — '+g.rashi+(g.degrees!==undefined?' '+g.degrees+'°':'')).join(' • '));
-      renderCharts(result);\n      scheduleTransitionRefresh(result);
+      renderCharts(result);
+      scheduleTransitionRefresh(result);
       const endText=(label,value)=>value?label+' समाप्ति: '+time(value):'';
       const ends=result.details?.astronomyEndsAt||result.endsAt||{};
       if(d.tithiEnd)set('panchang-detail-tithi',d.tithi+' ('+endText('तिथि',d.tithiEnd)+')');
@@ -3976,7 +3982,7 @@ document.addEventListener('toggle',function(event){
     if(transitionTimer)clearTimeout(transitionTimer);
     const candidates=[],now=Date.now();
     const addIso=value=>{if(value){const t=new Date(value).getTime();if(Number.isFinite(t)&&t>now+500)candidates.push(t);}};
-    const addClock=value=>{if(typeof value!=='string')return;const m=value.match(/^(\\d{1,2}):(\\d{2})/);if(!m)return;const d=new Date();const t=new Date(d.getFullYear(),d.getMonth(),d.getDate(),Number(m[1]),Number(m[2])).getTime();if(t>now+500)candidates.push(t);};
+    const addClock=value=>{if(typeof value!=='string')return;const m=value.match(/^(\d{1,2}):(\d{2})/);if(!m)return;const d=new Date();const t=new Date(d.getFullYear(),d.getMonth(),d.getDate(),Number(m[1]),Number(m[2])).getTime();if(t>now+500)candidates.push(t);};
     const ends=result.details?.astronomyEndsAt||{};
     Object.values(ends).forEach(addIso);
     const d=result.data||{};
