@@ -197,12 +197,14 @@ module.exports = async (req, res) => {
       const lagnaIndex = RASHI_NAMES_FOR_API.indexOf(calculated.kundali.lagna.rashi);
       swissGrahas.forEach(g => { g.house = ((RASHI_NAMES_FOR_API.indexOf(g.rashi) - lagnaIndex + 12) % 12) + 1; });
       calculated.grahas = swissGrahas;
+      calculated.limbs = swiss.limbs;
+      calculated.endsAt = swiss.endsAt;
       calculated.kundali.houses.forEach(h => { h.grahas = swissGrahas.filter(g => g.house === h.house); });
       calculated.positions.sun.siderealLongitude = swiss.positions.sun.longitude;
       calculated.positions.moon.siderealLongitude = swiss.positions.moon.longitude;
       calculated.ayanamsha.degrees = Number(swiss.ayanamsha.toFixed(6));
       calculated.ayanamsha.status = 'swiss-ephemeris';
-      ephemeris = { available: true, engine: swiss.engine, version: swiss.engineVersion, source: swiss.ephemeris, data: swiss.ephemerisData, note: 'ग्रहों की निरयन देशांतर स्थिति स्विस एफेमेरिस से निकाली गई है।' };
+      ephemeris = { available: true, engine: swiss.engine, version: swiss.engineVersion, source: swiss.ephemeris, data: swiss.ephemerisData, note: 'ग्रहों की निरयन स्थिति तथा तिथि, नक्षत्र, योग, करण और उनकी समाप्ति स्विस एफेमेरिस से निकाली गई है।' };
     } catch (swissError) {
       ephemeris = { available: false, engine: 'meeus-fallback', error: swissError.message, note: 'स्विस एफेमेरिस लोड नहीं हुआ; ग्रह-स्थिति प्रारंभिक Meeus सूत्रों से दिखाई गई है।' };
     }
@@ -265,7 +267,7 @@ module.exports = async (req, res) => {
       engine: ephemeris.available ? ephemeris.engine : calculated.engine,
       engineVersion: ephemeris.available ? ephemeris.version : calculated.engineVersion,
       ephemeris,
-      accuracyNotice: (ephemeris.available ? ephemeris.note + ' तिथि/नक्षत्र/योग/करण के समय और कुछ दैनिक काल अभी अलग प्रारंभिक गणना से हैं; पंचांग-परंपरा सत्यापन शेष है।' : ephemeris.note + ' ' + calculated.accuracyNotice),
+      accuracyNotice: (ephemeris.available ? ephemeris.note + ' कुछ स्थानीय दैनिक काल, वर्ज्य/भद्रा नियम और पंचांग-परंपरा के निर्णयों का स्वतंत्र सत्यापन शेष है।' : ephemeris.note + ' ' + calculated.accuracyNotice),
       updatedAt: new Date().toISOString()
     });
   } catch (error) {
