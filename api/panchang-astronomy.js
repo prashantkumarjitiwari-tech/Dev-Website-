@@ -176,7 +176,8 @@ function ascendantLongitude(jd, latitude, longitude, ay) {
   const theta=norm(gmst+longitude)*DEG;
   const eps=(23.439291-0.0130042*T)*DEG;
   const phi=latitude*DEG;
-  const tropical=norm(Math.atan2(-Math.cos(theta),Math.sin(eps)*Math.tan(phi)+Math.cos(eps)*Math.sin(theta))/DEG);
+  // atan2 का यह रूप क्षितिज के विपरीत बिंदु देता है; वास्तविक उदय-बिंदु के लिए 180° जोड़ें।
+  const tropical=norm(Math.atan2(-Math.cos(theta),Math.sin(eps)*Math.tan(phi)+Math.cos(eps)*Math.sin(theta))/DEG+180);
   return norm(tropical-ay);
 }
 function lunarLatitude(jd) {
@@ -332,7 +333,7 @@ function calculate(input={}) {
   }
   return {
     engine: 'independent-meeus-lite',
-    engineVersion: '0.5.0',
+    engineVersion: '0.5.1',
     julianDay: Number(jd.toFixed(6)),
     utc: utc.toISOString(),
     ayanamsha: { system, degrees: Number(ay.toFixed(6)), status: 'approximate' },
