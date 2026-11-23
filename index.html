@@ -4006,6 +4006,7 @@ document.addEventListener('toggle',function(event){
     const candidates=[],now=Date.now();
     const addIso=value=>{if(value){const t=new Date(value).getTime();if(Number.isFinite(t)&&t>now+500)candidates.push(t);}};
     const addClock=value=>{if(typeof value!=='string')return;const m=value.match(/^(\d{1,2}):(\d{2})/);if(!m)return;const d=new Date();const t=new Date(d.getFullYear(),d.getMonth(),d.getDate(),Number(m[1]),Number(m[2])).getTime();if(t>now+500)candidates.push(t);};
+    const upcoming=result.data?.nextEvents||result.details?.nextEvents||[];\n    upcoming.forEach(item=>addIso(item.at));
     const ends=result.details?.astronomyEndsAt||{};
     Object.values(ends).forEach(addIso);
     const d=result.data||{};
