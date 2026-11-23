@@ -3952,20 +3952,20 @@ document.addEventListener('toggle',function(event){
       const c=cells[i],group=make('g',{});
       // हर भाव में केवल राशि क्रमांक (1–12) दिखेगा। लग्न राशि से क्रम निकालने पर 12 भावों में 12 अलग-अलग राशियाँ रहेंगी।
       const signNumber=(((Number(h.signIndex)||0)%12)+12)%12+1;
-      group.append(make('text',{x:c.x,y:c.y-22,class:'kundali-rashi'},String(signNumber)));
+      group.append(make('text',{x:c.x,y:c.y-8,class:'kundali-rashi'},String(signNumber)));
       if(i===0){
-        group.append(make('text',{x:c.x,y:c.y-9,class:'kundali-lagna'},'लग्न '+Number(kundali.lagna?.degrees||0).toFixed(2)+'°'));
+        group.append(make('text',{x:c.x,y:c.y+6,class:'kundali-lagna'},'लग्न '+Number(kundali.lagna?.degrees||0).toFixed(2)+'°'));
       }
       const list=h.grahas||[];
       if(!list.length){
-        group.append(make('text',{x:c.x,y:c.y+8,class:'kundali-empty'},'—'));
+        group.append(make('text',{x:c.x,y:c.y+15,class:'kundali-empty'},'—'));
       }else{
-        const step=list.length>2?17:19;
+        const step=list.length>2?14:16;
         list.forEach((g,j)=>{
           const name=(typeof g==='string'?g:g.name)||'ग्रह';
           const deg=typeof g==='string'?'':Number(g.degrees||0).toFixed(1)+'°';
           const state=typeof g==='string'?'':shortState(g);
-          const yy=c.y+(i===0?7:5)+j*step;
+          const yy=c.y+(i===0?20:12)+j*step;
           group.append(make('text',{x:c.x,y:yy,class:'kundali-planet-line'},name+' '+deg+(state?' · '+state:'')));
         });
       }
