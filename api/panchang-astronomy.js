@@ -54,8 +54,10 @@ function lunarLongitude(jd) {
 function ayanamsha(jd, system='lahiri') {
   const T = (jd - 2451545.0) / 36525;
   const lahiri = 23.85675 + 1.3969713*T + 0.0003086*T*T;
-  if (system === 'raman') return lahiri - 1.46;
-  if (system === 'kp') return lahiri; // Provisional only; true KP settings require validation.
+  // Mean ayanamsha offsets: KP New is about 5'48" below Lahiri;
+  // B.V. Raman is about 1°26'46" below Lahiri.
+  if (system === 'raman') return lahiri - (1 + 26/60 + 46/3600);
+  if (system === 'kp') return lahiri - (5/60 + 48/3600);
   return lahiri;
 }
 
@@ -131,7 +133,8 @@ function orbitalPosition(name, d) {
     venus:[76.6799+2.4659e-5*d,3.3946+2.75e-8*d,54.8910+1.38374e-5*d,0.723330,0.006773-1.302e-9*d,48.0052+1.6021302244*d],
     mars:[49.5574+2.11081e-5*d,1.8497-1.78e-8*d,286.5016+2.92961e-5*d,1.523688,0.093405+2.516e-9*d,18.6021+0.5240207766*d],
     jupiter:[100.4542+2.76854e-5*d,1.3030-1.557e-7*d,273.8777+1.64505e-5*d,5.20256,0.048498+4.469e-9*d,19.8950+0.0830853001*d],
-    saturn:[113.6634+2.3898e-5*d,2.4886-1.081e-7*d,339.3939+2.97661e-5*d,9.55475,0.055546-9.499e-9*d,316.9670+0.0334442282*d]
+    saturn:[113.6634+2.3898e-5*d,2.4886-1.081e-7*d,339.3939+2.97661e-5*d,9.55475,0.055546-9.499e-9*d,316.9670+0.0334442282*d],
+    earth:[0,0,282.9404+4.70935e-5*d,1,0.016709-1.151e-9*d,356.0470+0.9856002585*d]
   }[name];
   const [N,i,w,a,e,M0]=el, M=norm(M0);
   let E=M+e/DEG*sin(M)*(1+e*cos(M));
@@ -145,15 +148,13 @@ function orbitalPosition(name, d) {
 }
 function planetaryLongitudes(jd, ay) {
   const d=jd-2451543.5;
-  const sunLon=solarLongitude(jd);
-  const sunR=1.00014*(1.00014); // scale is immaterial to longitude; refined Earth radius below
-  const earthAngle=(sunLon+180)*DEG;
-  const earth={x:Math.cos(earthAngle),y:Math.sin(earthAngle),z:0};
+  // Earth heliocentric vector: use its eccentric orbit, not a circular 1 AU approximation.
+  const earth=orbitalPosition('earth',d);
   const planets=[];
   const hindiNames={mercury:'बुध',venus:'शुक्र',mars:'मंगल',jupiter:'गुरु',saturn:'शनि'};
   for(const name of ['mercury','venus','mars','jupiter','saturn']){
     const p=orbitalPosition(name,d);
-    const lon=norm(Math.atan2(p.y+Math.sin(sunLon*DEG),p.x+Math.cos(sunLon*DEG))/DEG-ay);
+    const lon=norm(Math.atan2(p.y-earth.y,p.x-earth.x)/DEG-ay);
     const sid=norm(lon);
     planets.push({name:hindiNames[name],longitude:Number(sid.toFixed(4)),rashi:RASHIS[Math.floor(sid/30)],degrees:Number((sid%30).toFixed(4)),calculation:'approximate'});
   }
@@ -333,7 +334,7 @@ function calculate(input={}) {
   }
   return {
     engine: 'independent-meeus-lite',
-    engineVersion: '0.5.1',
+    engineVersion: '0.5.2',
     julianDay: Number(jd.toFixed(6)),
     utc: utc.toISOString(),
     ayanamsha: { system, degrees: Number(ay.toFixed(6)), status: 'approximate' },
