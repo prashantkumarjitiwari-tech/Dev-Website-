@@ -50,8 +50,8 @@ function calculate(date) {
   const dayDurmuhurta={0:[14],1:[9,12],2:[4],3:[8],4:[6,12],5:[4,9],6:[1,2]};
   const nightDurmuhurta={0:[],1:[8],2:[7],3:[],4:[],5:[8],6:[1]};
   const durmuhurta=[
-    ...dayDurmuhurta[dow].map(n=>({part:'day',number:n,name:'दुर्मुहूर्त',...interval(sunrise,sunset,(n-1)*dayMs/15/60000,n*dayMs/15/60000)})),
-    ...nightDurmuhurta[dow].map(n=>({part:'night',number:n,name:'दुर्मुहूर्त',...interval(sunset,addMinutes(sunset,nightMs/60000),(n-1)*nightMs/15/60000,n*nightMs/15/60000)}))
+    ...dayDurmuhurta[dow].map(n=>({part:'day',number:n,name:'दिन का दुर्मुहूर्त • '+n+'वाँ',...interval(sunrise,sunset,(n-1)*dayMs/15/60000,n*dayMs/15/60000)})),
+    ...nightDurmuhurta[dow].map(n=>({part:'night',number:n,name:'रात्रि का दुर्मुहूर्त • '+n+'वाँ',...interval(sunset,addMinutes(sunset,nightMs/60000),(n-1)*nightMs/15/60000,n*nightMs/15/60000)}))
   ];
   const periods={
     rahuKaal:interval(sunrise,sunset,rahu[dow]*unit,(rahu[dow]+1)*unit),
