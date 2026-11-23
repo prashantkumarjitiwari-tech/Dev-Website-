@@ -148,6 +148,7 @@ function orbitalPosition(name, d) {
 }
 function planetaryLongitudes(jd, ay) {
   const d=jd-2451543.5;
+  const sunLon=solarLongitude(jd);
   // Earth heliocentric vector: use its eccentric orbit, not a circular 1 AU approximation.
   const earth=orbitalPosition('earth',d);
   const planets=[];
