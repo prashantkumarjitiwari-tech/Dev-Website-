@@ -150,8 +150,9 @@ module.exports = (req, res) => {
     const observance = ['smarta','vaishnava','braj'].includes(query.observance) ? query.observance : 'braj';
     const options = require('./panchang-options');
     const selected = options.resolveSelection({ profile, ayanamsha, observance });
+    const time = query.time || (requested ? '12:00:00' : currentTimeIST());
     const calculated = astronomy.calculate({
-      date, time: '12:00:00', timezone: TZ_OFFSET,
+      date, time, timezone: TZ_OFFSET,
       ayanamsha,
       latitude: LAT, longitude: LON
     });
@@ -184,7 +185,8 @@ module.exports = (req, res) => {
       durmuhurta: day.durmuhurta,
       choghadiya: day.choghadiya,
       hora: day.hora,
-      grahas: calculated.grahas
+      grahas: calculated.grahas,
+      kundali: calculated.kundali
     };
     return res.status(200).json({
       date: { year: Number(date.slice(0, 4)), month: Number(date.slice(5, 7)), date: Number(date.slice(8, 10)) },
