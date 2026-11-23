@@ -3601,8 +3601,9 @@
             element.setAttribute(attribute, dictionary[original] || original);
           });
         });
-        document.documentElement.lang = code || 'hi';
-        try { localStorage.setItem('devSiteLanguage', code || 'hi'); } catch (e) {}
+        activeLanguage = code || 'hi';
+        document.documentElement.lang = activeLanguage;
+        try { localStorage.setItem('devSiteLanguage', activeLanguage); } catch (e) {}
       }
       window.changeSiteLanguage = applyLanguage;
       function restoreSavedLanguage() {
