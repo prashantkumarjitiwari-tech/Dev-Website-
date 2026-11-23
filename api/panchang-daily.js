@@ -47,6 +47,12 @@ function calculate(date) {
   if(!sunrise||!sunset)throw new Error('सूर्योदय/सूर्यास्त इस स्थान के लिए निर्धारित नहीं हो सके');
   const [y,m,d]=date.split('-').map(Number), dow=new Date(Date.UTC(y,m-1,d)).getUTCDay();
   const dayMs=new Date(sunset)-new Date(sunrise), unit=dayMs/8/60000;
+  const dayDurmuhurta={0:[14],1:[9,12],2:[4],3:[8],4:[6,12],5:[4,9],6:[1,2]};
+  const nightDurmuhurta={0:[],1:[8],2:[7],3:[],4:[],5:[8],6:[1]};
+  const durmuhurta=[
+    ...dayDurmuhurta[dow].map(n=>({part:'day',number:n,name:'दुर्मुहूर्त',...interval(sunrise,sunset,(n-1)*dayMs/15/60000,n*dayMs/15/60000)})),
+    ...nightDurmuhurta[dow].map(n=>({part:'night',number:n,name:'दुर्मुहूर्त',...interval(sunset,addMinutes(sunset,nightMs/60000),(n-1)*nightMs/15/60000,n*nightMs/15/60000)}))
+  ];
   const periods={
     rahuKaal:interval(sunrise,sunset,rahu[dow]*unit,(rahu[dow]+1)*unit),
     gulika:interval(sunrise,sunset,gulika[dow]*unit,(gulika[dow]+1)*unit),
@@ -69,6 +75,6 @@ function calculate(date) {
   const dayNames=[...choghadiya[dow],choghadiya[dow][0]], nightNames=[...choghadiya[(dow+1)%7],choghadiya[(dow+1)%7][0]];
   const makeCh=(start,total,names,part)=>names.map((name,i)=>({name,part,start:addMinutes(start,i*total/8),end:addMinutes(start,(i+1)*total/8)}));
   const ch=[...makeCh(sunrise,dayMs/60000,dayNames,'day'),...makeCh(sunset,nightMs/60000,nightNames,'night')];
-  return {weekday:weekdayNames[dow],sunrise,sunset,periods,hora,choghadiya:ch};
+  return {weekday:weekdayNames[dow],sunrise,sunset,periods,durmuhurta,hora,choghadiya:ch};
 }
 module.exports={calculate};
