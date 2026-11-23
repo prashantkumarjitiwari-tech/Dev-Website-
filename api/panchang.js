@@ -1,6 +1,7 @@
 'use strict';
 
 // Fully local Panchang endpoint. No third-party Panchang API is called.
+const RASHI_NAMES_FOR_API = ['मेष','वृषभ','मिथुन','कर्क','सिंह','कन्या','तुला','वृश्चिक','धनु','मकर','कुम्भ','मीन'];
 const LAT = 27.565;
 const LON = 77.659;
 const TZ_OFFSET = 5.5;
@@ -158,7 +159,7 @@ function formatRange(value) {
     : null;
 }
 
-module.exports = (req, res) => {
+module.exports = async (req, res) => {
   res.setHeader('Cache-Control', 'no-store');
   if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
   try {
@@ -181,6 +182,30 @@ module.exports = (req, res) => {
       ayanamsha,
       latitude: LAT, longitude: LON
     });
+    let ephemeris = { available: false, engine: 'meeus-fallback', note: 'स्विस एफेमेरिस उपलब्ध न होने पर प्रारंभिक ग्रह-गणना उपयोग हुई।' };
+    try {
+      const swiss = await require('./swiss-ephemeris').calculateSwiss({ date, time, ayanamsha });
+      const names = { sun: 'सूर्य', moon: 'चन्द्र', mars: 'मंगल', mercury: 'बुध', jupiter: 'गुरु', venus: 'शुक्र', saturn: 'शनि', rahu: 'राहु', ketu: 'केतु' };
+      const oldByName = new Map(calculated.grahas.map(g => [g.name, g]));
+      const swissGrahas = Object.entries(names).map(([key, name]) => {
+        const p = swiss.positions[key];
+        const longitude = ((p.longitude % 360) + 360) % 360;
+        const base = oldByName.get(name) || {};
+        const rashiIndex = Math.floor(longitude / 30);
+        return { ...base, name, longitude: Number(longitude.toFixed(6)), rashi: RASHI_NAMES_FOR_API[rashiIndex], degrees: Number((longitude % 30).toFixed(6)), retrograde: !!p.retrograde, calculation: 'swiss-ephemeris', ephemeris: p.ephemeris };
+      });
+      const lagnaIndex = RASHI_NAMES_FOR_API.indexOf(calculated.kundali.lagna.rashi);
+      swissGrahas.forEach(g => { g.house = ((RASHI_NAMES_FOR_API.indexOf(g.rashi) - lagnaIndex + 12) % 12) + 1; });
+      calculated.grahas = swissGrahas;
+      calculated.kundali.houses.forEach(h => { h.grahas = swissGrahas.filter(g => g.house === h.house); });
+      calculated.positions.sun.siderealLongitude = swiss.positions.sun.longitude;
+      calculated.positions.moon.siderealLongitude = swiss.positions.moon.longitude;
+      calculated.ayanamsha.degrees = Number(swiss.ayanamsha.toFixed(6));
+      calculated.ayanamsha.status = 'swiss-ephemeris';
+      ephemeris = { available: true, engine: swiss.engine, version: swiss.engineVersion, source: swiss.ephemeris, data: swiss.ephemerisData, note: 'ग्रहों की निरयन देशांतर स्थिति स्विस एफेमेरिस से निकाली गई है।' };
+    } catch (swissError) {
+      ephemeris = { available: false, engine: 'meeus-fallback', error: swissError.message, note: 'स्विस एफेमेरिस लोड नहीं हुआ; ग्रह-स्थिति प्रारंभिक Meeus सूत्रों से दिखाई गई है।' };
+    }
     const day = daily.calculate(date);
     const inauspicious = calculateBhadraAndVarjya(date, calculated.ayanamsha.system);
     const traditional = traditionalCalendar(date, calculated);
@@ -237,9 +262,10 @@ module.exports = (req, res) => {
       extendedAvailable: false,
       providers: { navamsha: false, astroLogics: false, goPixel: false, independent: true },
       fallback: false,
-      engine: calculated.engine,
-      engineVersion: calculated.engineVersion,
-      accuracyNotice: calculated.accuracyNotice,
+      engine: ephemeris.available ? ephemeris.engine : calculated.engine,
+      engineVersion: ephemeris.available ? ephemeris.version : calculated.engineVersion,
+      ephemeris,
+      accuracyNotice: (ephemeris.available ? ephemeris.note + ' तिथि/नक्षत्र/योग/करण के समय और कुछ दैनिक काल अभी अलग प्रारंभिक गणना से हैं; पंचांग-परंपरा सत्यापन शेष है।' : ephemeris.note + ' ' + calculated.accuracyNotice),
       updatedAt: new Date().toISOString()
     });
   } catch (error) {
