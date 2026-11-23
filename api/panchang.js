@@ -100,6 +100,9 @@ module.exports = (req, res) => {
       abhijit: formatRange(day.periods.abhijit),
       brahma: formatRange(day.periods.brahma),
       amrit: null,
+      bhadra: inauspicious.bhadra,
+      varjya: inauspicious.varjya,
+      durmuhurta: day.durmuhurta,
       choghadiya: day.choghadiya,
       hora: day.hora,
       grahas: calculated.grahas
