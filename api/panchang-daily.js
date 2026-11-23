@@ -46,7 +46,7 @@ function calculate(date) {
   const sunrise=solarEvent(date,true), sunset=solarEvent(date,false);
   if(!sunrise||!sunset)throw new Error('सूर्योदय/सूर्यास्त इस स्थान के लिए निर्धारित नहीं हो सके');
   const [y,m,d]=date.split('-').map(Number), dow=new Date(Date.UTC(y,m-1,d)).getUTCDay();
-  const dayMs=new Date(sunset)-new Date(sunrise), unit=dayMs/8/60000;
+  const dayMs=new Date(sunset)-new Date(sunrise), nightMs=24*60*60000-dayMs, unit=dayMs/8/60000;
   const dayDurmuhurta={0:[14],1:[9,12],2:[4],3:[8],4:[6,12],5:[4,9],6:[1,2]};
   const nightDurmuhurta={0:[],1:[8],2:[7],3:[],4:[],5:[8],6:[1]};
   const durmuhurta=[
@@ -60,7 +60,7 @@ function calculate(date) {
     abhijit:interval(sunrise,sunset,dayMs/2/60000-unit/2,dayMs/2/60000+unit/2),
     brahma: {start:addMinutes(sunrise,-96),end:addMinutes(sunrise,-48)}
   };
-  const nightMs=24*60*60000-dayMs, nextSunrise=addMinutes(sunrise,1440);
+  const nextSunrise=addMinutes(sunrise,1440);
   const hora=[];
   // Chaldean planetary-hour sequence starts with weekday lord.
   const order=['शनि','बृहस्पति','मंगल','सूर्य','शुक्र','बुध','चन्द्र'];
