@@ -49,6 +49,16 @@ async function calculateSwiss(input) {
     const speedFlag = enumValue(Flag, ['Speed'], 'Flag.Speed');
     swe.setSiderealMode(mode);
 
+    const [calcYear] = input.date.split('-').map(Number);
+    let dataStatus = { loaded: [], missing: [], bytes: 0 };
+    if (typeof pkg.FetchEphemeris === 'function' && typeof swe.loadEphemeris === 'function') {
+      dataStatus = await swe.loadEphemeris(new pkg.FetchEphemeris(), {
+        fromYear: Math.max(1800, calcYear),
+        toYear: Math.min(2399, calcYear),
+        fixedStars: false
+      });
+    }
+
     const jd = utcJulianDay(swe, input.date, input.time);
     const positions = {};
     let actualEphemeris = 'swiss';
@@ -74,6 +84,7 @@ async function calculateSwiss(input) {
       ayanamsha: swe.ayanamsa(jd),
       positions,
       ephemeris: actualEphemeris,
+      ephemerisData: dataStatus,
       engine: '@kuntay/swisseph',
       engineVersion: '0.2.2'
     };
