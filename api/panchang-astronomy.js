@@ -169,6 +169,15 @@ function planetaryLongitudes(jd, ay) {
 }
 
 
+function ascendantLongitude(jd, latitude, longitude, ay) {
+  const T=centuries(jd);
+  const gmst=norm(280.46061837+360.98564736629*(jd-2451545)+0.000387933*T*T-T*T*T/38710000);
+  const theta=norm(gmst+longitude)*DEG;
+  const eps=(23.439291-0.0130042*T)*DEG;
+  const phi=latitude*DEG;
+  const tropical=norm(Math.atan2(-Math.cos(theta),Math.sin(eps)*Math.tan(phi)+Math.cos(eps)*Math.sin(theta))/DEG);
+  return norm(tropical-ay);
+}
 function lunarLatitude(jd) {
   const T=centuries(jd);
   const D=norm(297.8501921+445267.1114034*T-0.0018819*T*T);
@@ -232,7 +241,7 @@ function calculate(input={}) {
     sun: riseSetForLocalDate(dateText, Number(input.latitude), Number(input.longitude), offset, 'sun'),
     moon: riseSetForLocalDate(dateText, Number(input.latitude), Number(input.longitude), offset, 'moon')
   } : null;
-  const grahas = planetaryLongitudes(jd, ay);
+  const grahas = planetaryLongitudes(jd, ay);\n  const lagnaLongitude=ascendantLongitude(jd,Number(input.latitude||0),Number(input.longitude||0),ay);\n  const lagnaRashi=Math.floor(lagnaLongitude/30);\n  const kundali={lagna:{longitude:Number(lagnaLongitude.toFixed(4)),rashi:RASHIS[lagnaRashi],degrees:Number((lagnaLongitude%30).toFixed(4))},houses:Array.from({length:12},(_,i)=>({house:i+1,rashi:RASHIS[(lagnaRashi+i)%12],signIndex:(lagnaRashi+i)%12,grahas:[]}))};\n  grahas.forEach(g=>{const house=((RASHIS.indexOf(g.rashi)-lagnaRashi+12)%12)+1;g.house=house;kundali.houses[house-1].grahas.push(g.name);});
   const endsAt = {};
   for (const key of ['tithi','nakshatra','yoga','karana']) {
     const boundary = nextBoundary(jd, key, system);
@@ -256,4 +265,4 @@ function calculate(input={}) {
   };
 }
 
-module.exports = { calculate, julianDay, solarLongitude, lunarLongitude, ayanamsha, limbIndices, nextBoundary, planetaryLongitudes, riseSetForLocalDate, lunarLatitude };
+module.exports = { calculate, julianDay, solarLongitude, lunarLongitude, ayanamsha, limbIndices, nextBoundary, planetaryLongitudes, riseSetForLocalDate, lunarLatitude, ascendantLongitude };
