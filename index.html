@@ -3937,7 +3937,8 @@ document.addEventListener('toggle',function(event){
     renderCards('panchang-varjya',d.varjya||det.varjya||[],'name');
     renderCards('panchang-durmuhurta',det.durmuhurta||d.durmuhurta||[],'name');
     renderGrahaCards(d.grahas||det.grahas||[]);
-    renderKundali(d.kundali||det.kundali,result.calculationTime);\n    renderNextEvents(d.nextEvents||det.nextEvents);
+    renderKundali(d.kundali||det.kundali,result.calculationTime);
+    renderNextEvents(d.nextEvents||det.nextEvents);
   }
   let lastLoadedDate='';
   async function load(){
