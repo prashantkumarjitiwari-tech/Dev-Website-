@@ -3982,7 +3982,7 @@ document.addEventListener('toggle',function(event){
     renderCards('panchang-varjya',d.varjya||det.varjya||[],'name');
     renderCards('panchang-durmuhurta',det.durmuhurta||d.durmuhurta||[],'name');
     renderKundali(d.kundali||det.kundali,result.calculationTime);
-    renderNextEvents(d.nextEvents||det.nextEvents);\n    renderAnnualTransits(t.samvatsaraPeriod,t.samvatsaraTransits||det.annualGrahaTransits||[]);
+    renderNextEvents(d.nextEvents||det.nextEvents);\n    renderAnnualTransits(result.traditional?.samvatsaraPeriod,result.traditional?.samvatsaraTransits||det.annualGrahaTransits||[]);
   }
   let lastLoadedDate='';
   async function load(){
