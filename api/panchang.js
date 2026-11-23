@@ -68,7 +68,7 @@ function traditionalCalendar(date, calculated) {
   const sign=((Math.floor(((sun%360)+360)%360/30))%12);
   const [year,month,day]=date.split('-').map(Number);
   const tithiIndex=astronomy.limbIndices(jd,calculated.ayanamsha.system).tithi;
-  const afterChaitraNewYear=(sign===11 && tithiIndex<15) || sign<=10;
+  const afterChaitraNewYear=month>=4 || (month===3 && sign===11 && tithiIndex<15);
   const vikramSamvat=year+(afterChaitraNewYear?57:56);
   const samvatsaraIndex=((vikramSamvat-2044)%60+60)%60;
   const ayana=(sign>=9 || sign<=2)?'उत्तरायण':'दक्षिणायन';
