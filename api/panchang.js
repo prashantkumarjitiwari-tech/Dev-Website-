@@ -186,7 +186,8 @@ module.exports = (req, res) => {
       choghadiya: day.choghadiya,
       hora: day.hora,
       grahas: calculated.grahas,
-      kundali: calculated.kundali
+      kundali: calculated.kundali,
+      nextEvents: calculated.nextEvents
     };
     return res.status(200).json({
       date: { year: Number(date.slice(0, 4)), month: Number(date.slice(5, 7)), date: Number(date.slice(8, 10)) },
@@ -198,7 +199,7 @@ module.exports = (req, res) => {
       details: {
         periods: day.periods, durmuhurta: day.durmuhurta, bhadra: inauspicious.bhadra, varjya: inauspicious.varjya, choghadiya: day.choghadiya, hora: day.hora,
         astronomy: calculated.positions, grahas: calculated.grahas,
-        riseSet: calculated.riseSet, astronomyEndsAt: calculated.endsAt,
+        riseSet: calculated.riseSet, astronomyEndsAt: calculated.endsAt, nextEvents: calculated.nextEvents,
         julianDay: calculated.julianDay
       },
       astroAvailable: false,
