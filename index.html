@@ -3882,7 +3882,7 @@ document.addEventListener('toggle',function(event){
       card.append(name,sign,deg);root.append(card);
     });
   }
-  function renderKundali(kundali){
+  function renderKundali(kundali,calculationTime){
     const svg=document.getElementById('panchang-kundali-svg'),lagna=document.getElementById('panchang-kundali-lagna');
     if(!svg)return;
     if(!kundali||!Array.isArray(kundali.houses)){svg.innerHTML='';if(lagna)lagna.textContent='कुंडली डेटा उपलब्ध नहीं है';return;}
@@ -3915,7 +3915,7 @@ document.addEventListener('toggle',function(event){
     renderCards('panchang-varjya',d.varjya||det.varjya||[],'name');
     renderCards('panchang-durmuhurta',det.durmuhurta||d.durmuhurta||[],'name');
     renderGrahaCards(d.grahas||det.grahas||[]);
-    renderKundali(d.kundali||det.kundali);
+    renderKundali(d.kundali||det.kundali,result.calculationTime);
   }
   let lastLoadedDate='';
   async function load(){
@@ -4000,6 +4000,7 @@ document.addEventListener('toggle',function(event){
   document.addEventListener('visibilitychange',()=>{if(!document.hidden&&lastLoadedDate!==currentISTDateKey())load();});
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',load,{once:true});else load();
   scheduleMidnightRefresh();
+  setInterval(()=>{if(!document.hidden)load();},60000);
 })();
 </script>
 
