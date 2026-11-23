@@ -24,10 +24,11 @@ function solarEvent(date, rise) {
   const local=((utc+OFFSET)%24+24)%24;
   const base=Date.UTC(y,m-1,d);
   const mins=Math.round(local*60);
-  return new Date(base+mins*60000).toISOString().replace('Z','+05:30');
+  // mins is local wall-clock time; convert it to the actual UTC instant.
+  return new Date(base+mins*60000-OFFSET*3600000).toISOString();
 }
 function fmt(iso){return new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Kolkata',hour:'2-digit',minute:'2-digit',hour12:false}).format(new Date(iso));}
-function addMinutes(iso,mins){return new Date(new Date(iso).getTime()+mins*60000).toISOString().replace('Z','+05:30');}
+function addMinutes(iso,mins){return new Date(new Date(iso).getTime()+mins*60000).toISOString();}
 function interval(start,end,a,b){return {start:addMinutes(start,a),end:addMinutes(start,b)};}
 const rahu=[8,2,7,5,6,4,3], gulika=[6,5,4,3,2,1,0], yama=[4,3,2,1,0,6,5];
 const weekdayNames=['रविवार','सोमवार','मंगलवार','बुधवार','गुरुवार','शुक्रवार','शनिवार'];
