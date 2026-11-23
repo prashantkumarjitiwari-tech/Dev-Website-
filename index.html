@@ -175,7 +175,7 @@
       .drive-iframe,#drive-pdf-list .drive-pdf-item .drive-iframe { height:350px; }
     }
   
-/* Panchang chart cards */
+/* Panchang chart cards */.panchang-graha-card strong{display:block;font-size:13px;margin:3px 0 2px;font-weight:700}.panchang-graha-card small{font-size:11px!important;font-weight:600}
 .panchang-chart-holder{display:block!important}.panchang-chart-holder>b{display:block;margin-bottom:10px}.panchang-chart-grid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;white-space:normal!important}.panchang-chart-card{min-width:0;border-radius:12px;padding:10px 6px;text-align:center;background:#e9f8ef;color:#245c3b;border:1px solid rgba(54,145,91,.12);line-height:1.35}.panchang-chart-card:nth-child(3n+2){background:#fcebed;color:#8a3c4a}.panchang-chart-card:nth-child(3n){background:#f2edfa;color:#594579}.panchang-chart-card b{display:block;font-size:13px;margin-bottom:4px}.panchang-chart-card small{display:block;font-size:10px;overflow-wrap:anywhere}.panchang-chart-empty{grid-column:1/-1;padding:10px;color:#82786b;font-size:12px;background:#faf7f0;border-radius:9px}@media(max-width:420px){.panchang-chart-grid{gap:6px}.panchang-chart-card{padding:9px 4px}.panchang-chart-card b{font-size:12px}.panchang-chart-card small{font-size:9px}}
 </style>
 
@@ -1108,7 +1108,7 @@
       <details class="panchang-topic">
         <summary><span class="panchang-topic-icon">☷</span><span class="panchang-topic-copy"><b>ग्रह स्थिति चार्ट</b><small>नवग्रहों की राशि स्थिति</small></span><i class="fa-solid fa-chevron-down panchang-chevron"></i></summary>
         <div class="panchang-topic-body"><div class="panchang-detail-grid">
-          <div class="panchang-detail-item panchang-detail-wide"><b>नवग्रहों की राशि स्थिति</b><span id="panchang-grahas">—</span></div>
+          <div class="panchang-detail-item panchang-detail-wide panchang-chart-holder"><b>नवग्रह स्थिति — राशि एवं अंश</b><span id="panchang-grahas" class="panchang-chart-grid">ग्रहों की गणना प्राप्त की जा रही है…</span><small style="display:block;margin-top:9px;color:#9b8b70;font-size:11px">प्रत्येक कार्ड में ग्रह, राशि और उस राशि में अंश दिखेंगे। ग्रह-स्थितियाँ प्रारंभिक स्वतंत्र गणना पर आधारित हैं; उच्च-परिशुद्धता ephemeris से मिलान बाकी है।</small></div>
         </div></div>
       </details>
     </div>
@@ -3764,6 +3764,22 @@ document.addEventListener('toggle',function(event){
       card.append(name,range);root.append(card);
     });
   }
+  function renderGrahaCards(grahas){
+    const root=document.getElementById('panchang-grahas');if(!root)return;
+    root.replaceChildren();
+    if(!Array.isArray(grahas)||!grahas.length){
+      const empty=document.createElement('span');empty.className='panchang-chart-empty';empty.textContent='ग्रह स्थिति का डेटा उपलब्ध नहीं है';root.append(empty);return;
+    }
+    const symbols={सूर्य:'☉',चन्द्र:'☽',चंद्र:'☽',बुध:'☿',शुक्र:'♀',मंगल:'♂',गुरु:'♃',बृहस्पति:'♃',शनि:'♄',राहु:'☊',केतु:'☋'};
+    grahas.forEach(g=>{
+      const card=document.createElement('span');card.className='panchang-chart-card panchang-graha-card';
+      const name=document.createElement('b');name.textContent=(symbols[g.name]||'✦')+' '+(g.name||'ग्रह');
+      const sign=document.createElement('strong');sign.textContent=g.rashi||'राशि अनुपलब्ध';
+      const deg=document.createElement('small');const value=Number(g.degrees);
+      deg.textContent=Number.isFinite(value)?value.toFixed(2)+'°':(g.longitude!==undefined?'दीर्घांश '+g.longitude+'°':'अंश अनुपलब्ध');
+      card.append(name,sign,deg);root.append(card);
+    });
+  }
   function renderCharts(result){
     const d=result.data||{},det=result.details||{};
     const ch=det.choghadiya||d.choghadiya||[];
@@ -3772,6 +3788,7 @@ document.addEventListener('toggle',function(event){
     const hora=det.hora||d.hora||[];
     renderCards('panchang-hora-day',hora.filter(x=>x.part==='day'),'lord');
     renderCards('panchang-hora-night',hora.filter(x=>x.part==='night'),'lord');
+    renderGrahaCards(d.grahas||det.grahas||[]);
   }
   async function load(){
     const status=document.getElementById('panchang-status');
