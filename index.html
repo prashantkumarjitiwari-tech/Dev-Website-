@@ -3694,15 +3694,31 @@
       }
     }
 
+    const MENU_HISTORY_KEY = 'devSiteMenu';
     function toggleMenu() {
       const menu = document.getElementById('dropdownMenu');
-      menu.classList.toggle('active');
+      if (!menu) return;
+      if (menu.classList.contains('active')) { closeMenu(); return; }
+      const state = Object.assign({}, history.state || {});
+      state[MENU_HISTORY_KEY] = true;
+      history.pushState(state, '', location.href);
+      menu.classList.add('active');
     }
 
     function closeMenu() {
       const menu = document.getElementById('dropdownMenu');
+      if (!menu || !menu.classList.contains('active')) return;
       menu.classList.remove('active');
+      if (history.state && history.state[MENU_HISTORY_KEY]) history.back();
     }
+
+    // Android/browser Back closes an open menu before leaving the current section.
+    window.addEventListener('popstate', function () {
+      const menu = document.getElementById('dropdownMenu');
+      if (!history.state || !history.state[MENU_HISTORY_KEY]) {
+        if (menu) menu.classList.remove('active');
+      }
+    });
 
     // Close only when tapping outside the menu; keep it open while using language selector.
     document.addEventListener('click', function(event) {
