@@ -1056,6 +1056,24 @@
       <button type="button" class="panchang-share-btn" id="panchang-share" onclick="shareDailyPanchang()"><i class="fa-solid fa-share-nodes"></i> शेयर करें</button>
     </div>
 
+    <div class="panchang-settings" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:10px;margin:14px 0;padding:13px;border:1px solid rgba(168,121,40,.2);border-radius:14px;background:#fffaf0">
+      <label style="display:grid;gap:5px;font-size:12px;font-weight:700;color:#76521d">पंचांग परंपरा
+        <select id="panchang-profile" style="width:100%;padding:9px;border:1px solid #d8c39a;border-radius:8px;background:#fff;color:#493b2b">
+          <option value="kashi_vishwanath">काशी विश्वनाथ</option><option value="rishikesh">ऋषिकेश</option><option value="drik">दृक गणना</option><option value="vaishnav_braj">वैष्णव / ब्रज</option>
+        </select>
+      </label>
+      <label style="display:grid;gap:5px;font-size:12px;font-weight:700;color:#76521d">अयनांश
+        <select id="panchang-ayanamsha" style="width:100%;padding:9px;border:1px solid #d8c39a;border-radius:8px;background:#fff;color:#493b2b">
+          <option value="lahiri">लाहिड़ी</option><option value="kp">के.पी.</option><option value="raman">रमन</option>
+        </select>
+      </label>
+      <label style="display:grid;gap:5px;font-size:12px;font-weight:700;color:#76521d">व्रत / उत्सव नियम
+        <select id="panchang-observance" style="width:100%;padding:9px;border:1px solid #d8c39a;border-radius:8px;background:#fff;color:#493b2b">
+          <option value="braj">ब्रज</option><option value="vaishnava">वैष्णव</option><option value="smarta">स्मार्त</option>
+        </select>
+      </label>
+    </div>
+    <p id="panchang-settings-note" style="margin:0 0 12px;font-size:11px;line-height:1.6;color:#786b59">गणना विकल्प चुनें। जिन परंपराओं का प्रकाशन-संस्करण सत्यापित नहीं है, उन्हें अभी प्रमाणित पंचांग न मानें।</p>
     <div class="panchang-summary-grid panchang-basic-grid">
       <div class="panchang-summary-item"><span>तिथि / पक्ष</span><strong id="panchang-tithi">लोड हो रहा है…</strong></div>
       <div class="panchang-summary-item"><span>वार</span><strong id="panchang-vara">लोड हो रहा है…</strong></div>
@@ -3863,7 +3881,11 @@ document.addEventListener('toggle',function(event){
   async function load(){
     const status=document.getElementById('panchang-status');
     try{
-      const response=await fetch('/api/panchang',{headers:{'Accept':'application/json'},cache:'no-store'});
+      const profile=document.getElementById('panchang-profile')?.value||'kashi_vishwanath';
+      const ayanamsha=document.getElementById('panchang-ayanamsha')?.value||'lahiri';
+      const observance=document.getElementById('panchang-observance')?.value||'braj';
+      const params=new URLSearchParams({profile,ayanamsha,observance});
+      const response=await fetch('/api/panchang?'+params.toString(),{headers:{'Accept':'application/json'},cache:'no-store'});
       const result=await response.json();
       if(!response.ok)throw new Error(result.error||'पंचांग उपलब्ध नहीं है');
       const d=result.data||{},t=result.traditional||{};
@@ -3894,6 +3916,13 @@ document.addEventListener('toggle',function(event){
       topics().forEach(item=>{if(item!==opened)item.open=false;});
     }
   },true);
+  ['panchang-profile','panchang-ayanamsha','panchang-observance'].forEach(id=>{
+    const control=document.getElementById(id);
+    if(!control)return;
+    const key='dev-'+id;
+    try{const saved=localStorage.getItem(key);if(saved&&[...control.options].some(o=>o.value===saved))control.value=saved;}catch(e){}
+    control.addEventListener('change',()=>{try{localStorage.setItem(key,control.value);}catch(e){}load();});
+  });
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',load,{once:true});else load();
 })();
 </script>
