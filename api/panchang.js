@@ -62,28 +62,66 @@ function calculateBhadraAndVarjya(date,system){
 const SAMVATSARA_NAMES=['प्रभव','विभव','शुक्ल','प्रमोद','प्रजापति','आङ्गिरस','श्रीमुख','भाव','युव','धाता','ईश्वर','बहुधान्य','प्रमाथी','विक्रम','वृष','चित्रभानु','स्वभानु','तारण','पार्थिव','व्यय','सर्वजित्','सर्वधारी','विरोधी','विकृति','खर','नन्दन','विजय','जय','मन्मथ','दुर्मुख','हेमलम्बी','विलम्बी','विकारी','शार्वरी','प्लव','शुभकृत्','शोभकृत्','क्रोधी','विश्वावसु','पराभव','प्लवंग','कीलक','सौम्य','साधारण','विरोधकृत्','परिधावी','प्रमादी','आनन्द','राक्षस','अनल','पिङ्गल','कालयुक्ति','सिद्धार्थी','रौद्र','दुर्मति','दुन्दुभि','रुधिरोद्गारी','रक्ताक्ष','क्रोधन','क्षय'];
 const RASHI_NAMES=['मेष','वृषभ','मिथुन','कर्क','सिंह','कन्या','तुला','वृश्चिक','धनु','मकर','कुम्भ','मीन'];
 const LUNAR_MONTHS=['चैत्र','वैशाख','ज्येष्ठ','आषाढ़','श्रावण','भाद्रपद','आश्विन','कार्तिक','मार्गशीर्ष','पौष','माघ','फाल्गुन'];
+function findLunationNewMoon(jd, direction, system) {
+  // Find the nearest 29 -> 0 tithi transition, sampling every six hours.
+  let previous=jd;
+  let previousIndex=astronomy.limbIndices(previous,system).tithi;
+  for(let step=1;step<=160;step++){
+    const current=jd+direction*step/4;
+    const currentIndex=astronomy.limbIndices(current,system).tithi;
+    const older=direction<0?current:previous;
+    const newer=direction<0?previous:current;
+    const olderIndex=direction<0?currentIndex:previousIndex;
+    const newerIndex=direction<0?previousIndex:currentIndex;
+    if(olderIndex===29&&newerIndex===0){
+      let lo=older,hi=newer;
+      for(let i=0;i<42;i++){
+        const mid=(lo+hi)/2;
+        if(astronomy.limbIndices(mid,system).tithi===29)lo=mid;
+        else hi=mid;
+      }
+      return hi;
+    }
+    previous=current;
+    previousIndex=currentIndex;
+  }
+  return null;
+}
+function siderealSolarSign(jd,system){
+  const tropical=astronomy.solarLongitude(jd);
+  const ay=astronomy.ayanamsha(jd,system);
+  return Math.floor((((tropical-ay)%360)+360)%360/30);
+}
 function traditionalCalendar(date, calculated) {
   const jd=localDateJd(date,12);
-  const sun=astronomy.solarLongitude(jd)-calculated.ayanamsha.degrees;
-  const sign=((Math.floor(((sun%360)+360)%360/30))%12);
-  const [year,month,day]=date.split('-').map(Number);
-  const tithiIndex=astronomy.limbIndices(jd,calculated.ayanamsha.system).tithi;
-  const afterChaitraNewYear=month>=4 || (month===3 && sign===11 && tithiIndex<15);
-  const vikramSamvat=year+(afterChaitraNewYear?57:56);
+  const system=calculated.ayanamsha.system;
+  const tithiIndex=astronomy.limbIndices(jd,system).tithi;
+  const previousNewMoon=findLunationNewMoon(jd,-1,system);
+  const nextNewMoon=findLunationNewMoon(jd,1,system);
+  const [year,month]=date.split('-').map(Number);
+  if(previousNewMoon===null||nextNewMoon===null){
+    return {status:'preliminary',festival:'प्रकाशित पंचांग एवं व्रत-निर्णय से सत्यापन शेष',note:'चन्द्र मास की सीमा नहीं निकाली जा सकी; पर्व-व्रत निर्णय प्रमाणित नहीं है।'};
+  }
+  const solarSign=siderealSolarSign(previousNewMoon,system);
+  const nextSolarSign=siderealSolarSign(nextNewMoon,system);
+  const monthIndex=(solarSign+1)%12;
+  const adhika=solarSign===nextSolarSign;
+  const vikramSamvat=year+((monthIndex===11&&month<=3)?56:57);
   const samvatsaraIndex=((vikramSamvat-2044)%60+60)%60;
-  const ayana=(sign>=9 || sign<=2)?'उत्तरायण':'दक्षिणायन';
-  const ritu=['वसन्त','वसन्त','ग्रीष्म','ग्रीष्म','वर्षा','वर्षा','शरद्','शरद्','हेमन्त','हेमन्त','शिशिर','शिशिर'][sign];
-  // Amanta month is estimated from the sidereal solar sign; exact new-moon month
-  // adjudication and adhika/kshaya masa need a validated ephemeris.
-  const lunarMonth=LUNAR_MONTHS[(sign+1)%12]+' (अनुमानित)';
+  const ritu=['वसन्त','वसन्त','ग्रीष्म','ग्रीष्म','वर्षा','वर्षा','शरद्','शरद्','हेमन्त','हेमन्त','शिशिर','शिशिर'][monthIndex];
+  const ayana=(siderealSolarSign(jd,system)>=9||siderealSolarSign(jd,system)<=2)?'उत्तरायण':'दक्षिणायन';
   return {
     vikramSamvat:String(vikramSamvat),
-    samvatsara:SAMVATSARA_NAMES[samvatsaraIndex]+' (अनुमानित)',
-    ayana, ritu, lunarMonth,
+    samvatsara:SAMVATSARA_NAMES[samvatsaraIndex],
+    ayana,ritu,
+    lunarMonth:(adhika?'अधिक ':'')+LUNAR_MONTHS[monthIndex],
     paksha:tithiIndex<15?'शुक्ल पक्ष':'कृष्ण पक्ष',
     festival:'प्रकाशित पंचांग एवं व्रत-निर्णय से सत्यापन शेष',
     status:'preliminary',
-    note:'संवत्सर, चन्द्र मास और ऋतु प्रारंभिक सौर-राशि आधारित अनुमान हैं; अधिक मास, क्षय मास और पर्व/व्रत निर्णय अभी प्रमाणित नहीं हैं।'
+    adhikaMasa:adhika,
+    lunationStart:jdIso(previousNewMoon),
+    nextLunationStart:jdIso(nextNewMoon),
+    note:'चन्द्र मास अमावस्या-सीमा और सूर्य की राशि से निकाला गया है; अधिक मास की पहचान प्रारंभिक है। संवत्सर/अयन तथा पर्व-व्रत निर्णय को प्रकाशित पंचांग से मिलान करना शेष है।'
   };
 }
 function formatRange(value) {
