@@ -1152,7 +1152,7 @@
       <details class="panchang-topic">
         <summary><span class="panchang-topic-icon">☷</span><span class="panchang-topic-copy"><b>ग्रह स्थिति चार्ट</b><small>नवग्रहों की राशि स्थिति</small></span><i class="fa-solid fa-chevron-down panchang-chevron"></i></summary>
         <div class="panchang-topic-body"><div class="panchang-detail-grid">
-          <div class="panchang-detail-item panchang-detail-wide panchang-chart-holder"><b>वर्तमान गोचर राशि कुंडली — उत्तर भारतीय शैली</b><div class="panchang-kundali-wrap"><svg id="panchang-kundali-svg" viewBox="0 0 400 400" role="img" aria-label="नवग्रह राशि कुंडली चार्ट"></svg></div><small class="kundali-legend">संकेत: अ = अस्त • व = वक्री • मा = मार्गी • उच्च = उच्च राशि • नीच = नीच राशि • स्व = स्वराशि</small><div class="panchang-transit-box"><b>ग्रहों के राशि परिवर्तन — समय</b><div id="panchang-next-events">परिवर्तन का समय गणना हो रहा है…</div></div><small style="display:block;margin-top:9px;color:#9b8b70;font-size:11px">यह वर्तमान समय की गोचर कुंडली है। ग्रह-स्थितियाँ प्रारंभिक स्वतंत्र गणना पर आधारित हैं; उच्च-परिशुद्धता ephemeris से मिलान बाकी है।</small></div>
+          <div class="panchang-detail-item panchang-detail-wide panchang-chart-holder"><b>वर्तमान गोचर राशि कुंडली — उत्तर भारतीय शैली</b><div class="panchang-kundali-wrap"><svg id="panchang-kundali-svg" viewBox="0 0 400 400" role="img" aria-label="नवग्रह राशि कुंडली चार्ट"></svg></div><small class="kundali-legend">संकेत: अ = अस्त • व = वक्री • मा = मार्गी • उच्च = उच्च राशि • नीच = नीच राशि • स्व = स्वराशि</small><div class="panchang-transit-box"><b>ग्रहों के राशि परिवर्तन — समय</b><div id="panchang-next-events">परिवर्तन का समय गणना हो रहा है…</div><b style="display:block;margin-top:12px">वर्तमान संवत्सर के सभी ग्रह राशि परिवर्तन</b><div id="panchang-annual-transits">वार्षिक गोचर गणना हो रही है…</div></div><small style="display:block;margin-top:9px;color:#9b8b70;font-size:11px">यह वर्तमान समय की गोचर कुंडली है। ग्रह-स्थितियाँ प्रारंभिक स्वतंत्र गणना पर आधारित हैं; उच्च-परिशुद्धता ephemeris से मिलान बाकी है।</small></div>
         </div></div>
       </details>
     </div>
@@ -3904,6 +3904,24 @@ document.addEventListener('toggle',function(event){
       row.append(left,middle,time);root.append(row);
     });
   }
+
+  function renderAnnualTransits(period,events){
+    const root=document.getElementById('panchang-annual-transits');if(!root)return;root.replaceChildren();
+    if(period){
+      const caption=document.createElement('p');caption.className='panchang-transit-period';
+      const f=new Intl.DateTimeFormat('hi-IN',{timeZone:'Asia/Kolkata',day:'numeric',month:'short',year:'numeric'});
+      caption.textContent='संवत्सर अवधि: '+f.format(new Date(period.start))+' से '+f.format(new Date(period.end));
+      root.append(caption);
+    }
+    if(!Array.isArray(events)||!events.length){const empty=document.createElement('p');empty.textContent='इस संवत्सर के गोचर समय उपलब्ध नहीं हैं।';root.append(empty);return;}
+    events.forEach(ev=>{
+      const row=document.createElement('div');row.className='panchang-transit-row';
+      const label=document.createElement('b');label.textContent=ev.name+' : '+ev.from+' → '+ev.to;
+      const dt=new Date(ev.at),when=document.createElement('span');when.className='panchang-transit-time';
+      when.textContent=new Intl.DateTimeFormat('hi-IN',{timeZone:'Asia/Kolkata',day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',hour12:true}).format(dt)+' IST';
+      row.append(label,when);root.append(row);
+    });
+  }
   function renderKundali(kundali,calculationTime){
     const svg=document.getElementById('panchang-kundali-svg');
     if(!svg)return;
@@ -3964,7 +3982,7 @@ document.addEventListener('toggle',function(event){
     renderCards('panchang-varjya',d.varjya||det.varjya||[],'name');
     renderCards('panchang-durmuhurta',det.durmuhurta||d.durmuhurta||[],'name');
     renderKundali(d.kundali||det.kundali,result.calculationTime);
-    renderNextEvents(d.nextEvents||det.nextEvents);
+    renderNextEvents(d.nextEvents||det.nextEvents);\n    renderAnnualTransits(t.samvatsaraPeriod,t.samvatsaraTransits||det.annualGrahaTransits||[]);
   }
   let lastLoadedDate='';
   async function load(){
@@ -3988,7 +4006,7 @@ document.addEventListener('toggle',function(event){
       set('panchang-paksha',t.paksha||((d.tithi||'').match(/शुक्ल पक्ष|कृष्ण पक्ष/)||[])[0]);
       set('panchang-festival',t.festival);
       const grahas=d.grahas||result.details?.grahas||t.grahas||[];
-      set('panchang-grahas',grahas.map(g=>g.name+' — '+g.rashi+(g.degrees!==undefined?' '+g.degrees+'°':'')).join(' • '));
+      
       renderCharts(result);
       scheduleTransitionRefresh(result);
       const endText=(label,value)=>value?label+' समाप्ति: '+time(value):'';
