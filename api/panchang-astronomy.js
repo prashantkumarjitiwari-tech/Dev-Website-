@@ -220,6 +220,55 @@ function bisectAltitude(lo,hi,lat,lon,body,threshold){
   return (lo+hi)/2;
 }
 
+
+const PLANET_META={
+ 'सूर्य':{exalt:0,debil:6,own:[4],combust:null},
+ 'चन्द्र':{exalt:1,debil:7,own:[3],combust:null},
+ 'मंगल':{exalt:9,debil:3,own:[0,7],combust:17},
+ 'बुध':{exalt:5,debil:11,own:[2,5],combust:14},
+ 'गुरु':{exalt:3,debil:9,own:[8,11],combust:11},
+ 'शुक्र':{exalt:11,debil:5,own:[1,6],combust:10},
+ 'शनि':{exalt:6,debil:0,own:[9,10],combust:15},
+ 'राहु':{exalt:1,debil:7,own:[],combust:null},
+ 'केतु':{exalt:7,debil:1,own:[],combust:null}
+};
+function planetStatus(g,all,retro){
+ const meta=PLANET_META[g.name]||{},sign=RASHIS.indexOf(g.rashi);
+ const sun=all.find(x=>x.name==='सूर्य');
+ const diff=sun?Math.abs(((g.longitude-sun.longitude+540)%360)-180):180;
+ const combust=meta.combust!==null&&meta.combust!==undefined&&diff<=meta.combust;
+ let dignity='सम राशि';
+ if(sign===meta.exalt)dignity='उच्च';
+ else if(sign===meta.debil)dignity='नीच';
+ else if((meta.own||[]).includes(sign))dignity='स्वराशि';
+ return {...g,retrograde:!!retro,combust,dignity,angularDistanceFromSun:Number(diff.toFixed(2)),strengthHint:sign===meta.exalt|| (meta.own||[]).includes(sign)?'राशि-बल अनुकूल':sign===meta.debil?'राशि-बल प्रतिकूल':'राशि-बल सामान्य'};
+}
+function longitudeForName(jd,ay,name){
+ const all=planetaryLongitudes(jd,ay),g=all.find(x=>x.name===name);
+ return g?g.longitude:null;
+}
+function nextSignIngress(jd,ay,offset,latitude,longitude){
+ const current=planetaryLongitudes(jd,ay),events=[];
+ for(const g of current){
+  let prev=jd,found=null,prevSign=Math.floor(g.longitude/30);
+  const maxDays=g.name==='चन्द्र'?4:g.name==='सूर्य'?40:g.name==='बुध'||g.name==='शुक्र'?100:g.name==='मंगल'?300:500;
+  for(let step=1;step<=maxDays*2;step++){
+   const t=jd+step*0.5,lon=longitudeForName(t,ay,g.name);
+   if(lon===null)break;
+   if(Math.floor(lon/30)!==prevSign){let lo=prev,hi=t;for(let k=0;k<35;k++){const mid=(lo+hi)/2;if(Math.floor(longitudeForName(mid,ay,g.name)/30)===prevSign)lo=mid;else hi=mid;}found=(lo+hi)/2;break;}
+   prev=t;
+  }
+  if(found)events.push({type:'graha',name:g.name,from:g.rashi,to:RASHIS[Math.floor(longitudeForName(found+0.00001,ay,g.name)/30)],at:localIsoFromJd(found,offset)});
+ }
+ let prevSign=Math.floor(ascendantLongitude(jd,latitude,longitude,ay)/30),prev=jd,lagnaAt=null;
+ for(let step=1;step<=240;step++){
+  const t=jd+step/720;
+  if(Math.floor(ascendantLongitude(t,latitude,longitude,ay)/30)!==prevSign){let lo=prev,hi=t;for(let k=0;k<32;k++){const mid=(lo+hi)/2;if(Math.floor(ascendantLongitude(mid,latitude,longitude,ay)/30)===prevSign)lo=mid;else hi=mid;}lagnaAt=(lo+hi)/2;break;}
+  prev=t;
+ }
+ if(lagnaAt){const from=RASHIS[prevSign],to=RASHIS[Math.floor(ascendantLongitude(lagnaAt+0.000001,latitude,longitude,ay)/30)];events.push({type:'lagna',name:'लग्न',from,to,at:localIsoFromJd(lagnaAt,offset)});}
+ return events.sort((a,b)=>new Date(a.at)-new Date(b.at));
+}
 function calculate(input={}) {
   const dateText = input.date || new Date().toISOString().slice(0,10);
   const timeText = input.time || '12:00:00';
@@ -242,7 +291,13 @@ function calculate(input={}) {
     sun: riseSetForLocalDate(dateText, Number(input.latitude), Number(input.longitude), offset, 'sun'),
     moon: riseSetForLocalDate(dateText, Number(input.latitude), Number(input.longitude), offset, 'moon')
   } : null;
-  const grahas = planetaryLongitudes(jd, ay);
+  const rawGrahas=planetaryLongitudes(jd,ay);
+  const grahas=rawGrahas.map(g=>{
+    const previous=longitudeForName(jd-1/24,ay,g.name),next=longitudeForName(jd+1/24,ay,g.name);
+    const delta=previous===null||next===null?0:((next-previous+540)%360)-180;
+    return planetStatus(g,rawGrahas,delta<0);
+  });
+  const nextEvents=nextSignIngress(jd,ay,offset,Number(input.latitude||0),Number(input.longitude||0));
   const lagnaLongitude=ascendantLongitude(jd,Number(input.latitude||0),Number(input.longitude||0),ay);
   const lagnaRashi=Math.floor(lagnaLongitude/30);
   const kundali={lagna:{longitude:Number(lagnaLongitude.toFixed(4)),rashi:RASHIS[lagnaRashi],degrees:Number((lagnaLongitude%30).toFixed(4))},houses:Array.from({length:12},(_,i)=>({house:i+1,rashi:RASHIS[(lagnaRashi+i)%12],signIndex:(lagnaRashi+i)%12,grahas:[]}))};
