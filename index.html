@@ -3932,42 +3932,66 @@ document.addEventListener('toggle',function(event){
     svg.setAttribute('viewBox','0 0 400 400');
     svg.append(make('rect',{x:3,y:3,width:394,height:394,fill:'#fffaf0',stroke:'#9a6034','stroke-width':2.5}));
     svg.append(make('path',{d:'M3 3 L397 397 M397 3 L3 397 M200 3 L397 200 L200 397 L3 200 Z M3 3 L200 200 L397 3 M397 397 L200 200 L3 397',class:'kundali-lines'}));
-    // उत्तर भारतीय शैली में भावों का क्रम: लग्न से वामावर्त।
+
+    // उत्तर भारतीय कुंडली के स्थिर भाव-स्थान: 1 शीर्ष-मध्य, फिर वामावर्त 2 से 12।
+    // हर भाव का अपना अलग केंद्र है; राशि क्रम लग्न से आगे बढ़ता है।
     const cells=[
-      {x:200,y:86,w:100}, {x:100,y:49,w:90}, {x:50,y:150,w:78},
-      {x:100,y:200,w:78}, {x:100,y:265,w:78}, {x:100,y:351,w:90},
-      {x:200,y:314,w:100}, {x:300,y:351,w:90}, {x:300,y:265,w:78},
-      {x:300,y:200,w:78}, {x:350,y:150,w:78}, {x:300,y:49,w:90}
+      {x:200,y:76},  // 1
+      {x:105,y:48},  // 2
+      {x:48,y:145},  // 3
+      {x:105,y:200}, // 4
+      {x:105,y:280}, // 5
+      {x:105,y:352}, // 6
+      {x:200,y:322}, // 7
+      {x:295,y:352}, // 8
+      {x:295,y:280}, // 9
+      {x:295,y:200}, // 10
+      {x:352,y:145}, // 11
+      {x:295,y:48}   // 12
     ];
     const shortState=g=>{
       const a=[];
       if(g.combust)a.push('अस्त');
-      a.push(g.retrograde?'व':'मा');
+      a.push(g.retrograde?'वक्री':'मार्गी');
       if(g.dignity==='उच्च')a.push('उच्च');
       else if(g.dignity==='नीच')a.push('नीच');
       else if(g.dignity==='स्वराशि')a.push('स्व');
-      return a.join(' ');
+      return a.join(' · ');
     };
-    kundali.houses.forEach((h,i)=>{
-      const c=cells[i],group=make('g',{});
-      // हर भाव में केवल राशि क्रमांक (1–12) दिखेगा। लग्न राशि से क्रम निकालने पर 12 भावों में 12 अलग-अलग राशियाँ रहेंगी।
-      const signNumber=(((Number(h.signIndex)||0)%12)+12)%12+1;
-      group.append(make('text',{x:c.x,y:c.y-8,class:'kundali-rashi'},String(signNumber)));
-      if(i===0){
-        group.append(make('text',{x:c.x,y:c.y+6,class:'kundali-lagna'},'लग्न '+Number(kundali.lagna?.degrees||0).toFixed(2)+'°'));
-      }
+    const lagnaSignIndex=Number.isInteger(Number(kundali.lagna?.signIndex))
+      ? Number(kundali.lagna.signIndex)
+      : (Array.isArray(kundali.houses)&&kundali.houses.find(h=>Number(h.house)===1)
+          ? Number(kundali.houses.find(h=>Number(h.house)===1).signIndex)
+          : 0);
+    const ordered=[...kundali.houses].sort((a,b)=>Number(a.house)-Number(b.house));
+    ordered.forEach((h)=>{
+      const houseNo=Number(h.house);
+      if(!Number.isInteger(houseNo)||houseNo<1||houseNo>12)return;
+      const c=cells[houseNo-1],group=make('g',{});
+      // API signIndex is authoritative; fallback is the zodiac sequence from the ascendant.
+      const rawIndex=Number(h.signIndex);
+      const signIndex=Number.isInteger(rawIndex)&&rawIndex>=0&&rawIndex<12
+        ? rawIndex : (lagnaSignIndex+houseNo-1)%12;
+      group.append(make('text',{x:c.x,y:c.y,class:'kundali-rashi'},String(signIndex+1)));
       const list=h.grahas||[];
+      let y=c.y+15;
+      if(houseNo===1){
+        group.append(make('text',{x:c.x,y:y,class:'kundali-lagna'},'लग्न '+Number(kundali.lagna?.degrees||0).toFixed(2)+'°'));
+        y+=12;
+      }
       if(!list.length){
-        group.append(make('text',{x:c.x,y:c.y+15,class:'kundali-empty'},'—'));
+        group.append(make('text',{x:c.x,y:y,class:'kundali-empty'},'—'));
       }else{
-        const step=list.length>2?14:16;
-        list.forEach((g,j)=>{
+        const maxLines=Math.max(1,Math.min(4,list.length));
+        const step=maxLines>=4?10:maxLines===3?12:14;
+        list.slice(0,4).forEach((g,j)=>{
           const name=(typeof g==='string'?g:g.name)||'ग्रह';
           const deg=typeof g==='string'?'':Number(g.degrees||0).toFixed(1)+'°';
           const state=typeof g==='string'?'':shortState(g);
-          const yy=c.y+(i===0?20:12)+j*step;
-          group.append(make('text',{x:c.x,y:yy,class:'kundali-planet-line'},name+' '+deg+(state?' · '+state:'')));
+          const line=(name+' '+deg+(state?' · '+state:'')).trim();
+          group.append(make('text',{x:c.x,y:y+j*step,class:'kundali-planet-line'},line));
         });
+        if(list.length>4)group.append(make('text',{x:c.x,y:y+4*step,class:'kundali-state-line'},'और '+(list.length-4)+' ग्रह'));
       }
       svg.append(group);
     });
