@@ -3901,7 +3901,7 @@ document.addEventListener('toggle',function(event){
     });
     svg.append(make('text',{x:200,y:194,class:'kundali-center'},'गोचर'));
     svg.append(make('text',{x:200,y:213,class:'kundali-center'},'कुंडली'));
-    if(lagna)lagna.textContent='लग्न: '+(kundali.lagna?.rashi||'—')+' '+(Number(kundali.lagna?.degrees||0).toFixed(2))+'° • वर्तमान समय की ग्रह स्थिति';
+    if(lagna)lagna.textContent='लग्न: '+(kundali.lagna?.rashi||'—')+' '+(Number(kundali.lagna?.degrees||0).toFixed(2))+'° • गणना समय: '+(calculationTime||'वर्तमान')+' IST';
   }
   function renderCharts(result){
     const d=result.data||{},det=result.details||{};
