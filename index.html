@@ -3917,7 +3917,7 @@ document.addEventListener('toggle',function(event){
     kundali.houses.forEach((h,i)=>{
       const [x,y]=points[i],group=make('g',{});
       group.append(make('text',{x,y:y-18,class:'kundali-rashi'},h.rashi||'—'));
-      const list=(h.grahas||[]).slice(0,3);
+      const list=(h.grahas||[]);
       if(!list.length)group.append(make('text',{x,y:y+2,class:'kundali-planets'},'—'));
       list.forEach((g,j)=>{
         const name=(typeof g==='string'?g:g.name)||'ग्रह';
