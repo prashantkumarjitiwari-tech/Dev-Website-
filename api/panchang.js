@@ -15,7 +15,7 @@ function todayIST() {
   const p = Object.fromEntries(parts.map(x => [x.type, x.value]));
   return { year: Number(p.year), month: Number(p.month), date: Number(p.day) };
 }
-function formatTime(value) {
+function currentTimeIST() {\n  return new Intl.DateTimeFormat('en-GB',{timeZone:TIME_ZONE,hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'}).format(new Date());\n}\nfunction formatTime(value) {
   if (!value) return null;
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return String(value);
@@ -93,7 +93,7 @@ function siderealSolarSign(jd,system){
   return Math.floor((((tropical-ay)%360)+360)%360/30);
 }
 function traditionalCalendar(date, calculated) {
-  const jd=localDateJd(date,12);
+  const jd=calculated.julianDay;
   const system=calculated.ayanamsha.system;
   const tithiIndex=astronomy.limbIndices(jd,system).tithi;
   const previousNewMoon=findLunationNewMoon(jd,-1,system);
@@ -184,7 +184,7 @@ module.exports = (req, res) => {
       grahas: calculated.grahas
     };
     return res.status(200).json({
-      date: { year: Number(date.slice(0, 4)), month: Number(date.slice(5, 7)), date: Number(date.slice(8, 10)) },
+      date: { year: Number(date.slice(0, 4)), month: Number(date.slice(5, 7)), date: Number(date.slice(8, 10)) },\n      calculationTime: time,
       location: { name: 'श्रीधाम वृंदावन', latitude: LAT, longitude: LON, timezone: TIME_ZONE, ayanamsha: calculated.ayanamsha.system },
       data,
       traditional,
