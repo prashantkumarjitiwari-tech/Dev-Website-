@@ -3907,7 +3907,8 @@ document.addEventListener('toggle',function(event){
       const profileStatus=selected.profile?.status||'';
       const selectionLine=selected.profile?.label?' • '+selected.profile.label+' / '+(selected.ayanamsha?.label||'लाहिड़ी')+' / '+(selected.observance?.label||'ब्रज'):'';
       const validationLine=profileStatus&&profileStatus!=='validated'?' • परंपरा के प्रकाशित संस्करण से मिलान शेष':'';
-      if(status)status.textContent=(result.fallback?'स्वतंत्र प्रारंभिक गणना':'स्वतंत्र पंचांग गणना')+engineLine+selectionLine+validationLine+' • '+(result.accuracyNotice||'गणना उपलब्ध');
+      const traditionalLine=t.note?' • '+t.note:'';
+      if(status)status.textContent=(result.fallback?'स्वतंत्र प्रारंभिक गणना':'स्वतंत्र पंचांग गणना')+engineLine+selectionLine+validationLine+traditionalLine+' • '+(result.accuracyNotice||'गणना उपलब्ध');
       const dateEl=document.getElementById('panchang-date');
       if(dateEl&&result.date){const dt=new Date(Date.UTC(result.date.year,result.date.month-1,result.date.date));dateEl.textContent='श्रीधाम वृंदावन • '+new Intl.DateTimeFormat('hi-IN',{day:'numeric',month:'long',year:'numeric',timeZone:'UTC'}).format(dt);}
     }catch(error){if(status)status.textContent='पंचांग डेटा अभी नहीं मिल पाया। कृपया थोड़ी देर बाद पुनः प्रयास करें।';console.error('Panchang load:',error);}
