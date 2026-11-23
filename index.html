@@ -3903,7 +3903,11 @@ document.addEventListener('toggle',function(event){
       if(d.tithiEnd)set('panchang-detail-tithi',d.tithi+' ('+endText('तिथि',d.tithiEnd)+')');
       if(d.nakshatraEnd)set('panchang-detail-nakshatra',d.nakshatra+' ('+endText('नक्षत्र',d.nakshatraEnd)+')');
       const engineLine=result.engine?(' • गणना इंजन '+result.engine+' v'+(result.engineVersion||'')):'';
-      if(status)status.textContent=(result.fallback?'स्वतंत्र प्रारंभिक गणना':'स्वतंत्र पंचांग गणना')+engineLine+' • '+(result.accuracyNotice||'गणना उपलब्ध');
+      const selected=result.calculationSelection||{};
+      const profileStatus=selected.profile?.status||'';
+      const selectionLine=selected.profile?.label?' • '+selected.profile.label+' / '+(selected.ayanamsha?.label||'लाहिड़ी')+' / '+(selected.observance?.label||'ब्रज'):'';
+      const validationLine=profileStatus&&profileStatus!=='validated'?' • परंपरा के प्रकाशित संस्करण से मिलान शेष':'';
+      if(status)status.textContent=(result.fallback?'स्वतंत्र प्रारंभिक गणना':'स्वतंत्र पंचांग गणना')+engineLine+selectionLine+validationLine+' • '+(result.accuracyNotice||'गणना उपलब्ध');
       const dateEl=document.getElementById('panchang-date');
       if(dateEl&&result.date){const dt=new Date(Date.UTC(result.date.year,result.date.month-1,result.date.date));dateEl.textContent='श्रीधाम वृंदावन • '+new Intl.DateTimeFormat('hi-IN',{day:'numeric',month:'long',year:'numeric',timeZone:'UTC'}).format(dt);}
       if(status)status.textContent=(result.fallback?'स्वतंत्र प्रारंभिक गणना':'स्वतंत्र पंचांग गणना')+engineLine+' • '+(result.accuracyNotice||'गणना उपलब्ध');
