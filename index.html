@@ -3921,8 +3921,9 @@ document.addEventListener('toggle',function(event){
       const engineLine=result.engine?(' • गणना इंजन '+result.engine+' v'+(result.engineVersion||'')):'';
       const selected=result.calculationSelection||{};
       const profileStatus=selected.profile?.status||'';
-      const selectionLine=selected.profile?.label?' • '+selected.profile.label+' / '+(selected.ayanamsha?.label||'लाहिड़ी')+' / '+(selected.observance?.label||'ब्रज'):'';
-      const validationLine=profileStatus&&profileStatus!=='validated'?' • परंपरा के प्रकाशित संस्करण से मिलान शेष':'';
+      const ayanamshaStatus=selected.ayanamsha?.status||'';
+      const selectionLine=selected.profile?.label?' • चयन: '+selected.profile.label+' / '+(selected.ayanamsha?.label||'लाहिड़ी')+' / '+(selected.observance?.label||'ब्रज'):'';
+      const validationLine=(profileStatus&&profileStatus!=='validated'?' • पंचांग परंपरा के नियम गणना में अभी लागू/सत्यापित नहीं':'')+(ayanamshaStatus&&ayanamshaStatus!=='validated'?' • चयनित अयनांश सूत्र सत्यापन शेष':'')+' • व्रत-उत्सव चयन अभी गणना में लागू नहीं';
       const traditionalLine=t.note?' • '+t.note:'';
       if(status)status.textContent=(result.fallback?'स्वतंत्र प्रारंभिक गणना':'स्वतंत्र पंचांग गणना')+engineLine+selectionLine+validationLine+traditionalLine+' • '+(result.accuracyNotice||'गणना उपलब्ध');
       const dateEl=document.getElementById('panchang-date');
