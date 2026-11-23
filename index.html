@@ -3894,6 +3894,7 @@ document.addEventListener('toggle',function(event){
     renderCards('panchang-durmuhurta',det.durmuhurta||d.durmuhurta||[],'name');
     renderGrahaCards(d.grahas||det.grahas||[]);
   }
+  let lastLoadedDate='';
   async function load(){
     const status=document.getElementById('panchang-status');
     try{
@@ -3927,7 +3928,7 @@ document.addEventListener('toggle',function(event){
       const traditionalLine=t.note?' • '+t.note:'';
       if(status)status.textContent=(result.fallback?'स्वतंत्र प्रारंभिक गणना':'स्वतंत्र पंचांग गणना')+engineLine+selectionLine+validationLine+traditionalLine+' • '+(result.accuracyNotice||'गणना उपलब्ध');
       const dateEl=document.getElementById('panchang-date');
-      if(dateEl&&result.date){const dt=new Date(Date.UTC(result.date.year,result.date.month-1,result.date.date));dateEl.textContent='श्रीधाम वृंदावन • '+new Intl.DateTimeFormat('hi-IN',{day:'numeric',month:'long',year:'numeric',timeZone:'UTC'}).format(dt);}
+      if(dateEl&&result.date){const dt=new Date(Date.UTC(result.date.year,result.date.month-1,result.date.date));dateEl.textContent='श्रीधाम वृंदावन • '+new Intl.DateTimeFormat('hi-IN',{day:'numeric',month:'long',year:'numeric',timeZone:'UTC'}).format(dt);lastLoadedDate=[result.date.year,String(result.date.month).padStart(2,'0'),String(result.date.date).padStart(2,'0')].join('-');}
     }catch(error){if(status)status.textContent='पंचांग डेटा अभी नहीं मिल पाया। कृपया थोड़ी देर बाद पुनः प्रयास करें।';console.error('Panchang load:',error);}
   }
   const topics=()=>document.querySelectorAll('#panchang-accordion-list .panchang-topic');
@@ -3944,7 +3945,20 @@ document.addEventListener('toggle',function(event){
     try{const saved=localStorage.getItem(key);if(saved&&[...control.options].some(o=>o.value===saved))control.value=saved;}catch(e){}
     control.addEventListener('change',()=>{try{localStorage.setItem(key,control.value);}catch(e){}load();});
   });
+  function currentISTDateKey(){
+    const parts=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Kolkata',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date());
+    const p=Object.fromEntries(parts.map(x=>[x.type,x.value]));
+    return p.year+'-'+p.month+'-'+p.day;
+  }
+  function scheduleMidnightRefresh(){
+    const nowIST=new Date(Date.now()+330*60000);
+    const nextMidnightUTC=Date.UTC(nowIST.getUTCFullYear(),nowIST.getUTCMonth(),nowIST.getUTCDate()+1);
+    const delay=Math.max(1000,nextMidnightUTC-nowIST.getTime()+2000);
+    setTimeout(()=>{load();scheduleMidnightRefresh();},delay);
+  }
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden&&lastLoadedDate!==currentISTDateKey())load();});
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',load,{once:true});else load();
+  scheduleMidnightRefresh();
 })();
 </script>
 
