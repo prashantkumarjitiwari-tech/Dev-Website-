@@ -77,7 +77,8 @@ module.exports = (req, res) => {
       ayanamsha: (req.query && req.query.ayanamsha) || 'lahiri',
       latitude: LAT, longitude: LON
     });
-    const day = daily.calculate(date);\n    const inauspicious = calculateBhadraAndVarjya(date, calculated.ayanamsha.system);
+    const day = daily.calculate(date);
+    const inauspicious = calculateBhadraAndVarjya(date, calculated.ayanamsha.system);
     const data = {
       vara: day.weekday,
       tithi: calculated.limbs.tithi,
