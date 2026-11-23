@@ -229,7 +229,7 @@ module.exports = (req, res) => {
       calculationSelection: selected,
       details: {
         periods: day.periods, durmuhurta: day.durmuhurta, bhadra: inauspicious.bhadra, varjya: inauspicious.varjya, choghadiya: day.choghadiya, hora: day.hora,
-        astronomy: calculated.positions, grahas: calculated.grahas,
+        astronomy: calculated.positions, grahas: calculated.grahas, annualGrahaTransits,
         riseSet: calculated.riseSet, astronomyEndsAt: calculated.endsAt, nextEvents: calculated.nextEvents,
         julianDay: calculated.julianDay
       },
