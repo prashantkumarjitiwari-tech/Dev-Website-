@@ -836,6 +836,20 @@
     .facebook-photo-grid .gallery-img:hover{transform:scale(1.025)}
     @media(max-width:700px){.facebook-photo-section{width:calc(100% - 20px);margin:8px auto 26px;padding:15px 12px;border-radius:17px}.facebook-photo-heading{margin-bottom:12px}.facebook-photo-heading p{font-size:11px}.facebook-photo-badge{font-size:10px;padding:7px 9px}.facebook-photo-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}}
     @media(max-width:380px){.facebook-photo-grid{gap:4px}}
+    .facebook-photo-grid .gallery-img{cursor:inherit}
+    .gallery-photo{position:relative;display:block;width:100%;padding:0;border:0;background:#eee;overflow:hidden;cursor:zoom-in;aspect-ratio:1/1}
+    .gallery-photo .gallery-img{display:block;width:100%;height:100%;object-fit:cover}
+    .gallery-photo>span{position:absolute;left:0;right:0;bottom:0;padding:7px 5px;background:linear-gradient(transparent,rgba(0,0,0,.72));color:#fff;font-size:11px;text-align:center;opacity:0;transition:opacity .2s}
+    .gallery-photo:focus-visible>span,.gallery-photo:hover>span{opacity:1}
+    .gallery-lightbox{position:fixed;inset:0;z-index:10050;display:none;align-items:center;justify-content:center;padding:54px 14px 24px;background:rgba(0,0,0,.94);touch-action:pan-y}
+    .gallery-lightbox.is-open{display:flex}
+    .gallery-lightbox img{max-width:min(94vw,1200px);max-height:82vh;object-fit:contain;border-radius:8px;box-shadow:0 12px 45px rgba(0,0,0,.5)}
+    .gallery-lightbox button{position:absolute;border:0;border-radius:50%;width:42px;height:42px;background:rgba(255,255,255,.15);color:#fff;font-size:25px;cursor:pointer}
+    .gallery-lightbox .gallery-close{top:12px;right:14px}
+    .gallery-lightbox .gallery-prev{left:12px;top:50%;transform:translateY(-50%)}
+    .gallery-lightbox .gallery-next{right:12px;top:50%;transform:translateY(-50%)}
+    .gallery-lightbox .gallery-counter{position:absolute;top:20px;left:50%;transform:translateX(-50%);color:#fff;font-size:13px}
+    @media(max-width:700px){.gallery-photo>span{opacity:1;font-size:10px;padding:6px 3px}.gallery-lightbox{padding:55px 8px 20px}.gallery-lightbox img{max-width:96vw;max-height:78vh}.gallery-lightbox button{width:38px;height:38px}.gallery-lightbox .gallery-prev{left:5px}.gallery-lightbox .gallery-next{right:5px}}
   </style>
 
   <style id="daily-panchang-dashboard">
@@ -1122,17 +1136,20 @@
 <!-- Facebook-style photo gallery, immediately below daily thought -->
     <section id="gallery" class="facebook-photo-section" aria-labelledby="gallery-title" data-aos="fade-up">
       <div class="facebook-photo-heading">
-        <div><span>तस्वीरें • स्मृतियाँ</span><h2 id="gallery-title">फोटो गैलरी</h2><p>कथा, सत्संग और आध्यात्मिक यात्रा की झलकियाँ</p></div>
+        <div><span>तस्वीरें • स्मृतियाँ</span><h2 id="gallery-title">फोटो गैलरी</h2><p>किसी भी तस्वीर को बड़ा देखने के लिए उस पर छुएँ।</p></div>
         <span class="facebook-photo-badge"><i class="fa-solid fa-images"></i> Photos</span>
       </div>
       <div class="facebook-photo-grid">
-        <img src="/assets/profile.jpg" class="gallery-img" alt="आचार्य देव तिवारी जी महाराज — कथा एवं सत्संग" title="आचार्य देव तिवारी जी महाराज" width="1000" height="750" loading="lazy" decoding="async">
-        <img src="assets/gallery1.jpg" class="gallery-img" alt="आध्यात्मिक यात्रा की झलक">
-        <img src="assets/gallery2.jpg" class="gallery-img" alt="कथा एवं सत्संग की झलक">
-        <img src="assets/gallery3.jpg" class="gallery-img" alt="विशेष स्मृति">
-        <img src="/assets/gallery/photo-3.jpg" class="gallery-img" alt="फोटो गैलरी — नई तस्वीर 3" loading="lazy" decoding="async">
-        <img src="/assets/gallery/photo-4.jpg" class="gallery-img" alt="फोटो गैलरी — नई तस्वीर 4" loading="lazy" decoding="async">
-        <img src="/assets/gallery/photo-6%20.jpg" class="gallery-img" alt="फोटो गैलरी — नई तस्वीर 6" loading="lazy" decoding="async">
+        <button class="gallery-photo" type="button" aria-label="तस्वीर को बड़ा खोलें"><img src="/assets/profile.jpg" class="gallery-img" alt="आचार्य देव तिवारी जी महाराज — कथा एवं सत्संग" loading="lazy" decoding="async"><span>देखने के लिए छुएँ</span></button>
+        <button class="gallery-photo" type="button" aria-label="तस्वीर को बड़ा खोलें"><img src="/assets/gallery1.jpg" class="gallery-img" alt="आध्यात्मिक यात्रा की झलक" loading="lazy" decoding="async"><span>देखने के लिए छुएँ</span></button>
+        <button class="gallery-photo" type="button" aria-label="तस्वीर को बड़ा खोलें"><img src="/assets/gallery2.jpg" class="gallery-img" alt="कथा एवं सत्संग की झलक" loading="lazy" decoding="async"><span>देखने के लिए छुएँ</span></button>
+        <button class="gallery-photo" type="button" aria-label="तस्वीर को बड़ा खोलें"><img src="/assets/gallery3.jpg" class="gallery-img" alt="विशेष स्मृति" loading="lazy" decoding="async"><span>देखने के लिए छुएँ</span></button>
+        <button class="gallery-photo" type="button" aria-label="तस्वीर को बड़ा खोलें"><img src="/assets/gallery/photo-1%20.png" class="gallery-img" alt="नई तस्वीर 1" loading="lazy" decoding="async"><span>देखने के लिए छुएँ</span></button>
+        <button class="gallery-photo" type="button" aria-label="तस्वीर को बड़ा खोलें"><img src="/assets/gallery/photo-2.png" class="gallery-img" alt="नई तस्वीर 2" loading="lazy" decoding="async"><span>देखने के लिए छुएँ</span></button>
+        <button class="gallery-photo" type="button" aria-label="तस्वीर को बड़ा खोलें"><img src="/assets/gallery/photo-3.jpg" class="gallery-img" alt="नई तस्वीर 3" loading="lazy" decoding="async"><span>देखने के लिए छुएँ</span></button>
+        <button class="gallery-photo" type="button" aria-label="तस्वीर को बड़ा खोलें"><img src="/assets/gallery/photo-4.jpg" class="gallery-img" alt="नई तस्वीर 4" loading="lazy" decoding="async"><span>देखने के लिए छुएँ</span></button>
+        <button class="gallery-photo" type="button" aria-label="तस्वीर को बड़ा खोलें"><img src="/assets/gallery/photo-6%20.jpg" class="gallery-img" alt="नई तस्वीर 6" loading="lazy" decoding="async"><span>देखने के लिए छुएँ</span></button>
+        <button class="gallery-photo" type="button" aria-label="तस्वीर को बड़ा खोलें"><img src="/assets/gallery/photo-7%20.jpg" class="gallery-img" alt="नई तस्वीर 7" loading="lazy" decoding="async"><span>देखने के लिए छुएँ</span></button>
       </div>
     </section>
 
@@ -3887,6 +3904,54 @@ async function shareDailyPanchang(){
   }catch(error){if(error.name!=='AbortError'){console.error('Panchang share:',error);alert('शेयर नहीं हो पाया। कृपया दोबारा प्रयास करें।');}}
   finally{button.disabled=false;button.innerHTML=original;}
 }
+</script>
+<div class="gallery-lightbox" id="gallery-lightbox" role="dialog" aria-modal="true" aria-label="फोटो देखने का बड़ा दृश्य">
+  <button class="gallery-close" type="button" aria-label="बंद करें">×</button>
+  <button class="gallery-prev" type="button" aria-label="पिछली तस्वीर">‹</button>
+  <img src="" alt="बड़ी तस्वीर">
+  <button class="gallery-next" type="button" aria-label="अगली तस्वीर">›</button>
+  <span class="gallery-counter" aria-live="polite"></span>
+</div>
+<script>
+(function(){
+  const section=document.getElementById('gallery');
+  const box=document.getElementById('gallery-lightbox');
+  if(!section||!box)return;
+  const buttons=[...section.querySelectorAll('.gallery-photo')];
+  const image=box.querySelector('img'),counter=box.querySelector('.gallery-counter');
+  let current=0,touchX=0,previousFocus=null;
+  function show(index){
+    current=(index+buttons.length)%buttons.length;
+    const source=buttons[current].querySelector('img');
+    image.src=source.src;image.alt=source.alt||'फोटो गैलरी';
+    counter.textContent=(current+1)+' / '+buttons.length;
+  }
+  function open(index){
+    previousFocus=document.activeElement;show(index);
+    box.classList.add('is-open');document.body.style.overflow='hidden';
+    box.querySelector('.gallery-close').focus();
+  }
+  function close(){
+    box.classList.remove('is-open');document.body.style.overflow='';
+    image.removeAttribute('src');if(previousFocus)previousFocus.focus();
+  }
+  buttons.forEach((button,index)=>button.addEventListener('click',()=>open(index)));
+  box.querySelector('.gallery-close').addEventListener('click',close);
+  box.querySelector('.gallery-prev').addEventListener('click',()=>show(current-1));
+  box.querySelector('.gallery-next').addEventListener('click',()=>show(current+1));
+  box.addEventListener('click',event=>{if(event.target===box)close();});
+  document.addEventListener('keydown',event=>{
+    if(!box.classList.contains('is-open'))return;
+    if(event.key==='Escape')close();
+    if(event.key==='ArrowLeft')show(current-1);
+    if(event.key==='ArrowRight')show(current+1);
+  });
+  box.addEventListener('touchstart',event=>{touchX=event.changedTouches[0].screenX;},{passive:true});
+  box.addEventListener('touchend',event=>{
+    const delta=event.changedTouches[0].screenX-touchX;
+    if(Math.abs(delta)>45)show(current+(delta<0?1:-1));
+  },{passive:true});
+})();
 </script>
 <!-- Panchang charts are rendered by the single daily-panchang live loader above. -->
 </body>
