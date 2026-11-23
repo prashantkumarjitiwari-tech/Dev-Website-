@@ -177,7 +177,7 @@
   
 /* Panchang chart cards */.panchang-graha-card strong{display:block;font-size:13px;margin:3px 0 2px;font-weight:700}.panchang-graha-card small{font-size:11px!important;font-weight:600}
 .panchang-chart-holder{display:block!important}.panchang-chart-holder>b{display:block;margin-bottom:10px}.panchang-chart-grid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;white-space:normal!important}.panchang-chart-card{min-width:0;border-radius:12px;padding:10px 6px;text-align:center;background:#e9f8ef;color:#245c3b;border:1px solid rgba(54,145,91,.12);line-height:1.35}.panchang-chart-card:nth-child(3n+2){background:#fcebed;color:#8a3c4a}.panchang-chart-card:nth-child(3n){background:#f2edfa;color:#594579}.panchang-chart-card b{display:block;font-size:13px;margin-bottom:4px}.panchang-chart-card small{display:block;font-size:10px;overflow-wrap:anywhere}.panchang-chart-empty{grid-column:1/-1;padding:10px;color:#82786b;font-size:12px;background:#faf7f0;border-radius:9px}@media(max-width:420px){.panchang-chart-grid{gap:6px}.panchang-chart-card{padding:9px 4px}.panchang-chart-card b{font-size:12px}.panchang-chart-card small{font-size:9px}}
-\n.panchang-kundali-wrap{max-width:430px;margin:12px auto;background:#fffaf0;border:1px solid #d7b879;border-radius:12px;padding:8px}.panchang-kundali-wrap svg{display:block;width:100%;height:auto}.kundali-lines{fill:none;stroke:#9a6034;stroke-width:2}.kundali-rashi{font-size:12px;fill:#30251a;font-weight:700;text-anchor:middle}.kundali-planets{font-size:9px;fill:#46321e;text-anchor:middle}.kundali-flags{font-size:7px;fill:#805126;text-anchor:middle}.kundali-center{font-size:12px;fill:#8b5427;font-weight:700;text-anchor:middle}.kundali-time{font-size:9px;fill:#805126;text-anchor:middle}.kundali-lagna{font-size:9px;fill:#805126;font-weight:700;text-anchor:middle}.kundali-empty{font-size:9px;fill:#9b8b70;text-anchor:middle}.kundali-legend{display:block;text-align:center;font-size:10px;color:#806b4d;margin:7px 0 10px}.kundali-planets{font-size:8px;fill:#46321e;text-anchor:middle}.kundali-flags{font-size:7px;fill:#805126;text-anchor:middle}
+\n.panchang-kundali-wrap{max-width:520px;margin:12px auto;background:#fffaf0;border:1px solid #d7b879;border-radius:12px;padding:8px}.panchang-kundali-wrap svg{display:block;width:100%;height:auto}.kundali-lines{fill:none;stroke:#9a6034;stroke-width:2}.kundali-rashi{font-size:12px;fill:#30251a;font-weight:700;text-anchor:middle}.kundali-planet-line{font-size:8.5px;fill:#30251a;font-weight:700;text-anchor:middle}.kundali-state-line{font-size:6.8px;fill:#805126;text-anchor:middle}.kundali-flags{font-size:7px;fill:#805126;text-anchor:middle}.kundali-center{font-size:12px;fill:#8b5427;font-weight:700;text-anchor:middle}.kundali-time{font-size:9px;fill:#805126;text-anchor:middle}.kundali-lagna{font-size:9px;fill:#805126;font-weight:700;text-anchor:middle}.kundali-empty{font-size:9px;fill:#9b8b70;text-anchor:middle}.kundali-legend{display:block;text-align:center;font-size:10px;color:#806b4d;margin:7px 0 10px}.kundali-planet-line{font-size:8.5px;fill:#30251a;font-weight:700;text-anchor:middle}.kundali-state-line{font-size:6.8px;fill:#805126;text-anchor:middle}
 .panchang-graha-legend,.panchang-transit-box{margin:12px 0;padding:12px;border:1px solid rgba(154,96,52,.28);border-radius:10px;background:rgba(255,250,240,.7);color:#50351f}.panchang-graha-legend p{margin:6px 0;font-size:13px;line-height:1.8}.panchang-graha-legend small{font-size:11px;color:#8c765f}.panchang-transit-row{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:9px 0;border-bottom:1px solid rgba(154,96,52,.15);font-size:13px}.panchang-transit-row:last-child{border-bottom:0}.graha-flags{display:block;font-size:12px;color:#805126;margin-top:5px}.panchang-transit-time{font-weight:700;color:#805126}\n</style>
 
   <style>
@@ -1152,7 +1152,7 @@
       <details class="panchang-topic">
         <summary><span class="panchang-topic-icon">☷</span><span class="panchang-topic-copy"><b>ग्रह स्थिति चार्ट</b><small>नवग्रहों की राशि स्थिति</small></span><i class="fa-solid fa-chevron-down panchang-chevron"></i></summary>
         <div class="panchang-topic-body"><div class="panchang-detail-grid">
-          <div class="panchang-detail-item panchang-detail-wide panchang-chart-holder"><b>वर्तमान गोचर राशि कुंडली — उत्तर भारतीय शैली</b><div class="panchang-kundali-wrap"><svg id="panchang-kundali-svg" viewBox="0 0 400 400" role="img" aria-label="नवग्रह राशि कुंडली चार्ट"></svg></div><small class="kundali-legend">संकेत: 🔥 अस्त • ↗ मार्गी • ↶ वक्री • ⬆ उच्च • ⬇ नीच • ★ स्वराशि</small><div class="panchang-transit-box"><b>ग्रहों के राशि परिवर्तन — समय</b><div id="panchang-next-events">परिवर्तन का समय गणना हो रहा है…</div></div><small style="display:block;margin-top:9px;color:#9b8b70;font-size:11px">यह वर्तमान समय की गोचर कुंडली है। ग्रह-स्थितियाँ प्रारंभिक स्वतंत्र गणना पर आधारित हैं; उच्च-परिशुद्धता ephemeris से मिलान बाकी है।</small></div>
+          <div class="panchang-detail-item panchang-detail-wide panchang-chart-holder"><b>वर्तमान गोचर राशि कुंडली — उत्तर भारतीय शैली</b><div class="panchang-kundali-wrap"><svg id="panchang-kundali-svg" viewBox="0 0 400 400" role="img" aria-label="नवग्रह राशि कुंडली चार्ट"></svg></div><small class="kundali-legend">संकेत: अ = अस्त • व = वक्री • मा = मार्गी • उच्च = उच्च राशि • नीच = नीच राशि • स्व = स्वराशि</small><div class="panchang-transit-box"><b>ग्रहों के राशि परिवर्तन — समय</b><div id="panchang-next-events">परिवर्तन का समय गणना हो रहा है…</div></div><small style="display:block;margin-top:9px;color:#9b8b70;font-size:11px">यह वर्तमान समय की गोचर कुंडली है। ग्रह-स्थितियाँ प्रारंभिक स्वतंत्र गणना पर आधारित हैं; उच्च-परिशुद्धता ephemeris से मिलान बाकी है।</small></div>
         </div></div>
       </details>
     </div>
@@ -3911,33 +3911,43 @@ document.addEventListener('toggle',function(event){
     const ns='http://www.w3.org/2000/svg';
     const make=(tag,attrs,textValue)=>{const el=document.createElementNS(ns,tag);Object.entries(attrs||{}).forEach(([k,v])=>el.setAttribute(k,v));if(textValue!==undefined)el.textContent=textValue;return el;};
     svg.replaceChildren();
-    svg.append(make('rect',{x:3,y:3,width:394,height:394,fill:'#fffaf0',stroke:'#9a6034','stroke-width':3}));
+    svg.setAttribute('viewBox','0 0 400 400');
+    svg.append(make('rect',{x:3,y:3,width:394,height:394,fill:'#fffaf0',stroke:'#9a6034','stroke-width':2.5}));
     svg.append(make('path',{d:'M3 3 L397 397 M397 3 L3 397 M200 3 L397 200 L200 397 L3 200 Z M3 3 L200 200 L397 3 M397 397 L200 200 L3 397',class:'kundali-lines'}));
-    // प्रत्येक स्थान एक भाव है; भाव-संख्या जानबूझकर नहीं दिखाई जाती।
-    const points=[[200,49],[300,99],[350,200],[300,301],[200,351],[100,301],[50,200],[100,99],[150,150],[250,150],[250,250],[150,250]];
-    const mark=g=>[
-      g.combust?'🔥 अस्त':'',
-      g.retrograde?'↶ वक्री':'↗ मार्गी',
-      g.dignity==='उच्च'?'⬆ उच्च':g.dignity==='नीच'?'⬇ नीच':g.dignity==='स्वराशि'?'★ स्वराशि':''
-    ].filter(Boolean).join(' · ');
+    // उत्तर भारतीय शैली में भावों का क्रम: लग्न से वामावर्त।
+    const cells=[
+      {x:200,y:86,w:100}, {x:100,y:49,w:90}, {x:50,y:150,w:78},
+      {x:100,y:200,w:78}, {x:50,y:250,w:78}, {x:100,y:351,w:90},
+      {x:200,y:314,w:100}, {x:300,y:351,w:90}, {x:350,y:250,w:78},
+      {x:300,y:200,w:78}, {x:350,y:150,w:78}, {x:300,y:49,w:90}
+    ];
+    const shortState=g=>{
+      const a=[];
+      if(g.combust)a.push('अस्त');
+      a.push(g.retrograde?'व':'मा');
+      if(g.dignity==='उच्च')a.push('उच्च');
+      else if(g.dignity==='नीच')a.push('नीच');
+      else if(g.dignity==='स्वराशि')a.push('स्व');
+      return a.join(' ');
+    };
     kundali.houses.forEach((h,i)=>{
-      const [x,y]=points[i],group=make('g',{});
-      group.append(make('text',{x,y:y-20,class:'kundali-rashi'},h.rashi||'—'));
+      const c=cells[i],group=make('g',{});
+      group.append(make('text',{x:c.x,y:c.y-22,class:'kundali-rashi'},h.rashi||'—'));
       if(i===0){
-        group.append(make('text',{x,y:y-7,class:'kundali-lagna'},'लग्न '+Number(kundali.lagna?.degrees||0).toFixed(1)+'°'));
+        group.append(make('text',{x:c.x,y:c.y-9,class:'kundali-lagna'},'लग्न '+Number(kundali.lagna?.degrees||0).toFixed(2)+'°'));
       }
-      const list=(h.grahas||[]);
+      const list=h.grahas||[];
       if(!list.length){
-        group.append(make('text',{x,y:y+9,class:'kundali-empty'},'—'));
+        group.append(make('text',{x:c.x,y:c.y+8,class:'kundali-empty'},'—'));
       }else{
-        const rowStep=list.length>2?18:21;
+        const step=list.length>2?17:19;
         list.forEach((g,j)=>{
           const name=(typeof g==='string'?g:g.name)||'ग्रह';
-          const degree=typeof g==='string'?'':Number(g.degrees||0).toFixed(1)+'°';
-          const flags=typeof g==='string'?'':mark(g);
-          const yy=y+(i===0?7:4)+j*rowStep;
-          group.append(make('text',{x,y:yy,class:'kundali-planets'},name+' '+degree));
-          if(flags)group.append(make('text',{x,y:yy+9,class:'kundali-flags'},flags));
+          const deg=typeof g==='string'?'':Number(g.degrees||0).toFixed(1)+'°';
+          const state=typeof g==='string'?'':shortState(g);
+          const yy=c.y+(i===0?7:5)+j*step;
+          group.append(make('text',{x:c.x,y:yy,class:'kundali-planet-line'},name+' '+deg));
+          if(state)group.append(make('text',{x:c.x,y:yy+8,class:'kundali-state-line'},state));
         });
       }
       svg.append(group);
