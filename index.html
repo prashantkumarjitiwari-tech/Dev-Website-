@@ -1073,6 +1073,9 @@
           <div class="panchang-detail-item"><b>अभिजित मुहूर्त</b><span id="panchang-abhijit">—</span></div>
           <div class="panchang-detail-item"><b>ब्रह्म मुहूर्त</b><span id="panchang-brahma">—</span></div>
           <div class="panchang-detail-item"><b>अमृत काल</b><span id="panchang-amrit">—</span></div>
+          <div class="panchang-detail-item panchang-detail-wide panchang-chart-holder"><b>भद्रा (विष्टि करण)</b><span id="panchang-bhadra" class="panchang-chart-grid">गणना प्राप्त की जा रही है…</span></div>
+          <div class="panchang-detail-item panchang-detail-wide panchang-chart-holder"><b>वर्ज्य मुहूर्त (नक्षत्र त्याज्य)</b><span id="panchang-varjya" class="panchang-chart-grid">—</span></div>
+          <div class="panchang-detail-item panchang-detail-wide panchang-chart-holder"><b>दुर्मुहूर्त</b><span id="panchang-durmuhurta" class="panchang-chart-grid">—</span></div>
         </div></div>
       </details>
 
@@ -3788,6 +3791,9 @@ document.addEventListener('toggle',function(event){
     const hora=det.hora||d.hora||[];
     renderCards('panchang-hora-day',hora.filter(x=>x.part==='day'),'lord');
     renderCards('panchang-hora-night',hora.filter(x=>x.part==='night'),'lord');
+    renderCards('panchang-bhadra',d.bhadra||det.bhadra||[],'name');
+    renderCards('panchang-varjya',d.varjya||det.varjya||[],'name');
+    renderCards('panchang-durmuhurta',det.durmuhurta||d.durmuhurta||[],'name');
     renderGrahaCards(d.grahas||det.grahas||[]);
   }
   async function load(){
