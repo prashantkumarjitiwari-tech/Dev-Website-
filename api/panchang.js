@@ -115,7 +115,8 @@ module.exports = (req, res) => {
       latitude: LAT, longitude: LON
     });
     const day = daily.calculate(date);
-    const inauspicious = calculateBhadraAndVarjya(date, calculated.ayanamsha.system);\n    const traditional = traditionalCalendar(date, calculated);
+    const inauspicious = calculateBhadraAndVarjya(date, calculated.ayanamsha.system);
+    const traditional = traditionalCalendar(date, calculated);
     const data = {
       vara: day.weekday,
       tithi: calculated.limbs.tithi,
