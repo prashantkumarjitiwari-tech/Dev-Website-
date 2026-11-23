@@ -332,7 +332,7 @@ function calculate(input={}) {
   }
   return {
     engine: 'independent-meeus-lite',
-    engineVersion: '0.4.0',
+    engineVersion: '0.5.0',
     julianDay: Number(jd.toFixed(6)),
     utc: utc.toISOString(),
     ayanamsha: { system, degrees: Number(ay.toFixed(6)), status: 'approximate' },
