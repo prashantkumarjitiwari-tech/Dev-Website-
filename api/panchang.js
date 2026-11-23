@@ -186,13 +186,33 @@ module.exports = async (req, res) => {
     try {
       const swiss = await require('./swiss-ephemeris').calculateSwiss({ date, time, ayanamsha });
       const names = { sun: 'सूर्य', moon: 'चन्द्र', mars: 'मंगल', mercury: 'बुध', jupiter: 'गुरु', venus: 'शुक्र', saturn: 'शनि', rahu: 'राहु', ketu: 'केतु' };
-      const oldByName = new Map(calculated.grahas.map(g => [g.name, g]));
+      const planetMeta = {
+        'सूर्य': { exalt: 0, debil: 6, own: [4] },
+        'चन्द्र': { exalt: 1, debil: 7, own: [3] },
+        'मंगल': { exalt: 9, debil: 3, own: [0, 7], combust: 17 },
+        'बुध': { exalt: 5, debil: 11, own: [2, 5], combust: 14 },
+        'गुरु': { exalt: 3, debil: 9, own: [8, 11], combust: 11 },
+        'शुक्र': { exalt: 11, debil: 5, own: [1, 6], combust: 10 },
+        'शनि': { exalt: 6, debil: 0, own: [9, 10], combust: 15 },
+        'राहु': { exalt: 1, debil: 7, own: [] },
+        'केतु': { exalt: 7, debil: 1, own: [] }
+      };
+      const sunLongitude = swiss.positions.sun.longitude;
       const swissGrahas = Object.entries(names).map(([key, name]) => {
         const p = swiss.positions[key];
         const longitude = ((p.longitude % 360) + 360) % 360;
-        const base = oldByName.get(name) || {};
         const rashiIndex = Math.floor(longitude / 30);
-        return { ...base, name, longitude: Number(longitude.toFixed(6)), rashi: RASHI_NAMES_FOR_API[rashiIndex], degrees: Number((longitude % 30).toFixed(6)), retrograde: !!p.retrograde, calculation: 'swiss-ephemeris', ephemeris: p.ephemeris };
+        const meta = planetMeta[name] || {};
+        const distance = Math.abs(((longitude - sunLongitude + 540) % 360) - 180);
+        const dignity = rashiIndex === meta.exalt ? 'उच्च' : rashiIndex === meta.debil ? 'नीच' : (meta.own || []).includes(rashiIndex) ? 'स्वराशि' : 'सम राशि';
+        return {
+          name, longitude: Number(longitude.toFixed(6)), rashi: RASHI_NAMES_FOR_API[rashiIndex],
+          degrees: Number((longitude % 30).toFixed(6)), retrograde: !!p.retrograde,
+          combust: meta.combust !== undefined && distance <= meta.combust,
+          angularDistanceFromSun: Number(distance.toFixed(2)), dignity,
+          strengthHint: dignity === 'उच्च' || dignity === 'स्वराशि' ? 'राशि-बल अनुकूल' : dignity === 'नीच' ? 'राशि-बल प्रतिकूल' : 'राशि-बल सामान्य',
+          calculation: 'swiss-ephemeris', ephemeris: p.ephemeris
+        };
       });
       const lagnaIndex = RASHI_NAMES_FOR_API.indexOf(calculated.kundali.lagna.rashi);
       swissGrahas.forEach(g => { g.house = ((RASHI_NAMES_FOR_API.indexOf(g.rashi) - lagnaIndex + 12) % 12) + 1; });
