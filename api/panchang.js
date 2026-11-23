@@ -72,7 +72,7 @@ module.exports = (req, res) => {
     const today = todayIST();
     const requested = req.query && req.query.date;
     const date = requested || [today.year, String(today.month).padStart(2, '0'), String(today.date).padStart(2, '0')].join('-');
-    if (!/^\\d{4}-\\d{2}-\\d{2}$/.test(date)) throw new Error('तिथि YYYY-MM-DD प्रारूप में होनी चाहिए।');
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) throw new Error('तिथि YYYY-MM-DD प्रारूप में होनी चाहिए।');
     const [year, month, dayOfMonth] = date.split('-').map(Number);
     const checkDate = new Date(Date.UTC(year, month - 1, dayOfMonth));
     if (checkDate.getUTCFullYear() !== year || checkDate.getUTCMonth() + 1 !== month || checkDate.getUTCDate() !== dayOfMonth) throw new Error('अमान्य कैलेंडर तिथि।');
