@@ -1152,7 +1152,7 @@
       <details class="panchang-topic">
         <summary><span class="panchang-topic-icon">☷</span><span class="panchang-topic-copy"><b>ग्रह स्थिति चार्ट</b><small>नवग्रहों की राशि स्थिति</small></span><i class="fa-solid fa-chevron-down panchang-chevron"></i></summary>
         <div class="panchang-topic-body"><div class="panchang-detail-grid">
-          <div class="panchang-detail-item panchang-detail-wide panchang-chart-holder"><b>जन्म/गोचर राशि कुंडली — उत्तर भारतीय शैली</b><div class="panchang-kundali-wrap"><svg id="panchang-kundali-svg" viewBox="0 0 400 400" role="img" aria-label="नवग्रह राशि कुंडली चार्ट"></svg></div><small id="panchang-kundali-lagna" style="display:block;margin:8px 0;color:#9b8b70;font-size:11px">लग्न की गणना प्राप्त की जा रही है…</small><b style="margin-top:14px">नवग्रह स्थिति — राशि एवं अंश</b><span id="panchang-grahas" class="panchang-chart-grid">ग्रहों की गणना प्राप्त की जा रही है…</span><div class="panchang-graha-legend"><b>ग्रह संकेतों का अर्थ</b><p>🔥 अस्त • ↗ मार्गी • ↶ वक्री • ⬆ उच्च • ⬇ नीच • ★ स्वराशि • ✓ राशि-बल अनुकूल • ! राशि-बल प्रतिकूल</p><small>अस्त होने की सीमा ग्रह-विशेष के पारंपरिक कोण से; उच्च/नीच/स्वराशि राशि के आधार पर। “राशि-बल” केवल संकेत है, पूर्ण षड्बल नहीं।</small></div><div class="panchang-transit-box"><b>आगे ग्रह राशि कब बदलेंगे और लग्न कब बदलेगा?</b><div id="panchang-next-events">अगले बदलाव की गणना हो रही है…</div></div><small style="display:block;margin-top:9px;color:#9b8b70;font-size:11px">यह वर्तमान समय की गोचर कुंडली है। ग्रह-स्थितियाँ प्रारंभिक स्वतंत्र गणना पर आधारित हैं; उच्च-परिशुद्धता ephemeris से मिलान बाकी है।</small></div>
+          <div class="panchang-detail-item panchang-detail-wide panchang-chart-holder"><b>जन्म/गोचर राशि कुंडली — उत्तर भारतीय शैली</b><div class="panchang-kundali-wrap"><svg id="panchang-kundali-svg" viewBox="0 0 400 400" role="img" aria-label="नवग्रह राशि कुंडली चार्ट"></svg></div><small id="panchang-kundali-lagna" style="display:block;margin:8px 0;color:#9b8b70;font-size:11px">लग्न की गणना प्राप्त की जा रही है…</small><b style="margin-top:14px">नवग्रह स्थिति — राशि एवं अंश</b><span id="panchang-grahas" class="panchang-chart-grid">ग्रहों की गणना प्राप्त की जा रही है…</span><div class="panchang-graha-legend"><b>ग्रह संकेतों का अर्थ</b><p>🔥 अस्त • ↗ मार्गी • ↶ वक्री • ⬆ उच्च • ⬇ नीच • ★ स्वराशि • ✓ बलवान संकेत • ! निर्बल संकेत</p><small>अस्त होने की सीमा ग्रह-विशेष के पारंपरिक कोण से; उच्च/नीच/स्वराशि राशि के आधार पर। “राशि-बल” केवल संकेत है, पूर्ण षड्बल नहीं।</small></div><div class="panchang-transit-box"><b>आगे ग्रह राशि कब बदलेंगे और लग्न कब बदलेगा?</b><div id="panchang-next-events">अगले बदलाव की गणना हो रही है…</div></div><small style="display:block;margin-top:9px;color:#9b8b70;font-size:11px">यह वर्तमान समय की गोचर कुंडली है। ग्रह-स्थितियाँ प्रारंभिक स्वतंत्र गणना पर आधारित हैं; उच्च-परिशुद्धता ephemeris से मिलान बाकी है।</small></div>
         </div></div>
       </details>
     </div>
@@ -3886,8 +3886,8 @@ document.addEventListener('toggle',function(event){
       if(g.dignity==='उच्च')marks.push('⬆ उच्च');
       if(g.dignity==='नीच')marks.push('⬇ नीच');
       if(g.dignity==='स्वराशि')marks.push('★ स्वराशि');
-      if(g.strengthHint==='राशि-बल अनुकूल')marks.push('✓ अनुकूल');
-      if(g.strengthHint==='राशि-बल प्रतिकूल')marks.push('! प्रतिकूल');
+      if(g.strengthHint==='राशि-बल अनुकूल')marks.push('✓ बलवान संकेत');
+      if(g.strengthHint==='राशि-बल प्रतिकूल')marks.push('! निर्बल संकेत');
       flags.textContent=marks.join(' · ');
       card.append(name,sign,deg,flags);root.append(card);
     });
