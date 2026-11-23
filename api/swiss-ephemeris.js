@@ -16,8 +16,8 @@ const BODY_KEYS = {
 };
 const AYANAMSHA_KEYS = {
   lahiri: ['Lahiri', 'IndianLahiri'],
-  kp: ['KpNew', 'KPNew', 'Krishnamurti'],
-  raman: ['Raman', 'BVRaman']
+  kp: ['Krishnamurti'],
+  raman: ['Raman']
 };
 
 function enumValue(source, keys, label) {
