@@ -23,6 +23,42 @@ function formatTime(value) {
     timeZone: TIME_ZONE, hour: '2-digit', minute: '2-digit', hour12: false
   }).format(date);
 }
+const NAKSHATRA_NAMES=['अश्विनी','भरणी','कृत्तिका','रोहिणी','मृगशिरा','आर्द्रा','पुनर्वसु','पुष्य','आश्लेषा','मघा','पूर्वाफाल्गुनी','उत्तराफाल्गुनी','हस्त','चित्रा','स्वाती','विशाखा','अनुराधा','ज्येष्ठा','मूल','पूर्वाषाढ़ा','उत्तराषाढ़ा','श्रवण','धनिष्ठा','शतभिषा','पूर्वाभाद्रपद','उत्तराभाद्रपद','रेवती'];
+// विषघटी की पारंपरिक आरंभ-घटी; रोहिणी का 40 घटी मान प्रकाशित सारणियों में अनुमानित है।
+const VARJYA_GHATI=[50,24,30,40,14,21,30,20,32,30,20,18,21,20,14,14,10,14,56,24,20,10,10,18,16,24,30];
+function localDateJd(date, hour=0){
+  const [y,m,d]=date.split('-').map(Number);
+  return astronomy.julianDay(new Date(Date.UTC(y,m-1,d,hour)-TZ_OFFSET*3600000));
+}
+function jdIso(jd){return new Date((jd-2440587.5)*86400000).toISOString();}
+function isVishti(index){return index>=1&&index<=56&&index%7===0;}
+function calculateBhadraAndVarjya(date,system){
+  const start=localDateJd(date,0),end=start+1;
+  const bhadra=[],varjya=[];
+  // Walk exact Karana/Nakshatra transitions across the local civil day.
+  let cursor=start;
+  for(let guard=0;guard<12&&cursor<end;guard++){
+    const ix=astronomy.limbIndices(cursor+1e-8,system);
+    const boundary=astronomy.nextBoundary(cursor+1e-8,'karana',system);
+    if(!boundary||boundary<=cursor)break;
+    if(isVishti(ix.karana)&&boundary>start&&cursor<end){
+      bhadra.push({name:'भद्रा (विष्टि करण)',start:jdIso(Math.max(cursor,start)),end:jdIso(Math.min(boundary,end))});
+    }
+    cursor=boundary+1e-8;
+  }
+  cursor=start;
+  for(let guard=0;guard<5&&cursor<end;guard++){
+    const ix=astronomy.limbIndices(cursor+1e-8,system);
+    const boundary=astronomy.nextBoundary(cursor+1e-8,'nakshatra',system);
+    if(!boundary||boundary<=cursor)break;
+    const n=ix.nakshatra,span=boundary-cursor;
+    const vStart=cursor+span*VARJYA_GHATI[n]/60;
+    const vEnd=cursor+span*(VARJYA_GHATI[n]+4)/60;
+    if(vEnd>start&&vStart<end)varjya.push({name:'वर्ज्य काल • '+NAKSHATRA_NAMES[n],start:jdIso(Math.max(vStart,start)),end:jdIso(Math.min(vEnd,end)),nakshatra:NAKSHATRA_NAMES[n]});
+    cursor=boundary+1e-8;
+  }
+  return {bhadra,varjya};
+}
 function formatRange(value) {
   return value && value.start && value.end
     ? formatTime(value.start) + ' – ' + formatTime(value.end)
@@ -41,7 +77,7 @@ module.exports = (req, res) => {
       ayanamsha: (req.query && req.query.ayanamsha) || 'lahiri',
       latitude: LAT, longitude: LON
     });
-    const day = daily.calculate(date);
+    const day = daily.calculate(date);\n    const inauspicious = calculateBhadraAndVarjya(date, calculated.ayanamsha.system);
     const data = {
       vara: day.weekday,
       tithi: calculated.limbs.tithi,
@@ -73,7 +109,7 @@ module.exports = (req, res) => {
       data,
       traditional: {},
       details: {
-        periods: day.periods, choghadiya: day.choghadiya, hora: day.hora,
+        periods: day.periods, durmuhurta: day.durmuhurta, bhadra: inauspicious.bhadra, varjya: inauspicious.varjya, choghadiya: day.choghadiya, hora: day.hora,
         astronomy: calculated.positions, grahas: calculated.grahas,
         riseSet: calculated.riseSet, astronomyEndsAt: calculated.endsAt,
         julianDay: calculated.julianDay
