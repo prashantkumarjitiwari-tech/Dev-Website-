@@ -95,6 +95,31 @@ function siderealSolarSign(jd,system){
   const ay=astronomy.ayanamsha(jd,system);
   return Math.floor((((tropical-ay)%360)+360)%360/30);
 }
+
+function chaitraSamvatsaraBounds(jd,system){
+ let ingress=null,previous=jd,prevSign=siderealSolarSign(previous,system);
+ for(let i=1;i<=1600;i++){
+  const t=jd-i*0.25,sign=siderealSolarSign(t,system);
+  if(sign===11&&prevSign!==11){
+   let lo=t,hi=previous;
+   for(let k=0;k<40;k++){const mid=(lo+hi)/2;if(siderealSolarSign(mid,system)===11)hi=mid;else lo=mid;}
+   ingress=hi;break;
+  }
+  previous=t;prevSign=sign;
+ }
+ if(ingress===null)return null;
+ const start=findLunationNewMoon(ingress+0.02,1,system);
+ if(start===null)return null;
+ let nextIngress=null,prev=ingress+300,prevSign2=siderealSolarSign(prev,system);
+ for(let i=1;i<=400;i++){
+  const t=ingress+300+i*0.25,sign=siderealSolarSign(t,system);
+  if(sign===11&&prevSign2!==11){let lo=prev,hi=t;for(let k=0;k<40;k++){const mid=(lo+hi)/2;if(siderealSolarSign(mid,system)===11)hi=mid;else lo=mid;}nextIngress=hi;break;}
+  prev=t;prevSign2=sign;
+ }
+ const end=nextIngress===null?null:findLunationNewMoon(nextIngress+0.02,1,system);
+ return end&&end>start?{start,end}:null;
+}
+
 function traditionalCalendar(date, calculated) {
   const jd=calculated.julianDay;
   const system=calculated.ayanamsha.system;
@@ -159,6 +184,12 @@ module.exports = (req, res) => {
     const day = daily.calculate(date);
     const inauspicious = calculateBhadraAndVarjya(date, calculated.ayanamsha.system);
     const traditional = traditionalCalendar(date, calculated);
+    const samvatsaraBounds=chaitraSamvatsaraBounds(calculated.julianDay,calculated.ayanamsha.system);
+    const annualGrahaTransits=samvatsaraBounds?astronomy.samvatsaraGrahaTransits(samvatsaraBounds.start,samvatsaraBounds.end,calculated.ayanamsha.system,TZ_OFFSET):[];
+    if(samvatsaraBounds){
+      traditional.samvatsaraPeriod={start:jdIso(samvatsaraBounds.start),end:jdIso(samvatsaraBounds.end)};
+      traditional.samvatsaraTransits=annualGrahaTransits;
+    }
     const data = {
       vara: day.weekday,
       tithi: calculated.limbs.tithi,
