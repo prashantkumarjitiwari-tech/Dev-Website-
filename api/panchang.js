@@ -72,9 +72,19 @@ module.exports = (req, res) => {
     const today = todayIST();
     const requested = req.query && req.query.date;
     const date = requested || [today.year, String(today.month).padStart(2, '0'), String(today.date).padStart(2, '0')].join('-');
+    if (!/^\\d{4}-\\d{2}-\\d{2}$/.test(date)) throw new Error('तिथि YYYY-MM-DD प्रारूप में होनी चाहिए।');
+    const [year, month, dayOfMonth] = date.split('-').map(Number);
+    const checkDate = new Date(Date.UTC(year, month - 1, dayOfMonth));
+    if (checkDate.getUTCFullYear() !== year || checkDate.getUTCMonth() + 1 !== month || checkDate.getUTCDate() !== dayOfMonth) throw new Error('अमान्य कैलेंडर तिथि।');
+    const query = req.query || {};
+    const ayanamsha = ['lahiri','kp','raman'].includes(query.ayanamsha) ? query.ayanamsha : 'lahiri';
+    const profile = ['kashi_vishwanath','rishikesh','drik','vaishnav_braj'].includes(query.profile) ? query.profile : 'kashi_vishwanath';
+    const observance = ['smarta','vaishnava','braj'].includes(query.observance) ? query.observance : 'braj';
+    const options = require('./panchang-options');
+    const selected = options.resolveSelection({ profile, ayanamsha, observance });
     const calculated = astronomy.calculate({
       date, time: '12:00:00', timezone: TZ_OFFSET,
-      ayanamsha: (req.query && req.query.ayanamsha) || 'lahiri',
+      ayanamsha,
       latitude: LAT, longitude: LON
     });
     const day = daily.calculate(date);
@@ -112,6 +122,7 @@ module.exports = (req, res) => {
       location: { name: 'श्रीधाम वृंदावन', latitude: LAT, longitude: LON, timezone: TIME_ZONE, ayanamsha: calculated.ayanamsha.system },
       data,
       traditional: {},
+      calculationSelection: selected,
       details: {
         periods: day.periods, durmuhurta: day.durmuhurta, bhadra: inauspicious.bhadra, varjya: inauspicious.varjya, choghadiya: day.choghadiya, hora: day.hora,
         astronomy: calculated.positions, grahas: calculated.grahas,
