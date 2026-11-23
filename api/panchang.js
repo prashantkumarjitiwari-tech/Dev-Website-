@@ -15,7 +15,10 @@ function todayIST() {
   const p = Object.fromEntries(parts.map(x => [x.type, x.value]));
   return { year: Number(p.year), month: Number(p.month), date: Number(p.day) };
 }
-function currentTimeIST() {\n  return new Intl.DateTimeFormat('en-GB',{timeZone:TIME_ZONE,hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'}).format(new Date());\n}\nfunction formatTime(value) {
+function currentTimeIST() {
+  return new Intl.DateTimeFormat('en-GB',{timeZone:TIME_ZONE,hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'}).format(new Date());
+}
+function formatTime(value) {
   if (!value) return null;
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return String(value);
@@ -184,7 +187,8 @@ module.exports = (req, res) => {
       grahas: calculated.grahas
     };
     return res.status(200).json({
-      date: { year: Number(date.slice(0, 4)), month: Number(date.slice(5, 7)), date: Number(date.slice(8, 10)) },\n      calculationTime: time,
+      date: { year: Number(date.slice(0, 4)), month: Number(date.slice(5, 7)), date: Number(date.slice(8, 10)) },
+      calculationTime: time,
       location: { name: 'श्रीधाम वृंदावन', latitude: LAT, longitude: LON, timezone: TIME_ZONE, ayanamsha: calculated.ayanamsha.system },
       data,
       traditional,
