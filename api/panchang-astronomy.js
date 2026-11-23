@@ -150,11 +150,12 @@ function planetaryLongitudes(jd, ay) {
   const earthAngle=(sunLon+180)*DEG;
   const earth={x:Math.cos(earthAngle),y:Math.sin(earthAngle),z:0};
   const planets=[];
+  const hindiNames={mercury:'बुध',venus:'शुक्र',mars:'मंगल',jupiter:'गुरु',saturn:'शनि'};
   for(const name of ['mercury','venus','mars','jupiter','saturn']){
     const p=orbitalPosition(name,d);
     const lon=norm(Math.atan2(p.y+Math.sin(sunLon*DEG),p.x+Math.cos(sunLon*DEG))/DEG-ay);
     const sid=norm(lon);
-    planets.push({name,longitude:Number(sid.toFixed(4)),rashi:RASHIS[Math.floor(sid/30)],degrees:Number((sid%30).toFixed(4)),calculation:'approximate'});
+    planets.push({name:hindiNames[name],longitude:Number(sid.toFixed(4)),rashi:RASHIS[Math.floor(sid/30)],degrees:Number((sid%30).toFixed(4)),calculation:'approximate'});
   }
   const node=norm(125.04452-1934.136261*centuries(jd)+0.0020708*Math.pow(centuries(jd),2));
   const rahu=norm(node-ay), ketu=norm(rahu+180);
