@@ -249,6 +249,7 @@ function calculate(input={}) {
       moon: { tropicalLongitude: Number(moonTropical.toFixed(6)), siderealLongitude: Number(norm(moonTropical-ay).toFixed(6)) }
     },
     limbs,
+    grahas,
     riseSet,
     endsAt,
     accuracyNotice: 'प्रारंभिक स्वतंत्र गणना: सूर्य/चन्द्रमा के निम्न-परिशुद्धता सूत्र और अनुमानित अयनांश। अंगों के समाप्ति समय संख्यात्मक रूप से निकाले गए हैं, पर उच्च-परिशुद्धता ephemeris तथा प्रमाणित काशी/ऋषिकेश पंचांग से मिलान बाकी है; अभी इसे धार्मिक निर्णय का अंतिम आधार न मानें।'
