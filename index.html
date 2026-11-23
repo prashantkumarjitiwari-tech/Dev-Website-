@@ -177,7 +177,7 @@
   
 /* Panchang chart cards */.panchang-graha-card strong{display:block;font-size:13px;margin:3px 0 2px;font-weight:700}.panchang-graha-card small{font-size:11px!important;font-weight:600}
 .panchang-chart-holder{display:block!important}.panchang-chart-holder>b{display:block;margin-bottom:10px}.panchang-chart-grid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;white-space:normal!important}.panchang-chart-card{min-width:0;border-radius:12px;padding:10px 6px;text-align:center;background:#e9f8ef;color:#245c3b;border:1px solid rgba(54,145,91,.12);line-height:1.35}.panchang-chart-card:nth-child(3n+2){background:#fcebed;color:#8a3c4a}.panchang-chart-card:nth-child(3n){background:#f2edfa;color:#594579}.panchang-chart-card b{display:block;font-size:13px;margin-bottom:4px}.panchang-chart-card small{display:block;font-size:10px;overflow-wrap:anywhere}.panchang-chart-empty{grid-column:1/-1;padding:10px;color:#82786b;font-size:12px;background:#faf7f0;border-radius:9px}@media(max-width:420px){.panchang-chart-grid{gap:6px}.panchang-chart-card{padding:9px 4px}.panchang-chart-card b{font-size:12px}.panchang-chart-card small{font-size:9px}}
-</style>
+\n.panchang-kundali-wrap{max-width:430px;margin:12px auto;background:#fffaf0;border:1px solid #d7b879;border-radius:12px;padding:8px}.panchang-kundali-wrap svg{display:block;width:100%;height:auto}.kundali-lines{fill:none;stroke:#9a6034;stroke-width:2}.kundali-house-no{font-size:12px;fill:#9a6034;font-weight:700;text-anchor:middle}.kundali-rashi{font-size:12px;fill:#30251a;font-weight:700;text-anchor:middle}.kundali-planets{font-size:10px;fill:#46321e;text-anchor:middle}.kundali-center{font-size:14px;fill:#8b5427;font-weight:700;text-anchor:middle}\n</style>
 
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; scroll-behavior: smooth; }
@@ -1151,7 +1151,7 @@
       <details class="panchang-topic">
         <summary><span class="panchang-topic-icon">☷</span><span class="panchang-topic-copy"><b>ग्रह स्थिति चार्ट</b><small>नवग्रहों की राशि स्थिति</small></span><i class="fa-solid fa-chevron-down panchang-chevron"></i></summary>
         <div class="panchang-topic-body"><div class="panchang-detail-grid">
-          <div class="panchang-detail-item panchang-detail-wide panchang-chart-holder"><b>नवग्रह स्थिति — राशि एवं अंश</b><span id="panchang-grahas" class="panchang-chart-grid">ग्रहों की गणना प्राप्त की जा रही है…</span><small style="display:block;margin-top:9px;color:#9b8b70;font-size:11px">प्रत्येक कार्ड में ग्रह, राशि और उस राशि में अंश दिखेंगे। ग्रह-स्थितियाँ प्रारंभिक स्वतंत्र गणना पर आधारित हैं; उच्च-परिशुद्धता ephemeris से मिलान बाकी है।</small></div>
+          <div class="panchang-detail-item panchang-detail-wide panchang-chart-holder"><b>जन्म/गोचर राशि कुंडली — उत्तर भारतीय शैली</b><div class="panchang-kundali-wrap"><svg id="panchang-kundali-svg" viewBox="0 0 400 400" role="img" aria-label="नवग्रह राशि कुंडली चार्ट"></svg></div><small id="panchang-kundali-lagna" style="display:block;margin:8px 0;color:#9b8b70;font-size:11px">लग्न की गणना प्राप्त की जा रही है…</small><b style="margin-top:14px">नवग्रह स्थिति — राशि एवं अंश</b><span id="panchang-grahas" class="panchang-chart-grid">ग्रहों की गणना प्राप्त की जा रही है…</span><small style="display:block;margin-top:9px;color:#9b8b70;font-size:11px">यह वर्तमान समय की गोचर कुंडली है। ग्रह-स्थितियाँ प्रारंभिक स्वतंत्र गणना पर आधारित हैं; उच्च-परिशुद्धता ephemeris से मिलान बाकी है।</small></div>
         </div></div>
       </details>
     </div>
@@ -3881,6 +3881,27 @@ document.addEventListener('toggle',function(event){
       card.append(name,sign,deg);root.append(card);
     });
   }
+  function renderKundali(kundali){
+    const svg=document.getElementById('panchang-kundali-svg'),lagna=document.getElementById('panchang-kundali-lagna');
+    if(!svg)return;
+    if(!kundali||!Array.isArray(kundali.houses)){svg.innerHTML='';if(lagna)lagna.textContent='कुंडली डेटा उपलब्ध नहीं है';return;}
+    const ns='http://www.w3.org/2000/svg',make=(tag,attrs,textValue)=>{const el=document.createElementNS(ns,tag);Object.entries(attrs||{}).forEach(([k,v])=>el.setAttribute(k,v));if(textValue!==undefined)el.textContent=textValue;return el;};
+    svg.replaceChildren();
+    svg.append(make('rect',{x:3,y:3,width:394,height:394,fill:'#fffaf0',stroke:'#9a6034','stroke-width':3}));
+    svg.append(make('path',{d:'M3 3 L397 397 M397 3 L3 397 M200 3 L397 200 L200 397 L3 200 Z M3 3 L200 200 L397 3 M397 397 L200 200 L3 397',class:'kundali-lines'}));
+    const points=[[200,48],[300,92],[350,200],[300,308],[200,352],[100,308],[50,200],[100,92],[150,150],[250,150],[250,250],[150,250]];
+    kundali.houses.forEach((h,i)=>{
+      const [x,y]=points[i],g=make('g',{});
+      g.append(make('text',{x,y:y-19,class:'kundali-house-no'},'भाव '+h.house));
+      g.append(make('text',{x,y:y-3,class:'kundali-rashi'},h.rashi||'—'));
+      const names=(h.grahas||[]).join(' · ')||'—';
+      g.append(make('text',{x,y:y+15,class:'kundali-planets'},names));
+      svg.append(g);
+    });
+    svg.append(make('text',{x:200,y:194,class:'kundali-center'},'गोचर'));
+    svg.append(make('text',{x:200,y:213,class:'kundali-center'},'कुंडली'));
+    if(lagna)lagna.textContent='लग्न: '+(kundali.lagna?.rashi||'—')+' '+(Number(kundali.lagna?.degrees||0).toFixed(2))+'° • वर्तमान समय की ग्रह स्थिति';
+  }
   function renderCharts(result){
     const d=result.data||{},det=result.details||{};
     const ch=det.choghadiya||d.choghadiya||[];
@@ -3892,7 +3913,7 @@ document.addEventListener('toggle',function(event){
     renderCards('panchang-bhadra',d.bhadra||det.bhadra||[],'name');
     renderCards('panchang-varjya',d.varjya||det.varjya||[],'name');
     renderCards('panchang-durmuhurta',det.durmuhurta||d.durmuhurta||[],'name');
-    renderGrahaCards(d.grahas||det.grahas||[]);
+    renderGrahaCards(d.grahas||det.grahas||[]);\n    renderKundali(d.kundali||det.kundali);
   }
   let lastLoadedDate='';
   async function load(){
@@ -3901,7 +3922,7 @@ document.addEventListener('toggle',function(event){
       const profile=document.getElementById('panchang-profile')?.value||'kashi_vishwanath';
       const ayanamsha=document.getElementById('panchang-ayanamsha')?.value||'lahiri';
       const observance=document.getElementById('panchang-observance')?.value||'braj';
-      const params=new URLSearchParams({profile,ayanamsha,observance});
+      const now=new Date();\n      const parts=new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Kolkata',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'}).formatToParts(now);\n      const clock=Object.fromEntries(parts.map(p=>[p.type,p.value]));\n      const params=new URLSearchParams({profile,ayanamsha,observance,date:clock.year+'-'+clock.month+'-'+clock.day,time:clock.hour+':'+clock.minute+':'+clock.second});
       const response=await fetch('/api/panchang?'+params.toString(),{headers:{'Accept':'application/json'},cache:'no-store'});
       const result=await response.json();
       if(!response.ok)throw new Error(result.error||'पंचांग उपलब्ध नहीं है');
@@ -3914,7 +3935,7 @@ document.addEventListener('toggle',function(event){
       set('panchang-festival',t.festival);
       const grahas=d.grahas||result.details?.grahas||t.grahas||[];
       set('panchang-grahas',grahas.map(g=>g.name+' — '+g.rashi+(g.degrees!==undefined?' '+g.degrees+'°':'')).join(' • '));
-      renderCharts(result);
+      renderCharts(result);\n      scheduleTransitionRefresh(result);
       const endText=(label,value)=>value?label+' समाप्ति: '+time(value):'';
       const ends=result.details?.astronomyEndsAt||result.endsAt||{};
       if(d.tithiEnd)set('panchang-detail-tithi',d.tithi+' ('+endText('तिथि',d.tithiEnd)+')');
@@ -3949,6 +3970,20 @@ document.addEventListener('toggle',function(event){
     const parts=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Kolkata',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date());
     const p=Object.fromEntries(parts.map(x=>[x.type,x.value]));
     return p.year+'-'+p.month+'-'+p.day;
+  }
+  let transitionTimer=null;
+  function scheduleTransitionRefresh(result){
+    if(transitionTimer)clearTimeout(transitionTimer);
+    const candidates=[],now=Date.now();
+    const addIso=value=>{if(value){const t=new Date(value).getTime();if(Number.isFinite(t)&&t>now+500)candidates.push(t);}};
+    const addClock=value=>{if(typeof value!=='string')return;const m=value.match(/^(\\d{1,2}):(\\d{2})/);if(!m)return;const d=new Date();const t=new Date(d.getFullYear(),d.getMonth(),d.getDate(),Number(m[1]),Number(m[2])).getTime();if(t>now+500)candidates.push(t);};
+    const ends=result.details?.astronomyEndsAt||{};
+    Object.values(ends).forEach(addIso);
+    const d=result.data||{};
+    [d.choghadiya,d.hora,d.durmuhurta,d.bhadra,d.varjya].forEach(list=>(list||[]).forEach(item=>{addIso(item.start);addIso(item.end);addClock(item.start);addClock(item.end);}));
+    ['sunrise','sunset','moonrise','moonset'].forEach(k=>addClock(d[k]));
+    const next=Math.min(...candidates);
+    if(Number.isFinite(next))transitionTimer=setTimeout(()=>load(),Math.max(800,next-Date.now()+900));
   }
   function scheduleMidnightRefresh(){
     const nowIST=new Date(Date.now()+330*60000);
