@@ -137,7 +137,7 @@ module.exports = (req, res) => {
       yamagand: formatRange(day.periods.yamagand),
       abhijit: formatRange(day.periods.abhijit),
       brahma: formatRange(day.periods.brahma),
-      amrit: null,
+      amrit: 'प्रकाशित पंचांग से सत्यापन शेष',
       bhadra: inauspicious.bhadra,
       varjya: inauspicious.varjya,
       durmuhurta: day.durmuhurta,
