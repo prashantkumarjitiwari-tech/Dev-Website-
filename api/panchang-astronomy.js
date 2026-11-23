@@ -269,6 +269,29 @@ function nextSignIngress(jd,ay,offset,latitude,longitude){
  if(lagnaAt){const from=RASHIS[prevSign],to=RASHIS[Math.floor(ascendantLongitude(lagnaAt+0.000001,latitude,longitude,ay)/30)];events.push({type:'lagna',name:'लग्न',from,to,at:localIsoFromJd(lagnaAt,offset)});}
  return events.sort((a,b)=>new Date(a.at)-new Date(b.at));
 }
+
+function samvatsaraGrahaTransits(startJd,endJd,system,offset){
+ const events=[],step=0.25;
+ let prevJd=startJd,prev=planetaryLongitudes(startJd,ayanamsha(startJd,system));
+ for(let t=startJd+step;t<=endJd+step/2;t+=step){
+  const jd=Math.min(t,endJd),cur=planetaryLongitudes(jd,ayanamsha(jd,system));
+  for(const old of prev){
+   const now=cur.find(x=>x.name===old.name);if(!now)continue;
+   const oldSign=Math.floor(old.longitude/30),newSign=Math.floor(now.longitude/30);
+   if(oldSign===newSign)continue;
+   let lo=prevJd,hi=jd;
+   for(let k=0;k<38;k++){
+    const mid=(lo+hi)/2,at=planetaryLongitudes(mid,ayanamsha(mid,system)).find(x=>x.name===old.name);
+    if(at&&Math.floor(at.longitude/30)===oldSign)lo=mid;else hi=mid;
+   }
+   const atJd=(lo+hi)/2,after=planetaryLongitudes(atJd+1/86400,ayanamsha(atJd+1/86400,system)).find(x=>x.name===old.name);
+   events.push({type:'graha',name:old.name,from:RASHIS[oldSign],to:RASHIS[Math.floor(after.longitude/30)],at:localIsoFromJd(atJd,offset)});
+  }
+  prevJd=jd;prev=cur;
+ }
+ return events.sort((x,y)=>new Date(x.at)-new Date(y.at));
+}
+
 function calculate(input={}) {
   const dateText = input.date || new Date().toISOString().slice(0,10);
   const timeText = input.time || '12:00:00';
@@ -327,4 +350,4 @@ function calculate(input={}) {
   };
 }
 
-module.exports = { calculate, julianDay, solarLongitude, lunarLongitude, ayanamsha, limbIndices, nextBoundary, planetaryLongitudes, riseSetForLocalDate, lunarLatitude, ascendantLongitude };
+module.exports = { calculate, julianDay, solarLongitude, lunarLongitude, ayanamsha, limbIndices, nextBoundary, planetaryLongitudes, riseSetForLocalDate, lunarLatitude, ascendantLongitude, samvatsaraGrahaTransits };
